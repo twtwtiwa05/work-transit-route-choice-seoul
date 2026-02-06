@@ -1,0 +1,50 @@
+# Gradle
+.gradle/
+build/
+bin/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (large files)
+data/gtfs/
+data/osm/
+data/*.csv
+
+# Batch results (very large)
+batch_result*.ndjson
+batch_result*.ndjson.progress
+test_result*.ndjson
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+*.jar
+!libs/*.jar
+
+# Temporary files
+*.tmp
+*.bak
+build-*.ps1
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+batch_result.json

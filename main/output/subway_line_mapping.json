@@ -1,0 +1,258 @@
+{
+  "001": {
+    "tcd_name": "1호선",
+    "gtfs_name": "서울1호선",
+    "tcd_route_id": "001",
+    "method": "auto"
+  },
+  "002": {
+    "tcd_name": "2호선",
+    "gtfs_name": "서울2호선",
+    "tcd_route_id": "002",
+    "method": "auto"
+  },
+  "003": {
+    "tcd_name": "3호선",
+    "gtfs_name": "서울3호선",
+    "tcd_route_id": "003",
+    "method": "auto"
+  },
+  "004": {
+    "tcd_name": "4호선",
+    "gtfs_name": "서울4호선",
+    "tcd_route_id": "004",
+    "method": "auto"
+  },
+  "111": {
+    "tcd_name": "경춘선",
+    "gtfs_name": "경춘선",
+    "tcd_route_id": "111",
+    "method": "auto"
+  },
+  "113": {
+    "tcd_name": "경강선",
+    "gtfs_name": "경강선",
+    "tcd_route_id": "113",
+    "method": "auto"
+  },
+  "114": {
+    "tcd_name": "서해선",
+    "gtfs_name": "서해선",
+    "tcd_route_id": "114",
+    "method": "auto"
+  },
+  "205": {
+    "tcd_name": "5호선",
+    "gtfs_name": "서울5호선",
+    "tcd_route_id": "205",
+    "method": "auto"
+  },
+  "206": {
+    "tcd_name": "6호선",
+    "gtfs_name": "서울6호선",
+    "tcd_route_id": "206",
+    "method": "auto"
+  },
+  "207": {
+    "tcd_name": "7호선",
+    "gtfs_name": "서울7호선",
+    "tcd_route_id": "207",
+    "method": "auto"
+  },
+  "208": {
+    "tcd_name": "8호선",
+    "gtfs_name": "서울8호선",
+    "tcd_route_id": "208",
+    "method": "auto"
+  },
+  "301": {
+    "tcd_name": "인천1호선",
+    "gtfs_name": "인천1호선",
+    "tcd_route_id": "301",
+    "method": "auto"
+  },
+  "302": {
+    "tcd_name": "인천2호선",
+    "gtfs_name": "인천2호선",
+    "tcd_route_id": "302",
+    "method": "auto"
+  },
+  "401": {
+    "tcd_name": "9호선",
+    "gtfs_name": "서울9호선",
+    "tcd_route_id": "401",
+    "method": "auto"
+  },
+  "403": {
+    "tcd_name": "신분당선",
+    "gtfs_name": "신분당선",
+    "tcd_route_id": "403",
+    "method": "auto"
+  },
+  "406": {
+    "tcd_name": "의정부경전철",
+    "gtfs_name": "의정부경전철",
+    "tcd_route_id": "406",
+    "method": "auto"
+  },
+  "412": {
+    "tcd_name": "신림선",
+    "gtfs_name": "신림선",
+    "tcd_route_id": "412",
+    "method": "auto"
+  },
+  "101": {
+    "tcd_name": "경부선",
+    "gtfs_name": "서울1호선",
+    "tcd_route_id": "101",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='1호선' → GTFS '서울1호선'"
+  },
+  "102": {
+    "tcd_name": "경인선",
+    "gtfs_name": "서울1호선",
+    "tcd_route_id": "102",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='1호선' → GTFS '서울1호선'"
+  },
+  "103": {
+    "tcd_name": "경원선",
+    "gtfs_name": "서울1호선",
+    "tcd_route_id": "103",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='1호선' → GTFS '서울1호선'"
+  },
+  "104": {
+    "tcd_name": "안산선",
+    "gtfs_name": "서울4호선",
+    "tcd_route_id": "104",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='4호선' → GTFS '서울4호선'"
+  },
+  "105": {
+    "tcd_name": "과천선",
+    "gtfs_name": "서울4호선",
+    "tcd_route_id": "105",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='4호선' → GTFS '서울4호선'"
+  },
+  "106": {
+    "tcd_name": "분당선",
+    "gtfs_name": "수인분당선",
+    "tcd_route_id": "106",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='수인분당선' → GTFS '수인분당선'"
+  },
+  "107": {
+    "tcd_name": "일산선",
+    "gtfs_name": "서울3호선",
+    "tcd_route_id": "107",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='3호선' → GTFS '서울3호선'"
+  },
+  "108": {
+    "tcd_name": "중앙선",
+    "gtfs_name": "경의중앙선",
+    "tcd_route_id": "108",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='경의중앙선' → GTFS '경의중앙선'"
+  },
+  "109": {
+    "tcd_name": "장항선",
+    "gtfs_name": "서울1호선",
+    "tcd_route_id": "109",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='1호선' → GTFS '서울1호선'"
+  },
+  "110": {
+    "tcd_name": "경의선",
+    "gtfs_name": "경의중앙선",
+    "tcd_route_id": "110",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='경의중앙선' → GTFS '경의중앙선'"
+  },
+  "112": {
+    "tcd_name": "수인선",
+    "gtfs_name": "수인분당선",
+    "tcd_route_id": "112",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='수인분당선' → GTFS '수인분당선'"
+  },
+  "307": {
+    "tcd_name": "인천7호선",
+    "gtfs_name": "서울7호선",
+    "tcd_route_id": "307",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='7호선' → GTFS '서울7호선'"
+  },
+  "402": {
+    "tcd_name": "공항철도1호선",
+    "gtfs_name": "공항철도",
+    "tcd_route_id": "402",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='공항철도' → GTFS '공항철도'"
+  },
+  "404": {
+    "tcd_name": "9호선23단계",
+    "gtfs_name": "서울9호선",
+    "tcd_route_id": "404",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='9호선' → GTFS '서울9호선'"
+  },
+  "405": {
+    "tcd_name": "용인에버라인",
+    "gtfs_name": "용인경전철",
+    "tcd_route_id": "405",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='용인에버라인' → GTFS '용인경전철'"
+  },
+  "407": {
+    "tcd_name": "경기철도",
+    "gtfs_name": "신분당선",
+    "tcd_route_id": "407",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='신분당선' → GTFS '신분당선'"
+  },
+  "408": {
+    "tcd_name": "우이신설선",
+    "gtfs_name": "우이신설경전철",
+    "tcd_route_id": "408",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='우이신설경전철' → GTFS '우이신설경전철'"
+  },
+  "409": {
+    "tcd_name": "김포골드라인",
+    "gtfs_name": "김포도시철도",
+    "tcd_route_id": "409",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='김포골드라인' → GTFS '김포도시철도'"
+  },
+  "410": {
+    "tcd_name": "진접선",
+    "gtfs_name": "서울4호선",
+    "tcd_route_id": "410",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='4호선' → GTFS '서울4호선'"
+  },
+  "411": {
+    "tcd_name": "새서울철도",
+    "gtfs_name": "신분당선",
+    "tcd_route_id": "411",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='신분당선' → GTFS '신분당선'"
+  },
+  "413": {
+    "tcd_name": "8호선(구리)",
+    "gtfs_name": "서울8호선",
+    "tcd_route_id": "413",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='8호선' → GTFS '서울8호선'"
+  },
+  "414": {
+    "tcd_name": "8호선(남양주)",
+    "gtfs_name": "서울8호선",
+    "tcd_route_id": "414",
+    "method": "manual",
+    "evidence": "TCD 노선명(long)='8호선' → GTFS '서울8호선'"
+  }
+}

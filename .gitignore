@@ -1,0 +1,105 @@
+# ============================================
+# 강릉ITS 통합 .gitignore
+# ============================================
+
+# Raw data (very large)
+DATA/
+
+# Root level temp files
+nul
+*.pdf
+
+# ============================================
+# main/ - Python 전처리 & 모델 추정
+# ============================================
+
+# Phase 1-2 중간 산출물 (큰 파일, 재생성 가능)
+main/output/cleaned_tcd.parquet
+main/output/trip_legs.parquet
+main/output/trip_chains.parquet
+main/output/trip_attributes_full.parquet
+main/output/trip_attributes.parquet
+main/output/trip_attributes_filtered.parquet
+main/output/od_pairs.csv
+main/output/route_stop_sequences.parquet
+main/output/leg_stop_sequences.parquet
+main/output/gtfs_tcd_stop_mapping.parquet
+main/output/gtfs_tcd_route_mapping.parquet
+main/output/od_pairs_filtered.csv
+main/output/failed_od_ids.parquet
+main/output/trip_attributes_matched.parquet
+main/output/otp_alternatives.parquet
+main/output/tcd_leg_traversed_stops.parquet
+main/output/similarity_results.parquet
+main/output/similarity_summary.parquet
+
+# Phase 3 중간 산출물 (model_input_train/test로 충분)
+main/output/choice_set.parquet
+main/output/alternative_attributes.parquet
+main/output/model_input.parquet
+
+# ============================================
+# korean-otp/ - Java 경로탐색 엔진
+# ============================================
+
+# Gradle build
+korean-otp/.gradle/
+korean-otp/build/
+korean-otp/bin/
+!korean-otp/gradle/wrapper/gradle-wrapper.jar
+
+# Data (large files)
+korean-otp/data/gtfs/
+korean-otp/data/osm/
+korean-otp/data/*.csv
+
+# Batch results (very large - up to 32GB)
+korean-otp/batch_result*.ndjson
+korean-otp/batch_result*.ndjson.progress
+korean-otp/test_result*.ndjson
+korean-otp/batch_result.json
+
+# Build artifacts
+korean-otp/*.jar
+!korean-otp/libs/*.jar
+
+# Temp scripts
+korean-otp/build-*.ps1
+
+# ============================================
+# Common
+# ============================================
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
+*.temp
+*.log
+*.bak
+logs/
+
+# Jupyter
+.ipynb_checkpoints/

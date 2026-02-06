@@ -1,0 +1,51 @@
+# Phase 1-2 중간 산출물 (큰 파일, 재생성 가능)
+output/cleaned_tcd.parquet
+output/trip_legs.parquet
+output/trip_chains.parquet
+output/trip_attributes_full.parquet
+output/trip_attributes.parquet
+output/trip_attributes_filtered.parquet
+output/od_pairs.csv
+output/route_stop_sequences.parquet
+output/leg_stop_sequences.parquet
+output/gtfs_tcd_stop_mapping.parquet
+output/gtfs_tcd_route_mapping.parquet
+output/od_pairs_filtered.csv
+output/failed_od_ids.parquet
+output/trip_attributes_matched.parquet
+output/otp_alternatives.parquet
+output/tcd_leg_traversed_stops.parquet
+output/similarity_results.parquet
+output/similarity_summary.parquet
+
+# Phase 3 중간 산출물 (model_input_train/test로 충분)
+output/choice_set.parquet
+output/alternative_attributes.parquet
+output/model_input.parquet
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Temp files
+*.tmp
+*.temp
+*.log
+
+# Jupyter
+.ipynb_checkpoints/

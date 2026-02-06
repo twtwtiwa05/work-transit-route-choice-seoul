@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 기본 로그 레벨 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <!-- GTFS 로더 로그 (상세) -->
+    <logger name="kr.otp.gtfs" level="INFO" />
+
+    <!-- Raptor 엔진 로그 -->
+    <logger name="kr.otp.raptor" level="INFO" />
+</configuration>

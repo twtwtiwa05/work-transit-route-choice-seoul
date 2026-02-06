@@ -1,0 +1,546 @@
+<홍대입구->대전시청(장거리)>
+═══════════════════════════════════════════════════════════════
+           한국형 Raptor 경로탐색 엔진 v1.0.0-SNAPSHOT
+═══════════════════════════════════════════════════════════════
+
+[1/4] GTFS 데이터 로드 중...
+07:11:42.746 [main] INFO  kr.otp.gtfs.loader.GtfsLoader - GTFS 데이터 로드 시작: data\gtfs
+07:11:42.902 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   정류장 로드 완료: 212,105개
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4144): For input string: "안심촌"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4144): For input string: "조성"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4144): For input string: "곡천)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4145): For input string: "외서"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4145): For input string: "안장안)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4145): For input string: "낙성)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4146): For input string: "안장안"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4146): For input string: "고인돌"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4147): For input string: "곡천)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4147): For input string: "외서"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "곡천"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "낙)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "가용리"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "낙성)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "가용리"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "외서"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4154): For input string: "청암"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4154): For input string: "다원)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4154): For input string: "안심촌"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4157): For input string: "거석리"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4157): For input string: "광곡)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4163): For input string: "마천)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4163): For input string: "호음동"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4163): For input string: "도촌"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4164): For input string: "득량)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4187): For input string: "장동"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4187): For input string: "귀산리"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4188): For input string: "금산"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4188): For input string: "낙안"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4189): For input string: "화목"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4200): For input string: "문덕"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4205): For input string: "죽동)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4205): For input string: "문덕"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4209): For input string: "장동"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4210): For input string: "죽동"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4212): For input string: "교촌"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4213): For input string: "용암삼거리"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4213): For input string: "덕촌"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4218): For input string: "진봉"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4218): For input string: "복내"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4218): For input string: "겸백"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4234): For input string: "더래)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4262): For input string: "율포)""
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4276): For input string: "삼수"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4276): For input string: "회령"
+07:11:42.902 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4294): For input string: "겸백면사무소.가터"
+07:11:42.925 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15088): For input string: ": 수산회차지▶동문로터리"
+07:11:42.925 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15106): For input string: "동문시장▶신사동""
+07:11:42.925 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15206): For input string: "동문시장▶국제여객선터미널""
+07:11:42.925 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15208): For input string: ": 국제여객선터미널▶동문로터리"
+07:11:42.925 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15276): For input string: ": 신비마을▶동문로터리"
+07:11:42.925 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15793): For input string: ": 모슬포 남항 여객선 터미널▶제주현대미술관"
+07:11:42.925 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15793): For input string: "김창열미술관▶모슬포 남항 여객선 터미널""
+07:11:42.925 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   노선 로드 완료: 27,085개
+07:11:43.059 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   트립 로드 완료: 349,580개
+07:11:43.059 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   stop_times.txt 로드 중... (예상: 19,058,198개)
+07:11:43.273 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     500,000개 로드됨 (2577320 records/sec)
+07:11:43.442 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     1,000,000개 로드됨 (2702703 records/sec)
+07:11:43.656 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     1,500,000개 로드됨 (2336449 records/sec)
+07:11:43.870 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     2,000,000개 로드됨 (2336449 records/sec)
+07:11:44.059 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     2,500,000개 로드됨 (2645503 records/sec)
+07:11:44.213 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     3,000,000개 로드됨 (3246753 records/sec)
+07:11:44.418 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     3,500,000개 로드됨 (2439024 records/sec)
+07:11:44.562 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     4,000,000개 로드됨 (3472222 records/sec)
+07:11:44.784 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     4,500,000개 로드됨 (2252252 records/sec)
+07:11:44.992 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     5,000,000개 로드됨 (2403846 records/sec)
+07:11:45.246 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     5,500,000개 로드됨 (1968504 records/sec)
+07:11:45.400 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     6,000,000개 로드됨 (3246753 records/sec)
+07:11:45.533 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     6,500,000개 로드됨 (3759398 records/sec)
+07:11:45.770 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     7,000,000개 로드됨 (2109705 records/sec)
+07:11:45.913 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     7,500,000개 로드됨 (3496503 records/sec)
+07:11:46.073 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     8,000,000개 로드됨 (3125000 records/sec)
+07:11:46.294 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     8,500,000개 로드됨 (2262443 records/sec)
+07:11:46.437 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     9,000,000개 로드됨 (3496503 records/sec)
+07:11:46.580 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     9,500,000개 로드됨 (3496503 records/sec)
+07:11:46.740 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     10,000,000개 로드됨 (3125000 records/sec)
+07:11:47.026 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     10,500,000개 로드됨 (1748252 records/sec)
+07:11:47.216 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     11,000,000개 로드됨 (2631579 records/sec)
+07:11:47.407 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     11,500,000개 로드됨 (2617801 records/sec)
+07:11:47.701 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     12,000,000개 로드됨 (1700680 records/sec)
+07:11:47.838 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     12,500,000개 로드됨 (3649635 records/sec)
+07:11:47.977 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     13,000,000개 로드됨 (3597122 records/sec)
+07:11:48.120 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     13,500,000개 로드됨 (3496503 records/sec)
+07:11:48.358 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     14,000,000개 로드됨 (2100840 records/sec)
+07:11:48.501 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     14,500,000개 로드됨 (3496503 records/sec)
+07:11:48.644 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     15,000,000개 로드됨 (3496503 records/sec)
+07:11:48.787 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     15,500,000개 로드됨 (3496503 records/sec)
+07:11:48.930 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     16,000,000개 로드됨 (3496503 records/sec)
+07:11:49.183 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     16,500,000개 로드됨 (1976285 records/sec)
+07:11:49.326 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     17,000,000개 로드됨 (3496503 records/sec)
+07:11:49.470 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     17,500,000개 로드됨 (3472222 records/sec)
+07:11:49.614 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     18,000,000개 로드됨 (3472222 records/sec)
+07:11:49.884 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     18,500,000개 로드됨 (1851852 records/sec)
+07:11:50.075 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     19,000,000개 로드됨 (2617801 records/sec)
+07:11:50.266 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     19,500,000개 로드됨 (2617801 records/sec)
+07:11:50.473 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     20,000,000개 로드됨 (2415459 records/sec)
+07:11:50.632 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     20,500,000개 로드됨 (3144654 records/sec)
+07:11:50.728 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   시간표 로드 완료: 20,871,237개
+07:11:50.728 [main] INFO  kr.otp.gtfs.loader.GtfsLoader - GTFS 로드 완료 (소요시간: 8.0초)
+  완료: 212,105 정류장, 27,085 노선, 349,580 트립 (8.8초)
+[2/4] Raptor 데이터 구조 생성 중...
+07:11:51.378 [main] INFO  k.otp.raptor.data.TransitDataBuilder - 정류장 인덱스 생성 중...
+07:11:51.410 [main] INFO  k.otp.raptor.data.TransitDataBuilder -   정류장: 212105개
+07:11:51.410 [main] INFO  k.otp.raptor.data.TransitDataBuilder - 패턴 그룹화 중...
+07:11:52.152 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000104
+07:11:52.152 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000096
+07:11:52.162 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000017
+07:11:52.165 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000110
+07:11:52.173 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000042
+07:11:52.177 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB406576105
+07:11:52.184 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405131507
+07:11:52.184 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000004
+07:11:52.209 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000010
+07:11:52.222 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000045
+07:11:52.230 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000107
+07:11:52.274 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000007
+07:11:52.283 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000013
+07:11:52.306 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000073
+07:11:52.312 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000116
+07:11:52.317 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000029
+07:11:52.326 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000035
+07:11:52.342 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000076
+07:11:52.343 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000016
+07:11:52.366 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000003
+07:11:52.376 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405246603
+07:11:52.389 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000019
+07:11:52.389 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000172
+07:11:52.403 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000006
+07:11:52.422 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000188
+07:11:52.423 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000109
+07:11:52.425 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000072
+07:11:52.435 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000047
+07:11:52.436 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000028
+07:11:52.442 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000034
+07:11:52.454 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000102
+07:11:52.467 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000021
+07:11:52.471 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000143
+07:11:52.475 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000075
+07:11:52.481 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000118
+07:11:52.483 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000211
+07:11:52.484 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000002
+07:11:52.497 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405132604
+07:11:52.498 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000043
+07:11:52.501 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB406576106
+07:11:52.502 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405241202
+07:11:52.504 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000097
+07:11:52.504 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000018
+07:11:52.517 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000030
+07:11:52.517 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000078
+07:11:52.517 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405241102
+07:11:52.533 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000187
+07:11:52.533 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000090
+07:11:52.533 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000011
+07:11:52.581 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000008
+07:11:52.581 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000014
+07:11:52.581 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000117
+07:11:52.597 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000020
+07:11:52.604 [main] INFO  k.otp.raptor.data.TransitDataBuilder -   노선(패턴): 32229개
+07:11:52.604 [main] INFO  k.otp.raptor.data.TransitDataBuilder - 정류장별 노선 인덱스 생성 중...
+07:11:52.763 [main] INFO  k.otp.raptor.data.TransitDataBuilder - 환승 정보 생성 중...
+07:11:52.770 [main] INFO  k.otp.raptor.data.TransitDataBuilder -   환승 거리 기반 생성 (최대 500.0m)
+07:11:55.460 [main] INFO  k.otp.raptor.data.TransitDataBuilder -   환승: 2027380개
+07:11:55.460 [main] INFO  k.otp.raptor.data.TransitDataBuilder - TransitData 빌드 완료 (4082ms)
+  완료: 32,229 패턴, 349,509 트립 (4.7초)
+[3/4] OSM 도로망 로드 중...
+07:11:56.111 [main] INFO  kr.otp.osm.OsmLoader - OSM 데이터 로드 시작: data\osm\south-korea.osm.pbf
+07:11:56.112 [main] INFO  kr.otp.osm.OsmLoader -   Pass 1: Way 분석 중...
+07:12:03.768 [main] INFO  kr.otp.osm.OsmLoader -     도보 가능 Way: 1601155개, 필요 노드: 15711249개
+07:12:03.768 [main] INFO  kr.otp.osm.OsmLoader -   Pass 2: 노드 좌표 수집 중...
+07:12:10.466 [main] INFO  kr.otp.osm.OsmLoader -     좌표 수집 완료: 15711249개
+07:12:10.466 [main] INFO  kr.otp.osm.OsmLoader -   도로망 구축 중...
+07:12:17.224 [main] INFO  kr.otp.osm.OsmLoader - OSM 로드 완료: StreetNetwork[nodes=15711249, edges=32376508] (21112ms)
+  완료: StreetNetwork[nodes=15711249, edges=32376508] (21.1초)
+[4/4] Raptor 엔진 초기화...
+07:12:17.235 [main] INFO  kr.otp.core.AccessEgressFinder - 병렬 A* 스레드 풀: 16개 코어
+07:12:17.235 [main] INFO  kr.otp.core.AccessEgressFinder - 정류장-도로노드 매핑 계산 중...
+07:12:24.680 [main] INFO  kr.otp.core.AccessEgressFinder -   정류장 212105개 중 211855개 도로망 연결
+07:12:24.680 [main] INFO  kr.otp.core.AccessEgressFinder - OSM 기반 도보 거리 계산 활성화 (매핑: 7445ms)
+07:12:24.680 [main] INFO  kr.otp.core.KoreanRaptor - KoreanRaptor 초기화 완료: KoreanTransitDataProvider{stops=212105, routes=32229, trips=349509} (OSM: true)
+  완료: KoreanRaptor[stops=212105, routes=32229, trips=349509] (7.5초)
+  도보 거리: OSM 기반 (실제 도로)
+
+═══════════════════════════════════════════════════════════════
+  초기화 완료! (42.1초)
+═══════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════
+  대화형 경로 검색
+───────────────────────────────────────────────────────────────
+  입력: 출발위도 출발경도 도착위도 도착경도 시간 [결과수]
+  예시: 37.5547 126.9707 37.4979 127.0276 09:00 5
+  명령: q(종료), n=숫자(결과수 변경), mc(MULTI_CRITERIA), std(STANDARD)
+═══════════════════════════════════════════════════════════════
+
+[STD, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [STANDARD]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:13:54.723 [main] INFO  kr.otp.core.KoreanRaptor - 경로 3개 발견 (513ms)
+09:00 이후 경로 3개 (전체 3개, 0.513초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[STD, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [STANDARD]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:10.162 [main] INFO  kr.otp.core.KoreanRaptor - 경로 3개 발견 (382ms)
+09:00 이후 경로 3개 (전체 3개, 0.382초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[STD, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [STANDARD]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:13.405 [main] INFO  kr.otp.core.KoreanRaptor - 경로 3개 발견 (366ms)
+09:00 이후 경로 3개 (전체 3개, 0.366초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[STD, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [STANDARD]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:14.599 [main] INFO  kr.otp.core.KoreanRaptor - 경로 3개 발견 (352ms)
+09:00 이후 경로 3개 (전체 3개, 0.352초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[STD, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [STANDARD]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:15.612 [main] INFO  kr.otp.core.KoreanRaptor - 경로 3개 발견 (365ms)
+09:00 이후 경로 3개 (전체 3개, 0.365초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[STD, n=5] > mc
+검색 모드: MULTI_CRITERIA (파레토 최적)
+[MC, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [MULTI_CRITERIA]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:25.894 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 3개 발견 (787ms)
+09:00 이후 경로 3개 (전체 3개, 0.787초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[MC, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [MULTI_CRITERIA]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:29.707 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 3개 발견 (525ms)
+09:00 이후 경로 3개 (전체 3개, 0.525초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[MC, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [MULTI_CRITERIA]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:32.531 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 3개 발견 (571ms)
+09:00 이후 경로 3개 (전체 3개, 0.571초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[MC, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [MULTI_CRITERIA]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:34.946 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 3개 발견 (535ms)
+09:00 이후 경로 3개 (전체 3개, 0.535초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[MC, n=5] > 37.5571 126.9244 36.3510 127.3848 09:00 5
+검색 [MULTI_CRITERIA]: (37.5571, 126.9244) → (36.3510, 127.3848) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:14:36.264 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 3개 발견 (539ms)
+09:00 이후 경로 3개 (전체 3개, 0.539초)
+
+■ 경로 1: 09:01 출발 → 10:54 도착 (112분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:06 → 서울역 09:14
+  3. 환승 도보 2분
+  4. [[KTX]동해선(하행)] 서울 09:22 → 대전 10:27
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:36 → 시청 10:49
+  7. 도보 4분 → 목적지
+
+■ 경로 2: 09:07 출발 → 11:01 도착 (114분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:13 → 서울역 09:20
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:27 → 대전 10:33
+  5. 환승 도보 2분
+  6. [705] 대전역 10:42 → 시청역 10:56
+  7. 도보 5분 → 목적지
+
+■ 경로 3: 09:14 출발 → 11:04 도착 (109분, 환승 2회)
+  1. 도보 4분 → 홍대입구
+  2. [공항철도] 홍대입구 09:19 → 서울역 09:27
+  3. 환승 도보 2분
+  4. [[KTX]경부선(하행)] 서울 09:32 → 대전 10:42
+  5. 환승 도보 1분
+  6. [대전1호선] 대전 10:46 → 시청 10:59
+  7. 도보 4분 → 목적지
+
+
+[MC, n=5] >
+ 

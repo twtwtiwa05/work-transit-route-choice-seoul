@@ -1,0 +1,602 @@
+<서울역->강남(중거리)>
+═══════════════════════════════════════════════════════════════
+           한국형 Raptor 경로탐색 엔진 v1.0.0-SNAPSHOT
+═══════════════════════════════════════════════════════════════
+
+[1/4] GTFS 데이터 로드 중...
+07:06:51.569 [main] INFO  kr.otp.gtfs.loader.GtfsLoader - GTFS 데이터 로드 시작: data\gtfs
+07:06:51.723 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   정류장 로드 완료: 212,105개
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4144): For input string: "안심촌"
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4144): For input string: "조성"
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4144): For input string: "곡천)""
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4145): For input string: "외서"
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4145): For input string: "안장안)""
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4145): For input string: "낙성)""
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4146): For input string: "안장안"
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4146): For input string: "고인돌"
+07:06:51.733 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4147): For input string: "곡천)""
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4147): For input string: "외서"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "곡천"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "낙)""
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "가용리"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "낙성)""
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "가용리"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4148): For input string: "외서"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4154): For input string: "청암"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4154): For input string: "다원)""
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4154): For input string: "안심촌"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4157): For input string: "거석리"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4157): For input string: "광곡)""
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4163): For input string: "마천)""
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4163): For input string: "호음동"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4163): For input string: "도촌"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4164): For input string: "득량)""
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4187): For input string: "장동"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4187): For input string: "귀산리"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4188): For input string: "금산"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4188): For input string: "낙안"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4189): For input string: "화목"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4200): For input string: "문덕"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4205): For input string: "죽동)""
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4205): For input string: "문덕"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4209): For input string: "장동"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4210): For input string: "죽동"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4212): For input string: "교촌"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4213): For input string: "용암삼거리"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4213): For input string: "덕촌"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4218): For input string: "진봉"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4218): For input string: "복내"
+07:06:51.736 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4218): For input string: "겸백"
+07:06:51.738 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4234): For input string: "더래)""
+07:06:51.738 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4262): For input string: "율포)""
+07:06:51.738 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4276): For input string: "삼수"
+07:06:51.738 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4276): For input string: "회령"
+07:06:51.738 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 4294): For input string: "겸백면사무소.가터"
+07:06:51.750 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15088): For input string: ": 수산회차지▶동문로터리"
+07:06:51.751 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15106): For input string: "동문시장▶신사동""
+07:06:51.751 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15206): For input string: "동문시장▶국제여객선터미널""
+07:06:51.751 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15208): For input string: ": 국제여객선터미널▶동문로터리"
+07:06:51.751 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15276): For input string: ": 신비마을▶동문로터리"
+07:06:51.751 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15793): For input string: ": 모슬포 남항 여객선 터미널▶제주현대미술관"
+07:06:51.751 [main] WARN  kr.otp.gtfs.loader.GtfsLoader - routes.txt 파싱 오류 (line 15793): For input string: "김창열미술관▶모슬포 남항 여객선 터미널""
+07:06:51.755 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   노선 로드 완료: 27,085개
+07:06:51.879 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   트립 로드 완료: 349,580개
+07:06:51.880 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   stop_times.txt 로드 중... (예상: 19,058,198개)
+07:06:52.091 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     500,000개 로드됨 (2512563 records/sec)
+07:06:52.254 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     1,000,000개 로드됨 (3067485 records/sec)
+07:06:52.467 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     1,500,000개 로드됨 (2325581 records/sec)
+07:06:52.664 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     2,000,000개 로드됨 (2538071 records/sec)
+07:06:52.847 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     2,500,000개 로드됨 (2732240 records/sec)
+07:06:52.973 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     3,000,000개 로드됨 (3968254 records/sec)
+07:06:53.158 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     3,500,000개 로드됨 (2702703 records/sec)
+07:06:53.291 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     4,000,000개 로드됨 (3759398 records/sec)
+07:06:53.492 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     4,500,000개 로드됨 (2487562 records/sec)
+07:06:53.687 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     5,000,000개 로드됨 (2564103 records/sec)
+07:06:53.861 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     5,500,000개 로드됨 (2873563 records/sec)
+07:06:54.061 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     6,000,000개 로드됨 (2500000 records/sec)
+07:06:54.203 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     6,500,000개 로드됨 (3521127 records/sec)
+07:06:54.422 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     7,000,000개 로드됨 (2283105 records/sec)
+07:06:54.548 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     7,500,000개 로드됨 (3968254 records/sec)
+07:06:54.684 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     8,000,000개 로드됨 (3676471 records/sec)
+07:06:54.897 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     8,500,000개 로드됨 (2347418 records/sec)
+07:06:55.018 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     9,000,000개 로드됨 (4132231 records/sec)
+07:06:55.160 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     9,500,000개 로드됨 (3521127 records/sec)
+07:06:55.297 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     10,000,000개 로드됨 (3649635 records/sec)
+07:06:55.570 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     10,500,000개 로드됨 (1831502 records/sec)
+07:06:55.759 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     11,000,000개 로드됨 (2673797 records/sec)
+07:06:55.946 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     11,500,000개 로드됨 (2645503 records/sec)
+07:06:56.223 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     12,000,000개 로드됨 (1805054 records/sec)
+07:06:56.359 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     12,500,000개 로드됨 (3676471 records/sec)
+07:06:56.495 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     13,000,000개 로드됨 (3676471 records/sec)
+07:06:56.632 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     13,500,000개 로드됨 (3703704 records/sec)
+07:06:56.891 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     14,000,000개 로드됨 (1915709 records/sec)
+07:06:57.033 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     14,500,000개 로드됨 (3521127 records/sec)
+07:06:57.160 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     15,000,000개 로드됨 (3937008 records/sec)
+07:06:57.302 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     15,500,000개 로드됨 (3521127 records/sec)
+07:06:57.446 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     16,000,000개 로드됨 (3472222 records/sec)
+07:06:57.681 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     16,500,000개 로드됨 (2127660 records/sec)
+07:06:57.807 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     17,000,000개 로드됨 (3968254 records/sec)
+07:06:57.950 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     17,500,000개 로드됨 (3759398 records/sec)
+07:06:58.078 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     18,000,000개 로드됨 (3623188 records/sec)
+07:06:58.345 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     18,500,000개 로드됨 (1872659 records/sec)
+07:06:58.535 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     19,000,000개 로드됨 (2631579 records/sec)
+07:06:58.725 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     19,500,000개 로드됨 (2631579 records/sec)
+07:06:58.915 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     20,000,000개 로드됨 (2631579 records/sec)
+07:06:59.073 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -     20,500,000개 로드됨 (3164557 records/sec)
+07:06:59.294 [main] INFO  kr.otp.gtfs.loader.GtfsLoader -   시간표 로드 완료: 20,871,237개
+07:06:59.294 [main] INFO  kr.otp.gtfs.loader.GtfsLoader - GTFS 로드 완료 (소요시간: 7.7초)
+  완료: 212,105 정류장, 27,085 노선, 349,580 트립 (8.4초)
+[2/4] Raptor 데이터 구조 생성 중...
+07:06:59.843 [main] INFO  k.otp.raptor.data.TransitDataBuilder - 정류장 인덱스 생성 중...
+07:06:59.863 [main] INFO  k.otp.raptor.data.TransitDataBuilder -   정류장: 212105개
+07:06:59.863 [main] INFO  k.otp.raptor.data.TransitDataBuilder - 패턴 그룹화 중...
+07:07:00.606 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000016
+07:07:00.606 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000076
+07:07:00.634 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000035
+07:07:00.645 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000029
+07:07:00.653 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000116
+07:07:00.657 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000073
+07:07:00.684 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000013
+07:07:00.692 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000007
+07:07:00.741 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000107
+07:07:00.748 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000045
+07:07:00.750 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000010
+07:07:00.768 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000004
+07:07:00.770 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405131507
+07:07:00.779 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB406576105
+07:07:00.779 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000042
+07:07:00.779 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000110
+07:07:00.779 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000017
+07:07:00.795 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000096
+07:07:00.795 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000104
+07:07:00.811 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000020
+07:07:00.823 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000117
+07:07:00.829 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000014
+07:07:00.829 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000008
+07:07:00.874 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000011
+07:07:00.874 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000090
+07:07:00.874 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000187
+07:07:00.890 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405241102
+07:07:00.890 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000078
+07:07:00.890 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000030
+07:07:00.906 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000018
+07:07:00.906 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000097
+07:07:00.906 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405241202
+07:07:00.921 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB406576106
+07:07:00.921 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000043
+07:07:00.921 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405132604
+07:07:00.937 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000002
+07:07:00.937 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000211
+07:07:00.937 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000118
+07:07:00.943 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000075
+07:07:00.943 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000143
+07:07:00.953 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000021
+07:07:00.973 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000102
+07:07:00.986 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000034
+07:07:01.000 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000028
+07:07:01.002 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000047
+07:07:01.004 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000072
+07:07:01.004 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000109
+07:07:01.015 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000188
+07:07:01.031 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000006
+07:07:01.041 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000172
+07:07:01.041 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000019
+07:07:01.047 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_TAGO_JEB405246603
+07:07:01.063 [main] WARN  k.otp.raptor.data.TransitDataBuilder - 노선 정보 없음: BR_3656_333000003
+07:07:01.063 [main] INFO  k.otp.raptor.data.TransitDataBuilder -   노선(패턴): 32229개
+07:07:01.063 [main] INFO  k.otp.raptor.data.TransitDataBuilder - 정류장별 노선 인덱스 생성 중...
+07:07:01.206 [main] INFO  k.otp.raptor.data.TransitDataBuilder - 환승 정보 생성 중...
+07:07:01.206 [main] INFO  k.otp.raptor.data.TransitDataBuilder -   환승 거리 기반 생성 (최대 500.0m)
+07:07:03.928 [main] INFO  k.otp.raptor.data.TransitDataBuilder -   환승: 2027380개
+07:07:03.928 [main] INFO  k.otp.raptor.data.TransitDataBuilder - TransitData 빌드 완료 (4085ms)
+  완료: 32,229 패턴, 349,509 트립 (4.8초)
+[3/4] OSM 도로망 로드 중...
+07:07:04.611 [main] INFO  kr.otp.osm.OsmLoader - OSM 데이터 로드 시작: data\osm\south-korea.osm.pbf
+07:07:04.611 [main] INFO  kr.otp.osm.OsmLoader -   Pass 1: Way 분석 중...
+07:07:11.273 [main] INFO  kr.otp.osm.OsmLoader -     도보 가능 Way: 1601155개, 필요 노드: 15711249개
+07:07:11.273 [main] INFO  kr.otp.osm.OsmLoader -   Pass 2: 노드 좌표 수집 중...
+07:07:18.325 [main] INFO  kr.otp.osm.OsmLoader -     좌표 수집 완료: 15711249개
+07:07:18.325 [main] INFO  kr.otp.osm.OsmLoader -   도로망 구축 중...
+07:07:24.460 [main] INFO  kr.otp.osm.OsmLoader - OSM 로드 완료: StreetNetwork[nodes=15711249, edges=32376508] (19849ms)
+  완료: StreetNetwork[nodes=15711249, edges=32376508] (19.9초)
+[4/4] Raptor 엔진 초기화...
+07:07:24.487 [main] INFO  kr.otp.core.AccessEgressFinder - 병렬 A* 스레드 풀: 16개 코어
+07:07:24.487 [main] INFO  kr.otp.core.AccessEgressFinder - 정류장-도로노드 매핑 계산 중...
+07:07:31.484 [main] INFO  kr.otp.core.AccessEgressFinder -   정류장 212105개 중 211855개 도로망 연결
+07:07:31.484 [main] INFO  kr.otp.core.AccessEgressFinder - OSM 기반 도보 거리 계산 활성화 (매핑: 6997ms)
+07:07:31.484 [main] INFO  kr.otp.core.KoreanRaptor - KoreanRaptor 초기화 완료: KoreanTransitDataProvider{stops=212105, routes=32229, trips=349509} (OSM: true)
+  완료: KoreanRaptor[stops=212105, routes=32229, trips=349509] (7.0초)
+  도보 거리: OSM 기반 (실제 도로)
+
+═══════════════════════════════════════════════════════════════
+  초기화 완료! (40.1초)
+═══════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════
+  대화형 경로 검색
+───────────────────────────────────────────────────────────────
+  입력: 출발위도 출발경도 도착위도 도착경도 시간 [결과수]
+  예시: 37.5547 126.9707 37.4979 127.0276 09:00 5
+  명령: q(종료), n=숫자(결과수 변경), mc(MULTI_CRITERIA), std(STANDARD)
+═══════════════════════════════════════════════════════════════
+
+[STD, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [STANDARD]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:33.965 [main] INFO  kr.otp.core.KoreanRaptor - 경로 8개 발견 (439ms)
+09:00 이후 경로 8개 (전체 8개, 0.439초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 논현역6번출구 09:25
+  3. [360] 논현역6번출구 09:28 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 지하철2호선강남역 09:36
+  5. [360] 지하철2호선강남역 09:38 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[STD, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [STANDARD]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:39.431 [main] INFO  kr.otp.core.KoreanRaptor - 경로 8개 발견 (331ms)
+09:00 이후 경로 8개 (전체 8개, 0.331초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 논현역6번출구 09:25
+  3. [360] 논현역6번출구 09:28 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 지하철2호선강남역 09:36
+  5. [360] 지하철2호선강남역 09:38 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[STD, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [STANDARD]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:40.368 [main] INFO  kr.otp.core.KoreanRaptor - 경로 8개 발견 (333ms)
+09:00 이후 경로 8개 (전체 8개, 0.333초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 논현역6번출구 09:25
+  3. [360] 논현역6번출구 09:28 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 지하철2호선강남역 09:36
+  5. [360] 지하철2호선강남역 09:38 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[STD, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [STANDARD]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:41.388 [main] INFO  kr.otp.core.KoreanRaptor - 경로 8개 발견 (323ms)
+09:00 이후 경로 8개 (전체 8개, 0.323초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 논현역6번출구 09:25
+  3. [360] 논현역6번출구 09:28 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 지하철2호선강남역 09:36
+  5. [360] 지하철2호선강남역 09:38 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[STD, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [STANDARD]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:43.944 [main] INFO  kr.otp.core.KoreanRaptor - 경로 8개 발견 (319ms)
+09:00 이후 경로 8개 (전체 8개, 0.319초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 논현역6번출구 09:25
+  3. [360] 논현역6번출구 09:28 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 지하철2호선강남역 09:36
+  5. [360] 지하철2호선강남역 09:38 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[STD, n=5] > mc
+검색 모드: MULTI_CRITERIA (파레토 최적)
+[MC, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [MULTI_CRITERIA]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:53.803 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 10개 발견 (332ms)
+09:00 이후 경로 10개 (전체 10개, 0.332초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 고속터미널 09:21
+  3. [360] 고속터미널 09:23 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 논현역 09:34
+  5. [360] 논현역 09:36 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[MC, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [MULTI_CRITERIA]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:54.651 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 10개 발견 (212ms)
+09:00 이후 경로 10개 (전체 10개, 0.212초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 고속터미널 09:21
+  3. [360] 고속터미널 09:23 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 논현역 09:34
+  5. [360] 논현역 09:36 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[MC, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [MULTI_CRITERIA]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:55.424 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 10개 발견 (174ms)
+09:00 이후 경로 10개 (전체 10개, 0.174초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 고속터미널 09:21
+  3. [360] 고속터미널 09:23 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 논현역 09:34
+  5. [360] 논현역 09:36 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[MC, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [MULTI_CRITERIA]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:56.201 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 10개 발견 (175ms)
+09:00 이후 경로 10개 (전체 10개, 0.175초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 고속터미널 09:21
+  3. [360] 고속터미널 09:23 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 논현역 09:34
+  5. [360] 논현역 09:36 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
+
+
+[MC, n=5] > 37.5547 126.9707 37.4979 127.0276 09:00 5
+검색 [MULTI_CRITERIA]: (37.5547, 126.9707) → (37.4979, 127.0276) @ 09:00 이후, 최대 5개
+─────────────────────────────────────────────────────
+07:09:57.108 [main] INFO  kr.otp.core.KoreanRaptor - MULTI_CRITERIA 경로 10개 발견 (161ms)
+09:00 이후 경로 10개 (전체 10개, 0.161초)
+
+■ 경로 1: 09:02 출발 → 09:35 도착 (33분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [401] 서울역버스환승센터 09:06 → 고속터미널 09:21
+  3. [360] 고속터미널 09:23 → 강남역.역삼세무서 09:33
+  4. 도보 2분 → 목적지
+
+■ 경로 2: 09:05 출발 → 09:37 도착 (32분, 환승 0회)
+  1. 도보 3분 → 서울역버스환승센터
+  2. [402] 서울역버스환승센터 09:09 → 신분당선강남역 09:33
+  3. 도보 4분 → 목적지
+
+■ 경로 3: 09:06 출발 → 09:41 도착 (35분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [9003] 서울역버스환승센터(5번승강장)(중) 09:10 → 순천향대학병원 09:24
+  3. 환승 도보 0분
+  4. [420] 순천향대학병원.한남오거리 09:27 → 신분당선강남역 09:37
+  5. 도보 4분 → 목적지
+
+■ 경로 4: 09:07 출발 → 09:42 도착 (34분, 환승 1회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 신분당선강남역 09:38
+  5. 도보 4분 → 목적지
+
+■ 경로 5: 09:07 출발 → 09:41 도착 (33분, 환승 2회)
+  1. 도보 3분 → 서울역버스환승센터(5번승강장)(중)
+  2. [8100] 서울역버스환승센터(5번승강장)(중) 09:11 → 순천향대학병원 09:25
+  3. 환승 도보 0분
+  4. [400] 순천향대학병원.한남오거리 09:28 → 논현역 09:34
+  5. [360] 논현역 09:36 → 강남역.역삼세무서 09:39
+  6. 도보 2분 → 목적지
