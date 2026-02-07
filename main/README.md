@@ -27,7 +27,7 @@
 | Step 2 | 대안 속성 추출 | ✅ |
 | Step 3 | 모델 입력 준비 | ✅ |
 | Step 4 | MNL 추정 | ✅ |
-| Step 5 | Mixed Logit 추정 | 🔄 진행중 |
+| Step 5 | Mixed Logit 추정 | ✅ |
 | Step 6 | Latent Class | 🔲 |
 | Step 7 | LightGBM | 🔲 |
 
@@ -76,6 +76,19 @@ python scripts/models/step5_estimate_mixed_logit.py
 | 보행 가중치 | 22.7× | 7.3× | 30.2× |
 
 상세 결과: `results/PHASE3_RESULTS1_MNL.md`
+
+## 주요 결과 (Mixed Logit)
+
+| 파라미터 | 평균(μ) | 표준편차(σ) | 이질성 |
+|----------|---------|-------------|--------|
+| T_walk | -0.860 | 0.194*** | 보행 가중치 14×~36× |
+| N_transfer | -3.614 | 0.777*** | 환승 페널티 61~150분 |
+| D_subway | 2.585 | 0.483*** | 지하철 선호 개인차 |
+
+- ρ² = 0.464, Hit Rate = 62.3%
+- **모든 σ 유의** → 이용자 간 선호 이질성 확인
+
+상세 결과: `results/PHASE3_RESULTS2_MIXED_LOGIT.md`
 
 ## 요구사항
 

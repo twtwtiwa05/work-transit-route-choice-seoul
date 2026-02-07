@@ -9,7 +9,7 @@
 | **출력** | 모델 추정 결과 (MNL, Mixed Logit, Latent Class, LightGBM) |
 | **핵심 기여** | Mixed Logit으로 이용자 유형 내 이질성(heterogeneity) 포착 |
 
-## 진행 현황 (2026-02-07 업데이트)
+## 진행 현황 (2026-02-08 업데이트)
 
 | Step | 작업 | 상태 | 비고 |
 |------|------|------|------|
@@ -17,7 +17,7 @@
 | Step 2 | 대안 속성 추출 | ✅ 완료 | T_ride, T_walk, N_transfer 등 |
 | Step 3 | 모델 입력 준비 | ✅ 완료 | 411,754 체인, Train/Test 분할 |
 | Step 4 | MNL 추정 | ✅ 완료 | Pooled + 5개 유형별, ρ²=0.469 |
-| Step 5 | Mixed Logit 추정 | 🔲 예정 | |
+| Step 5 | Mixed Logit 추정 | ✅ Pooled 완료 | ρ²=0.464, 유형별 진행중 |
 | Step 6 | Latent Class 추정 | 🔲 예정 | |
 | Step 7 | LightGBM 벤치마크 | 🔲 예정 | |
 | Step 8 | 모델 비교 | 🔲 예정 | |
@@ -594,13 +594,12 @@ main/scripts/models/
 ├── step2_extract_attributes.py      # OTP 대안별 속성 추출
 ├── step3_prepare_model_input.py     # 모델 입력 데이터 병합
 ├── step4_estimate_mnl.py            # MNL 추정
-├── step5_estimate_mixed_logit.py    # Mixed Logit 추정
+├── step5_estimate_mixed_logit.py    # Mixed Logit 추정 (Pooled) ✅
+├── step5b_mixed_logit_by_type.py    # Mixed Logit 유형별 (최적화) 🆕
 ├── step6_estimate_latent_class.py   # Latent Class 추정
 ├── step7_lightgbm_benchmark.py      # LightGBM + SHAP
 ├── step8_compare_models.py          # 모델 비교표 생성
-└── utils/
-    ├── data_loader.py               # 공통 데이터 로드
-    └── evaluation_metrics.py        # 평가 지표 계산
+└── check_peak_transfer.py           # Peak 효과 진단용
 ```
 
 ### 7.2 각 스크립트 입출력
@@ -611,7 +610,8 @@ main/scripts/models/
 | 2 | otp_alternatives.parquet | alternative_attributes.parquet | ~3분 | ✅ 완료 |
 | 3 | step1,2 + trip_attributes | model_input.parquet | ~2분 | ✅ 완료 |
 | 4 | model_input.parquet | mnl_results.json | ~5분 | ✅ 완료 |
-| 5 | model_input.parquet | mixed_logit_results.json | 30분+ | 🔲 예정 |
+| 5 | model_input.parquet | mixed_logit_results.json | 6.4시간 (Pooled) | ✅ Pooled 완료 |
+| 5b | model_input.parquet | mixed_logit_{type}.json | 유형당 30분~3시간 | 🔄 진행중 |
 | 6 | model_input.parquet | latent_class_results.json | 20분 | 🔲 예정 |
 | 7 | model_input.parquet | lightgbm_results.json | 5분 | 🔲 예정 |
 | 8 | 모든 결과 | comparison_table.csv, figures/ | 5분 | 🔲 예정 |
@@ -769,99 +769,57 @@ def prepare_model_input():
 
 ### 8.4 Step 5: Mixed Logit 추정 (핵심)
 
-```python
-"""
-step5_estimate_mixed_logit.py
+#### Pooled Mixed Logit 결과 (2026-02-08 완료)
 
-입력:
-- model_input_train.parquet
+| 파라미터 | 추정치 | 표준오차 | t-stat | 유의 |
+|----------|--------|---------|--------|------|
+| T_ride (fixed) | -0.0342 | 0.0055 | -6.20 | *** |
+| T_walk (μ) | -0.8600 | 0.0155 | -55.62 | *** |
+| T_walk (σ) | 0.1938 | 0.0183 | 10.57 | *** |
+| N_transfer (μ) | -3.6140 | 0.0689 | -52.45 | *** |
+| N_transfer (σ) | 0.7772 | 0.0968 | 8.03 | *** |
+| D_subway (μ) | 2.5852 | 0.0645 | 40.07 | *** |
+| D_subway (σ) | 0.4834 | 0.1342 | 3.60 | *** |
+| Peak_T_ride (fixed) | -0.0091 | 0.0094 | -0.97 | - |
+| Peak_N_transfer (fixed) | 0.0160 | 0.0891 | 0.18 | - |
 
-출력:
-- mixed_logit_results.json
-  - pooled: 전체 이용자 결과
-  - by_type: 유형별 결과 (5개)
-  - comparison: MNL vs ML 비교
+**ρ² = 0.4636, Hit Rate = 62.30%**
+**모든 σ 유의** → 이용자 간 이질성 확인
 
-로직:
-1. Pooled Mixed Logit 추정
-2. 유형별 Mixed Logit 추정 (5개)
-3. 결과 저장 및 시각화
-"""
+#### 유형별 Mixed Logit 추정 방법 (step5b)
 
-from xlogit import MixedLogit
-import json
+**스크립트**: `step5b_mixed_logit_by_type.py`
 
-def estimate_mixed_logit(df: pd.DataFrame, user_type: int = None) -> dict:
-    if user_type is not None:
-        df = df[df['user_type'] == user_type]
-
-    X = df[['T_ride', 'T_walk', 'N_transfer', 'D_subway']].values
-    y = df['choice'].values
-    ids = df['chain_id'].values
-    alts = df['alt_id'].values
-
-    model = MixedLogit()
-    model.fit(
-        X=X, y=y,
-        varnames=['T_ride', 'T_walk', 'N_transfer', 'D_subway'],
-        ids=ids, alts=alts,
-        randvars={
-            'T_walk': 'n',
-            'N_transfer': 'n',
-            'D_subway': 'n'
-        },
-        n_draws=1000,
-        halton=True
-    )
-
-    # 결과 정리
-    results = {
-        'coefficients': {
-            'T_ride': {'mean': model.coeff_['T_ride'], 'se': model.stderr_['T_ride']},
-            'T_walk': {
-                'mean': model.coeff_['T_walk'],
-                'std': model.coeff_['sd.T_walk'],
-                'se_mean': model.stderr_['T_walk'],
-                'se_std': model.stderr_['sd.T_walk']
-            },
-            # ... 다른 파라미터들
-        },
-        'log_likelihood': model.loglikelihood,
-        'aic': model.aic,
-        'bic': model.bic,
-        'n_obs': len(df),
-        'n_trips': df['chain_id'].nunique()
-    }
-
-    # 가중치 계산
-    beta_ride = abs(model.coeff_['T_ride'])
-    results['weights'] = {
-        'walk': abs(model.coeff_['T_walk']) / beta_ride,
-        'transfer_minutes': abs(model.coeff_['N_transfer']) / beta_ride,
-    }
-
-    return results
-
-def main():
-    train_df = pd.read_parquet('model_input_train.parquet')
-
-    # Pooled
-    pooled_results = estimate_mixed_logit(train_df)
-
-    # By user type
-    by_type_results = {}
-    for user_type in [1, 2, 3, 4, 5]:
-        type_df = train_df[train_df['user_type'] == user_type]
-        if len(type_df) >= 1000:  # 최소 샘플
-            by_type_results[user_type] = estimate_mixed_logit(type_df)
-
-    # 저장
-    with open('mixed_logit_results.json', 'w') as f:
-        json.dump({
-            'pooled': pooled_results,
-            'by_type': by_type_results
-        }, f, indent=2)
+**실행 순서** (작은 샘플 → 큰 샘플):
 ```
+disabled → elderly → children → youth → general (마지막)
+```
+
+**샘플링 전략**:
+- 체인 수 > 15,000 → 자동으로 15,000 샘플링
+- 체인 수 ≤ 15,000 → 전체 사용
+- 최소 체인 수: 500 (미만 시 건너뜀)
+
+**실시간 저장**: 각 유형 완료 즉시 개별 파일 저장
+- `results/mixed_logit_disabled.json`
+- `results/mixed_logit_elderly.json`
+- `results/mixed_logit_children.json`
+- `results/mixed_logit_youth.json`
+- `results/mixed_logit_general.json`
+- `results/mixed_logit_by_type.json` (통합)
+
+**실행 명령**:
+```bash
+cd main/scripts/models
+python step5b_mixed_logit_by_type.py           # 전체 순차 실행
+python step5b_mixed_logit_by_type.py --type elderly  # 특정 유형만
+python step5b_mixed_logit_by_type.py --draws 300     # draws 줄여서 빠르게
+```
+
+**최적화 사항**:
+- 벡터화된 로그우도 계산 (draws 루프 제거)
+- numpy 브로드캐스팅 활용
+- 예상 속도: 유형당 30분~3시간 (샘플 크기에 따라)
 
 ---
 
@@ -992,8 +950,9 @@ statsmodels>=0.14.0      # 검정
 
 - [x] MNL: 기본 변수 부호 이론 일치 ✅ (Elderly/Disabled T_ride 제외)
 - [x] MNL: 모든 기본 파라미터 유의 ✅ (p < 0.001)
-- [ ] Mixed Logit: σ > 0 (이질성 존재) 🔲
-- [ ] Mixed Logit: ρ² > MNL ρ² 🔲
+- [x] Mixed Logit: σ > 0 (이질성 존재) ✅ 모든 σ 유의 (t > 3.6)
+- [x] Mixed Logit: Peak 효과 비유의 → 개인 이질성에 흡수됨 ✅
+- [ ] Mixed Logit: 유형별 추정 🔄
 - [ ] Latent Class: 최적 K의 BIC가 인접 K보다 낮음 🔲
 - [ ] LightGBM: Hit Rate > MNL Hit Rate 🔲
 
@@ -1079,8 +1038,9 @@ Phase 3 출력 → Phase 4 입력
 |------|------|--------|------|
 | Day 1 | Step 1-3: 데이터 준비 | model_input.parquet | ✅ 완료 |
 | Day 1 | Step 4: MNL 추정 + 검증 | mnl_results.json | ✅ 완료 |
-| Day 2 | Step 5: Mixed Logit (Pooled + 유형별) | mixed_logit_results.json | 🔲 예정 |
+| Day 2 | Step 5: Mixed Logit Pooled | mixed_logit_results.json | ✅ 완료 (6.4h) |
+| Day 2 | Step 5b: Mixed Logit 유형별 | mixed_logit_{type}.json | 🔄 진행중 |
 | Day 3 | Step 6: Latent Class | latent_class_results.json | 🔲 예정 |
 | Day 4 | Step 7-8: LightGBM + 비교 | 최종 결과 | 🔲 예정 |
 
-**진행 상황**: Step 1-4 완료 (2026-02-07), Step 5 대기 중
+**진행 상황**: Step 1-5 Pooled 완료 (2026-02-08), Step 5b 유형별 진행중

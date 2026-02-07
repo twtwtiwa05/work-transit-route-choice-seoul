@@ -1,0 +1,108 @@
+{
+  "model": "Mixed Logit",
+  "estimation_date": "2026-02-07",
+  "estimation_time_minutes": 383.5,
+  "converged": true,
+
+  "sample": {
+    "original_chains": 329403,
+    "sampled_chains": 29997,
+    "total_rows": 138468,
+    "sampling_method": "stratified"
+  },
+
+  "settings": {
+    "n_draws": 500,
+    "draw_type": "halton",
+    "distribution": "normal",
+    "optimizer": "L-BFGS-B"
+  },
+
+  "parameters": {
+    "fixed": {
+      "T_ride": {
+        "estimate": -0.0342,
+        "std_error": 0.0055,
+        "t_stat": -6.20,
+        "significant": true
+      },
+      "Peak_T_ride": {
+        "estimate": -0.0091,
+        "std_error": 0.0094,
+        "t_stat": -0.97,
+        "significant": false
+      },
+      "Peak_N_transfer": {
+        "estimate": 0.0160,
+        "std_error": 0.0891,
+        "t_stat": 0.18,
+        "significant": false
+      }
+    },
+    "random": {
+      "T_walk": {
+        "mean": -0.8600,
+        "mean_std_error": 0.0155,
+        "mean_t_stat": -55.62,
+        "sigma": 0.1938,
+        "sigma_std_error": 0.0183,
+        "sigma_t_stat": 10.57,
+        "significant": true
+      },
+      "N_transfer": {
+        "mean": -3.6140,
+        "mean_std_error": 0.0689,
+        "mean_t_stat": -52.45,
+        "sigma": 0.7772,
+        "sigma_std_error": 0.0968,
+        "sigma_t_stat": 8.03,
+        "significant": true
+      },
+      "D_subway": {
+        "mean": 2.5852,
+        "mean_std_error": 0.0645,
+        "mean_t_stat": 40.07,
+        "sigma": 0.4834,
+        "sigma_std_error": 0.1342,
+        "sigma_t_stat": 3.60,
+        "significant": true
+      }
+    }
+  },
+
+  "fit_statistics": {
+    "log_likelihood": -22990.31,
+    "null_log_likelihood": -42861.52,
+    "rho_squared": 0.4636,
+    "adjusted_rho_squared": 0.4634,
+    "aic": 45998.63,
+    "bic": 46073.41
+  },
+
+  "prediction": {
+    "hit_rate": 0.6230,
+    "mean_choice_probability": 0.5950
+  },
+
+  "derived_values": {
+    "walk_weight": {
+      "mean": 25.15,
+      "percentile_2.5": 14.0,
+      "percentile_97.5": 36.3,
+      "interpretation": "Walking 1 min = In-vehicle 25.2 min (average)"
+    },
+    "transfer_penalty_minutes": {
+      "mean": 105.7,
+      "percentile_2.5": 61.3,
+      "percentile_97.5": 150.1,
+      "interpretation": "1 transfer = 105.7 min in-vehicle time (average)"
+    }
+  },
+
+  "key_findings": {
+    "heterogeneity_confirmed": true,
+    "all_sigma_significant": true,
+    "peak_effects_not_significant": true,
+    "interpretation": "Individual heterogeneity absorbs peak-time effects observed in MNL"
+  }
+}

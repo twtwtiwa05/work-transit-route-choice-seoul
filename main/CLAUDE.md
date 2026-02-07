@@ -19,19 +19,18 @@ Claude Code 작업 가이드 - 대중교통 경로선택 모형 연구
 ```
 Phase 1: 데이터 전처리     ✅ 완료
 Phase 2: OTP 매칭 + 유사도  ✅ 완료
-Phase 3: 모형 추정         🔄 Step 5 Mixed Logit 진행 예정
+Phase 3: 모형 추정         🔄 Step 5 완료, Step 6-7 대기
 Phase 4: 반복 보정         ⏳ 대기
 ```
 
-### 지금 해야 할 일: Step 5 Mixed Logit 추정
+### 지금 해야 할 일: Step 6 Latent Class 또는 Step 7 LightGBM
 
-```bash
-cd main
-python scripts/models/step5_estimate_mixed_logit.py
-```
+**Step 5 Mixed Logit 완료됨** - 결과: `results/PHASE3_RESULTS2_MIXED_LOGIT.md`
 
-- **예상 소요시간**: 1.5~2.5시간 (30K 샘플, 500 draws)
-- **필요 파일**: `output/model_input_train.parquet` (GitHub에 포함됨)
+다음 단계 선택:
+- Step 6: Latent Class Model (이용자 세분화)
+- Step 7: LightGBM Benchmark (ML 비교)
+- Phase 4: 반복 보정 (OTP 비용함수 업데이트)
 
 ---
 
@@ -45,7 +44,7 @@ python scripts/models/step5_estimate_mixed_logit.py
 | 2 | 대안 속성 추출 | ✅ | `alternative_attributes.parquet` |
 | 3 | 모델 입력 준비 | ✅ | `model_input_train/test.parquet` |
 | 4 | MNL 추정 | ✅ | `results/mnl_results.json` |
-| 5 | Mixed Logit | 🔄 | - |
+| 5 | Mixed Logit | ✅ | `results/mixed_logit_results.json` |
 | 6 | Latent Class | ⏳ | - |
 | 7 | LightGBM | ⏳ | - |
 
@@ -80,7 +79,21 @@ V_j = β_ride × T_ride_j
 
 **상세 결과**: `results/PHASE3_RESULTS1_MNL.md`
 
-### Mixed Logit 설정 (Step 5)
+### Mixed Logit 추정 결과 (Step 5 완료)
+
+| 파라미터 | 평균(μ) | 표준편차(σ) | 해석 |
+|----------|---------|-------------|------|
+| T_walk | -0.860*** | 0.194*** | 보행 가중치 14×~36× |
+| N_transfer | -3.614*** | 0.777*** | 환승 페널티 61~150분 |
+| D_subway | 2.585*** | 0.483*** | 지하철 선호 개인차 |
+
+- ρ² = 0.4636, Hit Rate = 62.30%
+- **모든 σ 유의** → 이용자 간 선호 이질성 확인됨
+- Peak 상호작용 효과 비유의 (개인 이질성에 흡수됨)
+
+**상세 결과**: `results/PHASE3_RESULTS2_MIXED_LOGIT.md`
+
+### Mixed Logit 설정 (참고)
 
 ```python
 RANDOM_VARS = ['T_walk', 'N_transfer', 'D_subway']  # Normal distribution
@@ -211,12 +224,12 @@ python scripts/models/step5_estimate_mixed_logit.py
 
 ## 다음 단계
 
-1. **Step 5**: Mixed Logit 추정 (~2시간)
-2. **Step 6**: Latent Class Model
-3. **Step 7**: LightGBM Benchmark
+1. ~~**Step 5**: Mixed Logit 추정~~ ✅ 완료
+2. **Step 6**: Latent Class Model (선택)
+3. **Step 7**: LightGBM Benchmark (선택)
 4. **Step 8**: 모형 비교 분석
 5. **Phase 4**: 반복 보정 (추정 파라미터 → OTP 비용함수)
 
 ---
 
-*최종 수정: 2026-02-07 (Phase 3 Step 4 MNL 완료, Step 5 대기)*
+*최종 수정: 2026-02-08 (Phase 3 Step 5 Mixed Logit 완료)*
