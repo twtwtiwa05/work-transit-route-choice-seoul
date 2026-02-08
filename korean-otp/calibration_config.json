@@ -1,7 +1,7 @@
 {
-  "transferCostSeconds": 120,
+  "walkReluctance": 5.25,
+  "transferCostSeconds": 360,
   "firstBoardCostSeconds": 60,
   "waitReluctance": 1.0,
-  "walkReluctance": 1.0,
   "searchWindowSeconds": 1800
 }

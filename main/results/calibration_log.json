@@ -1,0 +1,26 @@
+{
+  "iterations": [
+    {
+      "iteration": 1,
+      "beta": {
+        "ride": -0.07689590803144454,
+        "walk": -0.7294944381549048,
+        "transfer": -3.2721626410302203,
+        "subway": 2.02172739201083
+      },
+      "theta_target": {
+        "walkReluctance": 9.49,
+        "transferCostSeconds": 600
+      },
+      "theta_prev": {
+        "walkReluctance": 1.0,
+        "transferCostSeconds": 120
+      },
+      "theta_new": {
+        "walkReluctance": 5.25,
+        "transferCostSeconds": 360
+      },
+      "alpha": 0.5
+    }
+  ]
+}
