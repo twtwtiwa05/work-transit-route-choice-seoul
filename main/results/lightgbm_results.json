@@ -1,0 +1,268 @@
+{
+  "core_model": {
+    "features": [
+      "T_ride",
+      "T_walk",
+      "N_transfer",
+      "D_subway"
+    ],
+    "n_features": 4,
+    "best_params": {
+      "n_estimators": 596,
+      "learning_rate": 0.010636066512540286,
+      "max_depth": 8,
+      "num_leaves": 55,
+      "min_child_samples": 58,
+      "subsample": 0.6727299868828402,
+      "colsample_bytree": 0.6733618039413735,
+      "reg_alpha": 5.472429642032189e-06,
+      "reg_lambda": 0.00052821153945323
+    },
+    "hit_rate_train": 0.6579508990507069,
+    "hit_rate_test": 0.6575026411336838,
+    "mean_choice_prob_train": 0.4345214633548986,
+    "mean_choice_prob_test": 0.4346460790789497,
+    "train_test_gap": 0.00044825791702307605,
+    "hit_rate_by_user_type": {
+      "General": {
+        "hit_rate": 0.6475920012948603,
+        "n_chains": 67961
+      },
+      "Children": {
+        "hit_rate": 0.6489547038327527,
+        "n_chains": 1148
+      },
+      "Youth": {
+        "hit_rate": 0.6491583857229771,
+        "n_chains": 4931
+      },
+      "Elderly": {
+        "hit_rate": 0.7599867395988729,
+        "n_chains": 6033
+      },
+      "Disabled": {
+        "hit_rate": 0.704126426690079,
+        "n_chains": 2278
+      }
+    },
+    "lgb_feature_importance": {
+      "T_ride": 13330.0,
+      "T_walk": 13800.0,
+      "N_transfer": 3094.0,
+      "D_subway": 1960.0
+    },
+    "cv_hit_rate": 0.6568003329529949,
+    "tuning_time_sec": 1142.15159201622,
+    "shap": {
+      "global_importance": {
+        "T_walk": 1.0612244103073474,
+        "N_transfer": 0.8487375148632424,
+        "T_ride": 0.4517861188027125,
+        "D_subway": 0.3176551766560271
+      },
+      "by_user_type": {
+        "General": {
+          "T_ride": 0.4504147162313541,
+          "T_walk": 1.0560343533318626,
+          "N_transfer": 0.8607294086260211,
+          "D_subway": 0.315798539741421
+        },
+        "Children": {
+          "T_ride": 0.49764217433772623,
+          "T_walk": 1.168659612507979,
+          "N_transfer": 0.7478353258326802,
+          "D_subway": 0.2588471399072542
+        },
+        "Youth": {
+          "T_ride": 0.441823606479058,
+          "T_walk": 1.0835010910742167,
+          "N_transfer": 0.786724821506762,
+          "D_subway": 0.26957224547916525
+        },
+        "Elderly": {
+          "T_ride": 0.46278345343209043,
+          "T_walk": 1.063826810826195,
+          "N_transfer": 0.8074200853490044,
+          "D_subway": 0.4037432308641393
+        },
+        "Disabled": {
+          "T_ride": 0.4676366880317784,
+          "T_walk": 1.1158996475133198,
+          "N_transfer": 0.7599409493160688,
+          "D_subway": 0.3010317095293459
+        }
+      }
+    }
+  },
+  "full_model": {
+    "features": [
+      "T_ride",
+      "T_walk",
+      "N_transfer",
+      "D_subway",
+      "D_peak",
+      "user_type",
+      "n_alternatives"
+    ],
+    "n_features": 7,
+    "best_params": {
+      "n_estimators": 313,
+      "learning_rate": 0.013399060561509796,
+      "max_depth": 7,
+      "num_leaves": 36,
+      "min_child_samples": 42,
+      "subsample": 0.798070764044508,
+      "colsample_bytree": 0.6137554084460873,
+      "reg_alpha": 1.5271567592511939,
+      "reg_lambda": 2.133142332373e-06
+    },
+    "hit_rate_train": 0.6642076726684335,
+    "hit_rate_test": 0.6622263239062064,
+    "mean_choice_prob_train": 0.4042395695789779,
+    "mean_choice_prob_test": 0.4041809324788575,
+    "train_test_gap": 0.0019813487622271087,
+    "hit_rate_by_user_type": {
+      "General": {
+        "hit_rate": 0.6527567281234826,
+        "n_chains": 67961
+      },
+      "Children": {
+        "hit_rate": 0.6594076655052264,
+        "n_chains": 1148
+      },
+      "Youth": {
+        "hit_rate": 0.6540255526262422,
+        "n_chains": 4931
+      },
+      "Elderly": {
+        "hit_rate": 0.7608155146693187,
+        "n_chains": 6033
+      },
+      "Disabled": {
+        "hit_rate": 0.702809482001756,
+        "n_chains": 2278
+      }
+    },
+    "lgb_feature_importance": {
+      "T_ride": 3046.0,
+      "T_walk": 2561.0,
+      "N_transfer": 923.0,
+      "D_subway": 760.0,
+      "D_peak": 216.0,
+      "user_type": 1087.0,
+      "n_alternatives": 2224.0
+    },
+    "cv_hit_rate": 0.663327290810729,
+    "tuning_time_sec": 733.6011180877686,
+    "shap": {
+      "global_importance": {
+        "T_walk": 0.8258327573661267,
+        "N_transfer": 0.6838044698028186,
+        "T_ride": 0.32704501500914196,
+        "D_subway": 0.21518768696046556,
+        "n_alternatives": 0.20029020793879038,
+        "user_type": 0.02176717931070518,
+        "D_peak": 0.0023382280245828856
+      },
+      "by_user_type": {
+        "General": {
+          "T_ride": 0.3287531613935517,
+          "T_walk": 0.8216790893175782,
+          "N_transfer": 0.6874566519304537,
+          "D_subway": 0.21355800825631654,
+          "D_peak": 0.0024038413245659846,
+          "user_type": 0.011170451927132084,
+          "n_alternatives": 0.19818524607750712
+        },
+        "Children": {
+          "T_ride": 0.3434895729079305,
+          "T_walk": 0.9104075494719159,
+          "N_transfer": 0.6203168707291206,
+          "D_subway": 0.1684756928585114,
+          "D_peak": 0.0016580692180045997,
+          "user_type": 0.021121985423801934,
+          "n_alternatives": 0.2159622475846148
+        },
+        "Youth": {
+          "T_ride": 0.32053392697343797,
+          "T_walk": 0.8454163675293247,
+          "N_transfer": 0.645276158258279,
+          "D_subway": 0.17953515807163692,
+          "D_peak": 0.0018261946106047614,
+          "user_type": 0.02107364841445013,
+          "n_alternatives": 0.21177867580816306
+        },
+        "Elderly": {
+          "T_ride": 0.30902818352722666,
+          "T_walk": 0.8296315212132415,
+          "N_transfer": 0.6998662655833285,
+          "D_subway": 0.29337240014041727,
+          "D_peak": 0.0024094947303911264,
+          "user_type": 0.15377988840020507,
+          "n_alternatives": 0.2073086344738832
+        },
+        "Disabled": {
+          "T_ride": 0.32381302171929033,
+          "T_walk": 0.8621344683658131,
+          "N_transfer": 0.6463745551374446,
+          "D_subway": 0.1770548008542205,
+          "D_peak": 0.001569884875593991,
+          "user_type": 0.033634928151803835,
+          "n_alternatives": 0.21611462031718745
+        }
+      }
+    }
+  },
+  "comparison": {
+    "MNL": {
+      "hit_rate": 0.6292231704022125,
+      "rho_squared": 0.4685752907158224,
+      "mean_choice_prob": 0.5984759620257215,
+      "n_params": 6,
+      "note": "Train set (329,403 chains)"
+    },
+    "Mixed_Logit": {
+      "hit_rate": 0.623,
+      "rho_squared": 0.4636,
+      "mean_choice_prob": 0.595,
+      "n_params": 9,
+      "note": "Sampled (29,997 chains)"
+    },
+    "Latent_Class": {
+      "hit_rate": 0.6742844652766815,
+      "rho_squared": 0.4734558208187536,
+      "mean_choice_prob": 0.6032859614728323,
+      "n_params": 24,
+      "note": "Sampled (49,997 chains, K=3)"
+    },
+    "LightGBM_Core": {
+      "hit_rate": 0.6575026411336838,
+      "rho_squared": null,
+      "mean_choice_prob": 0.4346460790789497,
+      "n_params": null,
+      "note": "Test set (82,351 chains, 4 features)"
+    },
+    "LightGBM_Full": {
+      "hit_rate": 0.6622263239062064,
+      "rho_squared": null,
+      "mean_choice_prob": 0.4041809324788575,
+      "n_params": null,
+      "note": "Test set (82,351 chains, 7 features)"
+    }
+  },
+  "data_info": {
+    "n_train_rows": 1518228,
+    "n_test_rows": 380532,
+    "n_train_chains": 329403,
+    "n_test_chains": 82351,
+    "pos_ratio": 0.21696543602146715,
+    "scale_pos_weight": 3.609029061666105
+  },
+  "estimation_info": {
+    "n_optuna_trials": 30,
+    "n_cv_folds": 5,
+    "random_state": 42,
+    "total_time_sec": 1915.9703240394592,
+    "timestamp": "2026-02-08 05:12:37"
+  }
+}

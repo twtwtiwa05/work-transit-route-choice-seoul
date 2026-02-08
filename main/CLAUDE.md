@@ -19,18 +19,21 @@ Claude Code 작업 가이드 - 대중교통 경로선택 모형 연구
 ```
 Phase 1: 데이터 전처리     ✅ 완료
 Phase 2: OTP 매칭 + 유사도  ✅ 완료
-Phase 3: 모형 추정         🔄 Step 5 완료, Step 6-7 대기
+Phase 3: 모형 추정         ✅ Step 8 완료 (MNL → ML → LC → LightGBM → 비교분석)
 Phase 4: 반복 보정         ⏳ 대기
 ```
 
-### 지금 해야 할 일: Step 6 Latent Class 또는 Step 7 LightGBM
+### 지금 해야 할 일: Phase 4 반복 보정
 
-**Step 5 Mixed Logit 완료됨** - 결과: `results/PHASE3_RESULTS2_MIXED_LOGIT.md`
+**Phase 3 모형 추정 + 비교분석 완료** — 4개 모형 추정 및 Step 8 통합 비교 완료:
+- Step 4: MNL → `results/PHASE3_RESULTS1_MNL.md`
+- Step 5: Mixed Logit → `results/PHASE3_RESULTS2_MIXED_LOGIT.md`
+- Step 6: Latent Class (K=3) → `results/PHASE3_RESULTS3_LC.md`
+- Step 7: LightGBM Benchmark → `results/PHASE3_RESULTS4_LIGHTGBM.md`
+- Step 8: 통합 모형 비교 → `results/PHASE3_RESULTS5_COMPARISON.md` + `results/figures/fig1~4`
 
-다음 단계 선택:
-- Step 6: Latent Class Model (이용자 세분화)
-- Step 7: LightGBM Benchmark (ML 비교)
-- Phase 4: 반복 보정 (OTP 비용함수 업데이트)
+다음 단계:
+- Phase 4: 반복 보정 (LC 클래스별 파라미터 → OTP 비용함수 업데이트)
 
 ---
 
@@ -45,8 +48,9 @@ Phase 4: 반복 보정         ⏳ 대기
 | 3 | 모델 입력 준비 | ✅ | `model_input_train/test.parquet` |
 | 4 | MNL 추정 | ✅ | `results/mnl_results.json` |
 | 5 | Mixed Logit | ✅ | `results/mixed_logit_results.json` |
-| 6 | Latent Class | ⏳ | - |
-| 7 | LightGBM | ⏳ | - |
+| 6 | Latent Class (K=3) | ✅ | `results/latent_class_results.json` |
+| 7 | LightGBM Benchmark | ✅ | `results/lightgbm_results.json` |
+| 8 | 통합 모형 비교 | ✅ | `results/PHASE3_RESULTS5_COMPARISON.md` |
 
 ### 효용함수 (Utility Function)
 
@@ -74,7 +78,8 @@ V_j = β_ride × T_ride_j
 | 지표 | Pooled | Elderly | Disabled |
 |------|--------|---------|----------|
 | ρ² (rho-squared) | 0.469 | 0.582 | 0.515 |
-| Hit Rate (정분류율) | 62.9% | 78.5% | 73.0% |
+| Hit Rate (테스트셋) | 66.0% | — | — |
+| Hit Rate (학습셋) | 62.9% | 78.5% | 73.0% |
 | 보행 가중치 (T_walk/T_ride) | 22.7× | 7.3× | 30.2× |
 
 **상세 결과**: `results/PHASE3_RESULTS1_MNL.md`
@@ -87,11 +92,36 @@ V_j = β_ride × T_ride_j
 | N_transfer | -3.614*** | 0.777*** | 환승 페널티 61~150분 |
 | D_subway | 2.585*** | 0.483*** | 지하철 선호 개인차 |
 
-- ρ² = 0.4636, Hit Rate = 62.30%
+- ρ² = 0.4636, Hit Rate (테스트셋) = 65.9%, Hit Rate (샘플) = 62.3%
 - **모든 σ 유의** → 이용자 간 선호 이질성 확인됨
 - Peak 상호작용 효과 비유의 (개인 이질성에 흡수됨)
 
 **상세 결과**: `results/PHASE3_RESULTS2_MIXED_LOGIT.md`
+
+### Latent Class 추정 결과 (Step 6 완료)
+
+| 클래스 | 비율 | 특성 | 핵심 파라미터 |
+|--------|------|------|-------------|
+| Class 1 (접근성) | 8.7% | 고령자 61%, 환승 극기피 | β_ride=+0.25, β_transfer=-10.0, β_subway=+8.12 |
+| Class 2 (일반) | 77.2% | 합리적 트레이드오프 | β_ride=-0.077, β_walk=-0.730, β_transfer=-3.27 |
+| Class 3 (극단) | 14.0% | 지하철 충성, 극단값 | 모든 β 경계값 |
+
+- ρ² = 0.474, Hit Rate (테스트셋) = 67.4%, χ²(교차분석) = 46,861***
+- Concomitant variables: D_elderly → Class 1 오즈비 22배
+- **상세 결과**: `results/PHASE3_RESULTS3_LC.md`
+
+### LightGBM Benchmark 결과 (Step 7 완료)
+
+| 모형 | Hit Rate | 비고 |
+|------|----------|------|
+| LightGBM Core (4변수) | 65.75% | MNL과 동일 변수 |
+| LightGBM Full (7변수) | 66.22% | context 변수 추가 |
+
+- **LC(67.4%) > LightGBM(66.2%)**: 경제학 모형이 ML 상한 +1.2%p 초과
+- MNL / LightGBM = 99.7%: 6개 파라미터 선형모형이 상한의 99.7% 달성
+- SHAP 순위 = MNL β 순위 (완벽 일치) → 효용함수 사양 타당성 확인
+- D_peak SHAP ≈ 0 → 네 모형 일관 비유의
+- **상세 결과**: `results/PHASE3_RESULTS4_LIGHTGBM.md`
 
 ### Mixed Logit 설정 (참고)
 
@@ -147,7 +177,11 @@ main/
 │       ├── step2_extract_attributes.py
 │       ├── step3_prepare_model_input.py
 │       ├── step4_estimate_mnl.py       ✅ 완료
-│       ├── step5_estimate_mixed_logit.py  ← 다음 실행
+│       ├── step5_estimate_mixed_logit.py  ✅ 완료
+│       ├── step6_estimate_latent_class.py  ✅ 완료
+│       ├── step7_lightgbm_benchmark.py     ✅ 완료
+│       ├── step8_model_comparison.py       ✅ 완료
+│       ├── regenerate_step7_figures.py     (TNR 폰트 재생성)
 │       └── check_peak_transfer.py      (진단용)
 │
 ├── output/
@@ -157,7 +191,15 @@ main/
 │
 ├── results/
 │   ├── mnl_results.json           ✅ MNL 추정 결과
-│   └── PHASE3_RESULTS1_MNL.md     ✅ MNL 결과 문서
+│   ├── mixed_logit_results.json   ✅ Mixed Logit 결과
+│   ├── latent_class_results.json  ✅ Latent Class 결과
+│   ├── lightgbm_results.json      ✅ LightGBM 결과
+│   ├── PHASE3_RESULTS1_MNL.md     ✅ MNL 결과 문서
+│   ├── PHASE3_RESULTS2_MIXED_LOGIT.md  ✅ ML 결과 문서
+│   ├── PHASE3_RESULTS3_LC.md      ✅ LC 결과 문서
+│   ├── PHASE3_RESULTS4_LIGHTGBM.md ✅ LightGBM 결과 문서
+│   ├── PHASE3_RESULTS5_COMPARISON.md ✅ 통합 비교 분석 (한국어)
+│   └── figures/                   ✅ SHAP, 비교 차트 (fig1~4 + SHAP 5종)
 │
 └── docs/
     ├── PHASE3_MODEL_ESTIMATION_PLAN.md  ← 모형 추정 계획
@@ -218,6 +260,10 @@ python scripts/models/step5_estimate_mixed_logit.py
 |------|------|
 | `docs/PHASE3_MODEL_ESTIMATION_PLAN.md` | Phase 3 상세 계획 |
 | `results/PHASE3_RESULTS1_MNL.md` | MNL 결과 상세 |
+| `results/PHASE3_RESULTS2_MIXED_LOGIT.md` | Mixed Logit 결과 상세 |
+| `results/PHASE3_RESULTS3_LC.md` | Latent Class 결과 상세 |
+| `results/PHASE3_RESULTS4_LIGHTGBM.md` | LightGBM 벤치마크 결과 |
+| `results/PHASE3_RESULTS5_COMPARISON.md` | 통합 모형 비교 분석 (한국어) |
 | `docs/SIMILARITY_METRICS_FRAMEWORK.md` | 유사도 지표 정의 |
 
 ---
@@ -225,11 +271,29 @@ python scripts/models/step5_estimate_mixed_logit.py
 ## 다음 단계
 
 1. ~~**Step 5**: Mixed Logit 추정~~ ✅ 완료
-2. **Step 6**: Latent Class Model (선택)
-3. **Step 7**: LightGBM Benchmark (선택)
-4. **Step 8**: 모형 비교 분석
-5. **Phase 4**: 반복 보정 (추정 파라미터 → OTP 비용함수)
+2. ~~**Step 6**: Latent Class Model~~ ✅ 완료 (K=3, 공변량 멤버십)
+3. ~~**Step 7**: LightGBM Benchmark~~ ✅ 완료 (Core/Full + SHAP)
+4. ~~**Step 8**: 통합 모형 비교 분석~~ ✅ 완료 (논문 Figure 4종 + 한국어 비교보고서)
+5. **Phase 4**: 반복 보정 (LC 클래스별 파라미터 → OTP 비용함수)
+
+### Phase 3 핵심 결과 요약
+
+```
+Hit Rate 순위 (테스트셋 82,351 체인):
+  LC (K=3)         67.4%  ← 경제학 모형이 1위
+  LightGBM Full    66.2%
+  MNL (Pooled)     66.0%
+  Mixed Logit      65.9%
+  LightGBM Core    65.8%
+
+핵심 발견:
+  - LC > LightGBM: choice-set 구조 모형화의 우위 (+1.2%p)
+  - MNL/LGB = 99.7%: 6개 파라미터 선형모형이 상한의 99.7% 달성
+  - SHAP 순위 = MNL β 순위: 효용함수 사양 교차검증 완료
+  - D_peak: 네 모형 모두 비유의 (4중 확인)
+  - Elderly > Disabled > General: 모형 비의존적 예측력 순위
+```
 
 ---
 
-*최종 수정: 2026-02-08 (Phase 3 Step 5 Mixed Logit 완료)*
+*최종 수정: 2026-02-08 (Phase 3 Step 8 통합 모형 비교 완료, 테스트셋 기준 수치 통일)*
