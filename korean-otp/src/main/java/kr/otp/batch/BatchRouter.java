@@ -1,6 +1,7 @@
 package kr.otp.batch;
 
 import kr.otp.CalibrationConfig;
+import kr.otp.core.AccessEgressFinder;
 import kr.otp.core.KoreanRaptor;
 import kr.otp.gtfs.GtfsBundle;
 import kr.otp.gtfs.loader.GtfsLoader;
@@ -136,6 +137,122 @@ public class BatchRouter {
 
         } catch (Exception e) {
             System.err.println("오류: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Multi-batch 모드: 데이터 1회 로드 → 여러 config로 순차 배치 실행.
+     *
+     * GTFS/OSM/OD를 한 번만 로드하고, 매니페스트 파일의 각 줄(config_path,result_path)에 대해
+     * config를 변경하면서 순차적으로 배치를 실행한다.
+     *
+     * args: od_file manifest_file threads
+     */
+    public static void runMultiBatch(String[] args) {
+        // UTF-8 출력 설정
+        try {
+            System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+            System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            // 무시
+        }
+
+        String odFile = args.length > 0 ? args[0] : "data/od_sample_1000.csv";
+        String manifestFile = args.length > 1 ? args[1] : "manifest.txt";
+        int numThreads = args.length > 2 ? Integer.parseInt(args[2]) : DEFAULT_THREADS;
+
+        System.out.println("═══════════════════════════════════════════════════════════════");
+        System.out.println("           Multi-Batch 경로 탐색 v1.0                          ");
+        System.out.println("═══════════════════════════════════════════════════════════════");
+        System.out.printf("  OD 파일: %s%n", odFile);
+        System.out.printf("  매니페스트: %s%n", manifestFile);
+        System.out.printf("  스레드: %d%n%n", numThreads);
+
+        try {
+            // 1. 초기 config로 데이터 로드 (1회만)
+            CalibrationConfig initialConfig = loadCalibrationConfig();
+            System.out.printf("  초기 보정 설정: %s%n%n", initialConfig);
+
+            KoreanRaptor initialRaptor = initializeRaptor(initialConfig);
+            TransitData transitData = initialRaptor.getTransitData();
+            AccessEgressFinder finder = initialRaptor.getAccessEgressFinder();
+
+            // 2. OD 로드 (1회, 모든 config에 동일)
+            List<ODRequest> requests = loadRequests(odFile);
+            System.out.printf("OD 로드 완료: %,d개%n%n", requests.size());
+
+            // 3. JVM 웜업 (1회)
+            warmup(initialRaptor, requests);
+
+            // 4. 매니페스트 읽기
+            List<String> manifestLines = Files.readAllLines(Path.of(manifestFile), StandardCharsets.UTF_8);
+            List<String[]> entries = new ArrayList<>();
+            for (String line : manifestLines) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) continue;
+                String[] parts = line.split(",", 2);
+                if (parts.length == 2) {
+                    entries.add(new String[]{parts[0].trim(), parts[1].trim()});
+                }
+            }
+
+            System.out.printf("매니페스트 항목: %d개%n", entries.size());
+            System.out.println("═══════════════════════════════════════════════════════════════");
+
+            long totalStart = System.currentTimeMillis();
+
+            // 5. 각 항목에 대해 순차 실행 (데이터 재사용)
+            for (int i = 0; i < entries.size(); i++) {
+                String configPath = entries.get(i)[0];
+                String resultPath = entries.get(i)[1];
+
+                System.out.printf("%n[%d/%d] config: %s%n", i + 1, entries.size(), configPath);
+                System.out.printf("       result: %s%n", resultPath);
+
+                // config 로드
+                CalibrationConfig config;
+                try {
+                    config = CalibrationConfig.fromJsonFile(Path.of(configPath));
+                } catch (IOException e) {
+                    System.err.printf("  config 로드 실패: %s → 건너뜀%n", e.getMessage());
+                    continue;
+                }
+                System.out.printf("  config: %s%n", config);
+
+                // walkReluctance 업데이트 (AccessEgressFinder 재사용)
+                finder.setWalkReluctance(config.getWalkReluctance());
+
+                // 새 Raptor 생성 (TransitData + AccessEgressFinder 재사용)
+                KoreanRaptor raptor = new KoreanRaptor(transitData, finder, config);
+
+                // 배치 실행
+                String outputFile = resultPath;
+                if (outputFile.endsWith(".json")) {
+                    outputFile = outputFile.substring(0, outputFile.length() - 5) + ".ndjson";
+                }
+                Path progressPath = Path.of(outputFile + ".progress");
+
+                long batchStart = System.currentTimeMillis();
+                runBatchWithCheckpoint(raptor, requests, numThreads, outputFile, progressPath, 0, false);
+                Files.deleteIfExists(progressPath);
+
+                long batchElapsed = System.currentTimeMillis() - batchStart;
+                System.out.printf("  완료: %s (%.1f req/s)%n",
+                    formatDuration(batchElapsed), requests.size() * 1000.0 / batchElapsed);
+            }
+
+            long totalElapsed = System.currentTimeMillis() - totalStart;
+            System.out.println();
+            System.out.println("═══════════════════════════════════════════════════════════════");
+            System.out.printf("  Multi-Batch 완료! %d개 배치, 총 %s%n", entries.size(), formatDuration(totalElapsed));
+            System.out.println("═══════════════════════════════════════════════════════════════");
+
+            System.exit(0);
+
+        } catch (Exception e) {
+            System.err.println("Multi-Batch 오류: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }

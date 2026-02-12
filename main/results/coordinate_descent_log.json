@@ -1,0 +1,1496 @@
+{
+  "status": "completed",
+  "results": {
+    "GENERAL": {
+      "initial_theta": {
+        "walkReluctance": 4.07,
+        "transferCostSeconds": 202
+      },
+      "optimal_theta": {
+        "walkReluctance": 9.24,
+        "transferCostSeconds": 258
+      },
+      "best_sim_total": 0.6618679165840149,
+      "rounds": 3,
+      "history": [
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 1.63,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6343420743942261,
+          "exact_match": 28.603910868576627
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 2.44,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.644038200378418,
+          "exact_match": 29.77985163914812
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.26,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6467770338058472,
+          "exact_match": 29.89481233564427
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.07,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.647901177406311,
+          "exact_match": 30.11527377521614
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.88,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.648243248462677,
+          "exact_match": 29.670459933617828
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 5.7,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6498057246208191,
+          "exact_match": 30.177585793136547
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6581088304519653,
+          "exact_match": 31.257092422140964
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 81
+          },
+          "sim_total": 0.6559581160545349,
+          "exact_match": 31.1636089469716
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 121
+          },
+          "sim_total": 0.6500571966171265,
+          "exact_match": 30.090930844699688
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 162
+          },
+          "sim_total": 0.649512529373169,
+          "exact_match": 30.167052798439215
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6532652378082275,
+          "exact_match": 30.65015479876161
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 242
+          },
+          "sim_total": 0.6525476574897766,
+          "exact_match": 30.528134254689043
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 283
+          },
+          "sim_total": 0.6537280678749084,
+          "exact_match": 30.70197044334975
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 323
+          },
+          "sim_total": 0.6522026658058167,
+          "exact_match": 30.526447105788424
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.78,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6474674344062805,
+          "exact_match": 30.208084190385076
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.69,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6512203216552734,
+          "exact_match": 30.353480516346963
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 5.6,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6558541655540466,
+          "exact_match": 31.102411920697058
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 6.51,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6537008285522461,
+          "exact_match": 30.782695673918482
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 7.42,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6546844244003296,
+          "exact_match": 30.657748049052397
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 8.33,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6557305455207825,
+          "exact_match": 30.92269326683292
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.6592305302619934,
+          "exact_match": 31.29860031104199
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 117
+          },
+          "sim_total": 0.6586308479309082,
+          "exact_match": 31.4887676101028
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.6613565683364868,
+          "exact_match": 31.83183183183183
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 174
+          },
+          "sim_total": 0.6589682698249817,
+          "exact_match": 31.566760998199122
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 202
+          },
+          "sim_total": 0.660609781742096,
+          "exact_match": 31.625835189309576
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 230
+          },
+          "sim_total": 0.6580043435096741,
+          "exact_match": 31.466527741599375
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 259
+          },
+          "sim_total": 0.6575189828872681,
+          "exact_match": 31.42931325457614
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.6616578102111816,
+          "exact_match": 31.754111198120594
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 6.47,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.6575887203216553,
+          "exact_match": 31.212469656317875
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 7.39,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.6560809016227722,
+          "exact_match": 31.099026179334764
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 8.32,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.6508219838142395,
+          "exact_match": 29.926479450403757
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.6581096649169922,
+          "exact_match": 31.187173940704927
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 10.16,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.6603018641471863,
+          "exact_match": 31.689686330192334
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 11.09,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.661188006401062,
+          "exact_match": 31.708927628103538
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 12.01,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.6595500707626343,
+          "exact_match": 31.756318859364875
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 201
+          },
+          "sim_total": 0.6565029621124268,
+          "exact_match": 30.897177419354836
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 230
+          },
+          "sim_total": 0.6587204933166504,
+          "exact_match": 31.53294194390085
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 258
+          },
+          "sim_total": 0.6618679165840149,
+          "exact_match": 32.02232606438214
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 287
+          },
+          "sim_total": 0.658451497554779,
+          "exact_match": 31.275614754098363
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 316
+          },
+          "sim_total": 0.6543319225311279,
+          "exact_match": 30.682951146560317
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 344
+          },
+          "sim_total": 0.6599277853965759,
+          "exact_match": 31.568703775788244
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 9.24,
+            "transferCostSeconds": 373
+          },
+          "sim_total": 0.6583712100982666,
+          "exact_match": 31.43953934740883
+        }
+      ],
+      "timestamp": "2026-02-09T10:14:17.380948"
+    },
+    "CHILDREN": {
+      "initial_theta": {
+        "walkReluctance": 2.97,
+        "transferCostSeconds": 145
+      },
+      "optimal_theta": {
+        "walkReluctance": 5.91,
+        "transferCostSeconds": 82
+      },
+      "best_sim_total": 0.7489306330680847,
+      "rounds": 3,
+      "history": [
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 1.19,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.7318715453147888,
+          "exact_match": 46.89103221834599
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 1.78,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.7347803711891174,
+          "exact_match": 46.815482285480236
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 2.38,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.7388501167297363,
+          "exact_match": 47.434576550587266
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 2.97,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.7395552396774292,
+          "exact_match": 47.26860441146156
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.56,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.7437819838523865,
+          "exact_match": 47.7562095595909
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.7437912821769714,
+          "exact_match": 47.878151260504204
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.75,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.7436695098876953,
+          "exact_match": 47.63393787784032
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7444015145301819,
+          "exact_match": 47.94204115917682
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 87
+          },
+          "sim_total": 0.7426466941833496,
+          "exact_match": 47.64180344899231
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 116
+          },
+          "sim_total": 0.7420194149017334,
+          "exact_match": 47.49482401656315
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 145
+          },
+          "sim_total": 0.7438869476318359,
+          "exact_match": 47.733887733887734
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 174
+          },
+          "sim_total": 0.743186354637146,
+          "exact_match": 47.67782426778243
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 203
+          },
+          "sim_total": 0.7436309456825256,
+          "exact_match": 47.84240150093809
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 232
+          },
+          "sim_total": 0.7433372735977173,
+          "exact_match": 47.690387016229714
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 2.41,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7403037548065186,
+          "exact_match": 47.51610891706506
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.0,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7395715117454529,
+          "exact_match": 47.26899383983573
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.58,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7419003248214722,
+          "exact_match": 47.681430650862964
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7413200736045837,
+          "exact_match": 47.37167594310451
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.74,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7419829964637756,
+          "exact_match": 47.3411959445479
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 5.32,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7447283267974854,
+          "exact_match": 47.9957805907173
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7457976341247559,
+          "exact_match": 47.913608723002724
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 34
+          },
+          "sim_total": 0.7474252581596375,
+          "exact_match": 48.12473662031184
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 42
+          },
+          "sim_total": 0.7475850582122803,
+          "exact_match": 48.34815756035578
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 50
+          },
+          "sim_total": 0.7434540390968323,
+          "exact_match": 47.55536982866694
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 58
+          },
+          "sim_total": 0.7472536563873291,
+          "exact_match": 48.10366624525916
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 66
+          },
+          "sim_total": 0.745317280292511,
+          "exact_match": 47.901804448174566
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 74
+          },
+          "sim_total": 0.7458162903785706,
+          "exact_match": 48.09224318658281
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.7489306330680847,
+          "exact_match": 48.53851077448261
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.14,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.743933916091919,
+          "exact_match": 47.73060029282577
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.73,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.7431555390357971,
+          "exact_match": 47.52289758534555
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 5.32,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.745053768157959,
+          "exact_match": 47.78686805118523
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.7475096583366394,
+          "exact_match": 48.19225861335602
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 6.5,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.7452675700187683,
+          "exact_match": 47.61606022584692
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 7.09,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.7465046644210815,
+          "exact_match": 48.00084175084175
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 7.68,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.7482847571372986,
+          "exact_match": 48.14736396358247
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 57
+          },
+          "sim_total": 0.7435368299484253,
+          "exact_match": 47.67659929151907
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 66
+          },
+          "sim_total": 0.7444109320640564,
+          "exact_match": 47.6875
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 74
+          },
+          "sim_total": 0.7445911169052124,
+          "exact_match": 47.897049591964844
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 82
+          },
+          "sim_total": 0.7471031546592712,
+          "exact_match": 48.086627417998315
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 90
+          },
+          "sim_total": 0.7432354092597961,
+          "exact_match": 47.42738589211618
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 98
+          },
+          "sim_total": 0.7457879781723022,
+          "exact_match": 47.886144830473
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.91,
+            "transferCostSeconds": 107
+          },
+          "sim_total": 0.7439732551574707,
+          "exact_match": 47.62301918265221
+        }
+      ],
+      "timestamp": "2026-02-09T12:28:21.142642"
+    },
+    "YOUTH": {
+      "initial_theta": {
+        "walkReluctance": 2.71,
+        "transferCostSeconds": 139
+      },
+      "optimal_theta": {
+        "walkReluctance": 5.54,
+        "transferCostSeconds": 222
+      },
+      "best_sim_total": 0.729058027267456,
+      "rounds": 3,
+      "history": [
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 1.08,
+            "transferCostSeconds": 139
+          },
+          "sim_total": 0.7078068852424622,
+          "exact_match": 41.00041858518209
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 1.63,
+            "transferCostSeconds": 139
+          },
+          "sim_total": 0.7156121730804443,
+          "exact_match": 42.0055354481584
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 2.17,
+            "transferCostSeconds": 139
+          },
+          "sim_total": 0.7175105214118958,
+          "exact_match": 42.17354317311782
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 2.71,
+            "transferCostSeconds": 139
+          },
+          "sim_total": 0.7194012403488159,
+          "exact_match": 42.409276358170494
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 139
+          },
+          "sim_total": 0.7210384607315063,
+          "exact_match": 42.549989249623735
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.79,
+            "transferCostSeconds": 139
+          },
+          "sim_total": 0.7206434011459351,
+          "exact_match": 42.40736774469908
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.34,
+            "transferCostSeconds": 139
+          },
+          "sim_total": 0.7205572724342346,
+          "exact_match": 42.22505849819188
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 56
+          },
+          "sim_total": 0.7203369736671448,
+          "exact_match": 42.40425531914894
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 83
+          },
+          "sim_total": 0.720207154750824,
+          "exact_match": 42.38594988220176
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 111
+          },
+          "sim_total": 0.7201047539710999,
+          "exact_match": 42.65524625267666
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 139
+          },
+          "sim_total": 0.7201611399650574,
+          "exact_match": 42.46134020618557
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 167
+          },
+          "sim_total": 0.7194390892982483,
+          "exact_match": 42.441736155655335
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 195
+          },
+          "sim_total": 0.7203819751739502,
+          "exact_match": 42.508038585209
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7212200164794922,
+          "exact_match": 42.48337979841304
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 1.89,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.71583491563797,
+          "exact_match": 41.95536663124336
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 2.34,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7180584669113159,
+          "exact_match": 42.30934018851757
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 2.8,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.721274197101593,
+          "exact_match": 42.51458198314971
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.25,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7184644341468811,
+          "exact_match": 42.19616204690831
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.71,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7213666439056396,
+          "exact_match": 42.601380500431404
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7209972739219666,
+          "exact_match": 42.37798322941303
+        },
+        {
+          "round": 2,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7261514067649841,
+          "exact_match": 43.179305770506296
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 129
+          },
+          "sim_total": 0.7226657271385193,
+          "exact_match": 42.536669542709234
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 160
+          },
+          "sim_total": 0.7237659096717834,
+          "exact_match": 42.909800520381616
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 191
+          },
+          "sim_total": 0.7216492295265198,
+          "exact_match": 42.540365984930034
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7282354831695557,
+          "exact_match": 43.441901408450704
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 253
+          },
+          "sim_total": 0.7251922488212585,
+          "exact_match": 43.103448275862064
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 284
+          },
+          "sim_total": 0.7235414385795593,
+          "exact_match": 42.95331161780673
+        },
+        {
+          "round": 2,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 315
+          },
+          "sim_total": 0.7221542596817017,
+          "exact_match": 42.653414001728606
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.23,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7198823690414429,
+          "exact_match": 42.38013698630137
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.7,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7231159806251526,
+          "exact_match": 42.776938026344205
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.16,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7226188778877258,
+          "exact_match": 42.75802254986991
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 4.62,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7259543538093567,
+          "exact_match": 43.275109170305676
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 5.08,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.725049614906311,
+          "exact_match": 43.131269079808106
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 5.54,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.729058027267456,
+          "exact_match": 43.62430939226519
+        },
+        {
+          "round": 3,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 6.01,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7283623218536377,
+          "exact_match": 43.443708609271525
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.54,
+            "transferCostSeconds": 155
+          },
+          "sim_total": 0.7261978387832642,
+          "exact_match": 43.34065934065934
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.54,
+            "transferCostSeconds": 178
+          },
+          "sim_total": 0.7267656326293945,
+          "exact_match": 43.36224149432955
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.54,
+            "transferCostSeconds": 200
+          },
+          "sim_total": 0.7268990874290466,
+          "exact_match": 43.54341119435875
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.54,
+            "transferCostSeconds": 222
+          },
+          "sim_total": 0.7265775799751282,
+          "exact_match": 43.343585237258345
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.54,
+            "transferCostSeconds": 244
+          },
+          "sim_total": 0.7288209795951843,
+          "exact_match": 43.67410024287922
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.54,
+            "transferCostSeconds": 266
+          },
+          "sim_total": 0.7270364761352539,
+          "exact_match": 43.373493975903614
+        },
+        {
+          "round": 3,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 5.54,
+            "transferCostSeconds": 289
+          },
+          "sim_total": 0.7281020283699036,
+          "exact_match": 43.435908789019265
+        }
+      ],
+      "timestamp": "2026-02-09T14:50:24.369615"
+    },
+    "ELDERLY": {
+      "initial_theta": {
+        "walkReluctance": 6.0,
+        "transferCostSeconds": 150,
+        "subwayReluctance": 0.5
+      },
+      "optimal_theta": {
+        "walkReluctance": 10.8,
+        "transferCostSeconds": 90,
+        "subwayReluctance": 0.5
+      },
+      "best_sim_total": 0.5914952158927917,
+      "rounds": 1,
+      "history": [
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 1.2,
+            "transferCostSeconds": 150,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5737955570220947,
+          "exact_match": 24.289544235924936
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 3.6,
+            "transferCostSeconds": 150,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5785503387451172,
+          "exact_match": 23.89189189189189
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 6.0,
+            "transferCostSeconds": 150,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5819007158279419,
+          "exact_match": 24.346859366314618
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 8.4,
+            "transferCostSeconds": 150,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5834752917289734,
+          "exact_match": 24.257703081232492
+        },
+        {
+          "round": 1,
+          "step": "walkRel",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 150,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5887572169303894,
+          "exact_match": 25.057077625570777
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 30,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5881380438804626,
+          "exact_match": 25.12968299711816
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 90,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5914952158927917,
+          "exact_match": 25.493612078977932
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 150,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5876808166503906,
+          "exact_match": 25.246662797446312
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 210,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5885362029075623,
+          "exact_match": 25.071715433161216
+        },
+        {
+          "round": 1,
+          "step": "transCost",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 270,
+            "subwayReluctance": 0.5
+          },
+          "sim_total": 0.5895615816116333,
+          "exact_match": 25.188187608569773
+        },
+        {
+          "round": 1,
+          "step": "subwayRel",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 90,
+            "subwayReluctance": 0.3
+          },
+          "sim_total": 0.5907662510871887,
+          "exact_match": 25.172018348623855
+        },
+        {
+          "round": 1,
+          "step": "subwayRel",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 90,
+            "subwayReluctance": 0.45
+          },
+          "sim_total": 0.5870926380157471,
+          "exact_match": 24.612736660929432
+        },
+        {
+          "round": 1,
+          "step": "subwayRel",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 90,
+            "subwayReluctance": 0.6
+          },
+          "sim_total": 0.5884159803390503,
+          "exact_match": 24.88532110091743
+        },
+        {
+          "round": 1,
+          "step": "subwayRel",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 90,
+            "subwayReluctance": 0.75
+          },
+          "sim_total": 0.5855659246444702,
+          "exact_match": 24.786324786324787
+        },
+        {
+          "round": 1,
+          "step": "subwayRel",
+          "theta": {
+            "walkReluctance": 10.8,
+            "transferCostSeconds": 90,
+            "subwayReluctance": 0.9
+          },
+          "sim_total": 0.5862425565719604,
+          "exact_match": 25.04297994269341
+        }
+      ],
+      "timestamp": "2026-02-09T19:46:39.078228"
+    }
+  },
+  "start_time": "2026-02-09T19:23:27.202583",
+  "last_update": "2026-02-09T19:46:39.081226",
+  "end_time": "2026-02-09T19:46:39.081226",
+  "total_elapsed_min": 23.2
+}

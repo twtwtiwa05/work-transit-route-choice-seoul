@@ -26,6 +26,7 @@ public class KoreanCostCalculator implements RaptorCostCalculator<KoreanTripSche
     private final int firstBoardCost;
     private final int transferCost;
     private final double waitReluctance;
+    private final double subwayReluctance;
 
     public KoreanCostCalculator() {
         this(CalibrationConfig.defaults());
@@ -35,6 +36,12 @@ public class KoreanCostCalculator implements RaptorCostCalculator<KoreanTripSche
         this.firstBoardCost = config.getFirstBoardCostSeconds() * 100;
         this.transferCost = config.getTransferCostSeconds() * 100;
         this.waitReluctance = config.getWaitReluctance();
+        this.subwayReluctance = config.getSubwayReluctance();
+    }
+
+    private boolean isSubway(KoreanTripSchedule trip) {
+        int rt = trip.getRouteType();
+        return rt == 1 || rt == 12;
     }
 
     @Override
@@ -69,7 +76,8 @@ public class KoreanCostCalculator implements RaptorCostCalculator<KoreanTripSche
         KoreanTripSchedule trip,
         int toStop
     ) {
-        return boardCost + (transitTime * 100);
+        double reluctance = isSubway(trip) ? subwayReluctance : 1.0;
+        return boardCost + (int)(transitTime * 100 * reluctance);
     }
 
     @Override
@@ -92,7 +100,8 @@ public class KoreanCostCalculator implements RaptorCostCalculator<KoreanTripSche
         return "KoreanCostCalculator{" +
             "firstBoardCost=" + (firstBoardCost / 100) + "s, " +
             "transferCost=" + (transferCost / 100) + "s, " +
-            "waitReluctance=" + waitReluctance +
+            "waitReluctance=" + waitReluctance + ", " +
+            "subwayReluctance=" + subwayReluctance +
             '}';
     }
 }

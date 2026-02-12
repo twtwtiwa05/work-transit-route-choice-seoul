@@ -1,0 +1,79 @@
+{
+  "status": "completed",
+  "results_by_type": {
+    "GENERAL": {
+      "theta": {
+        "walkReluctance": 4.07,
+        "transferCostSeconds": 202.0
+      },
+      "metrics": {
+        "exact_match": 30.02,
+        "sim_total": 0.6468,
+        "n_chains": 8394,
+        "avg_alts": 4.33,
+        "otp_elapsed_min": 6.4
+      }
+    },
+    "CHILDREN": {
+      "theta": {
+        "walkReluctance": 2.97,
+        "transferCostSeconds": 145.0
+      },
+      "metrics": {
+        "exact_match": 47.53,
+        "sim_total": 0.7409,
+        "n_chains": 4833,
+        "avg_alts": 4.22,
+        "otp_elapsed_min": 2.9
+      }
+    },
+    "YOUTH": {
+      "theta": {
+        "walkReluctance": 2.71,
+        "transferCostSeconds": 139.0
+      },
+      "metrics": {
+        "exact_match": 42.56,
+        "sim_total": 0.7212,
+        "n_chains": 4643,
+        "avg_alts": 4.2,
+        "otp_elapsed_min": 3.0
+      }
+    },
+    "ELDERLY": {
+      "theta": {
+        "walkReluctance": 1.75,
+        "transferCostSeconds": 109.0
+      },
+      "metrics": {
+        "exact_match": 23.68,
+        "sim_total": 0.5668,
+        "n_chains": 9296,
+        "avg_alts": 3.28,
+        "otp_elapsed_min": 5.4
+      }
+    },
+    "DISABLED": {
+      "theta": {
+        "walkReluctance": 7.28,
+        "transferCostSeconds": 358.0
+      },
+      "metrics": {
+        "exact_match": 32.56,
+        "sim_total": 0.6442,
+        "n_chains": 4423,
+        "avg_alts": 4.18,
+        "otp_elapsed_min": 3.5
+      }
+    }
+  },
+  "overall": {
+    "exact_match": 33.03,
+    "sim_total": 0.6482,
+    "n_chains": 31589,
+    "elapsed_min": 23.3
+  },
+  "start_time": "2026-02-09T04:27:18.097116",
+  "last_update": "2026-02-09T04:50:35.638096",
+  "end_time": "2026-02-09T04:50:35.638096"
+}

@@ -19,21 +19,19 @@ Claude Code 작업 가이드 - 대중교통 경로선택 모형 연구
 ```
 Phase 1: 데이터 전처리     ✅ 완료
 Phase 2: OTP 매칭 + 유사도  ✅ 완료
-Phase 3: 모형 추정         ✅ Step 8 완료 (MNL → ML → LC → LightGBM → 비교분석)
-Phase 4: 반복 보정         ⏳ 대기
+Phase 3: 모형 추정         ✅ 완료 (MNL → ML → LC → LightGBM → 비교분석)
+Phase 4: 반복 보정         ✅ 완료 (θ 최적화 한계 실증 + MNL 재순위)
 ```
 
-### 지금 해야 할 일: Phase 4 반복 보정
+### 모든 Phase 완료 — 논문 작성 단계
 
-**Phase 3 모형 추정 + 비교분석 완료** — 4개 모형 추정 및 Step 8 통합 비교 완료:
-- Step 4: MNL → `results/PHASE3_RESULTS1_MNL.md`
-- Step 5: Mixed Logit → `results/PHASE3_RESULTS2_MIXED_LOGIT.md`
-- Step 6: Latent Class (K=3) → `results/PHASE3_RESULTS3_LC.md`
-- Step 7: LightGBM Benchmark → `results/PHASE3_RESULTS4_LIGHTGBM.md`
-- Step 8: 통합 모형 비교 → `results/PHASE3_RESULTS5_COMPARISON.md` + `results/figures/fig1~4`
+**Phase 4 핵심 결론**:
+- θ 최적화(OTP 파라미터 보정)의 개선 상한: ~+1%p
+- MNL 재순위(β로 대안 재순위): +1.89%p (OTP 재실행 불필요)
+- 불일치 시 MNL:OTP 승률 = 10.4:1
 
 다음 단계:
-- Phase 4: 반복 보정 (LC 클래스별 파라미터 → OTP 비용함수 업데이트)
+- 최종 논문 작성
 
 ---
 
@@ -172,17 +170,20 @@ main/
 ├── scripts/
 │   ├── data/                ← Phase 1 전처리
 │   ├── matching/            ← Phase 2 OTP 매칭
-│   └── models/              ← Phase 3 모형 추정 ★
-│       ├── step1_build_choice_set.py
-│       ├── step2_extract_attributes.py
-│       ├── step3_prepare_model_input.py
-│       ├── step4_estimate_mnl.py       ✅ 완료
-│       ├── step5_estimate_mixed_logit.py  ✅ 완료
-│       ├── step6_estimate_latent_class.py  ✅ 완료
-│       ├── step7_lightgbm_benchmark.py     ✅ 완료
-│       ├── step8_model_comparison.py       ✅ 완료
-│       ├── regenerate_step7_figures.py     (TNR 폰트 재생성)
-│       └── check_peak_transfer.py      (진단용)
+│   ├── models/              ← Phase 3 모형 추정
+│   │   ├── step1_build_choice_set.py       ✅
+│   │   ├── step2_extract_attributes.py     ✅
+│   │   ├── step3_prepare_model_input.py    ✅
+│   │   ├── step4_estimate_mnl.py           ✅
+│   │   ├── step5_estimate_mixed_logit.py   ✅
+│   │   ├── step6_estimate_latent_class.py  ✅
+│   │   ├── step7_lightgbm_benchmark.py     ✅
+│   │   └── step8_model_comparison.py       ✅
+│   └── calibration/         ← Phase 4 반복 보정
+│       ├── fixed_choice_calibration.py     ✅ 접근법 A
+│       ├── usertype_calibration.py         ✅ 접근법 B
+│       ├── probabilistic_rsm_calibration.py ✅ 접근법 E
+│       └── mnl_reranking_analysis.py       ✅ MNL 재순위 (핵심)
 │
 ├── output/
 │   ├── model_input_train.parquet  ✅ GitHub 포함
@@ -198,11 +199,15 @@ main/
 │   ├── PHASE3_RESULTS2_MIXED_LOGIT.md  ✅ ML 결과 문서
 │   ├── PHASE3_RESULTS3_LC.md      ✅ LC 결과 문서
 │   ├── PHASE3_RESULTS4_LIGHTGBM.md ✅ LightGBM 결과 문서
-│   ├── PHASE3_RESULTS5_COMPARISON.md ✅ 통합 비교 분석 (한국어)
-│   └── figures/                   ✅ SHAP, 비교 차트 (fig1~4 + SHAP 5종)
+│   ├── PHASE3_RESULTS5_COMPARISON.md ✅ 통합 비교 분석
+│   ├── PHASE4_RESULTS.md          ✅ 반복 보정 + MNL 재순위 결과
+│   ├── mnl_reranking_analysis.json ✅ MNL 재순위 상세 데이터
+│   ├── probabilistic_rsm_log.json ✅ RSM 최적화 로그
+│   └── figures/                   ✅ SHAP, 비교 차트
 │
 └── docs/
     ├── PHASE3_MODEL_ESTIMATION_PLAN.md  ← 모형 추정 계획
+    ├── PHASE4_ITERATIVE_CALIBRATION_PLAN.md ← 반복 보정 계획
     ├── SIMILARITY_METRICS_FRAMEWORK.md
     └── ...
 ```
@@ -259,22 +264,22 @@ python scripts/models/step5_estimate_mixed_logit.py
 | 파일 | 설명 |
 |------|------|
 | `docs/PHASE3_MODEL_ESTIMATION_PLAN.md` | Phase 3 상세 계획 |
+| `docs/PHASE4_ITERATIVE_CALIBRATION_PLAN.md` | Phase 4 반복 보정 계획 |
 | `results/PHASE3_RESULTS1_MNL.md` | MNL 결과 상세 |
 | `results/PHASE3_RESULTS2_MIXED_LOGIT.md` | Mixed Logit 결과 상세 |
 | `results/PHASE3_RESULTS3_LC.md` | Latent Class 결과 상세 |
 | `results/PHASE3_RESULTS4_LIGHTGBM.md` | LightGBM 벤치마크 결과 |
-| `results/PHASE3_RESULTS5_COMPARISON.md` | 통합 모형 비교 분석 (한국어) |
+| `results/PHASE3_RESULTS5_COMPARISON.md` | 통합 모형 비교 분석 |
+| `results/PHASE4_RESULTS.md` | **Phase 4 반복 보정 + MNL 재순위 결과** |
 | `docs/SIMILARITY_METRICS_FRAMEWORK.md` | 유사도 지표 정의 |
 
 ---
 
 ## 다음 단계
 
-1. ~~**Step 5**: Mixed Logit 추정~~ ✅ 완료
-2. ~~**Step 6**: Latent Class Model~~ ✅ 완료 (K=3, 공변량 멤버십)
-3. ~~**Step 7**: LightGBM Benchmark~~ ✅ 완료 (Core/Full + SHAP)
-4. ~~**Step 8**: 통합 모형 비교 분석~~ ✅ 완료 (논문 Figure 4종 + 한국어 비교보고서)
-5. **Phase 4**: 반복 보정 (LC 클래스별 파라미터 → OTP 비용함수)
+1. ~~**Phase 3**: 모형 추정~~ ✅ 완료 (MNL → ML → LC → LightGBM → 비교분석)
+2. ~~**Phase 4**: 반복 보정~~ ✅ 완료 (θ 최적화 한계 + MNL 재순위)
+3. **논문 작성**
 
 ### Phase 3 핵심 결과 요약
 
@@ -285,15 +290,23 @@ Hit Rate 순위 (테스트셋 82,351 체인):
   MNL (Pooled)     66.0%
   Mixed Logit      65.9%
   LightGBM Core    65.8%
+```
 
-핵심 발견:
-  - LC > LightGBM: choice-set 구조 모형화의 우위 (+1.2%p)
-  - MNL/LGB = 99.7%: 6개 파라미터 선형모형이 상한의 99.7% 달성
-  - SHAP 순위 = MNL β 순위: 효용함수 사양 교차검증 완료
-  - D_peak: 네 모형 모두 비유의 (4중 확인)
-  - Elderly > Disabled > General: 모형 비의존적 예측력 순위
+### Phase 4 핵심 결과 요약
+
+```
+θ 최적화 (OTP 파라미터 보정):
+  접근법 A (Pooled MSA):    +1.02%p (Best Match 기준)
+  접근법 B (유형별 θ):      +4.3%p  (Best Match 기준)
+  접근법 E (확률적 RSM):    +0.95%p (OTP 1순위 기준, 경계 수렴)
+
+MNL 재순위 (핵심 기여):
+  OTP 1순위 → MNL 1순위:   +1.89%p (OTP 재실행 불필요)
+  불일치 시 MNL:OTP 승률:  10.4:1 (Exact Match)
+  대안 5개+:              +3.17%p (최대 개선)
+  MNL 선택 경로:          보행↓0.5분, 환승↓0.10, 지하철↑2.0%p
 ```
 
 ---
 
-*최종 수정: 2026-02-08 (Phase 3 Step 8 통합 모형 비교 완료, 테스트셋 기준 수치 통일)*
+*최종 수정: 2026-02-11 (Phase 4 완료 — θ 최적화 한계 실증, MNL 재순위 핵심 기여)*

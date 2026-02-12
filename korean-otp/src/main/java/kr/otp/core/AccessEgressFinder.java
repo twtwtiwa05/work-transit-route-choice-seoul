@@ -36,7 +36,7 @@ public class AccessEgressFinder {
     private static final int MAX_STOPS = 30;           // 최대 검색 정류장 수 (지하철역 포함 위해 증가)
 
     private final TransitData transitData;
-    private final double walkReluctance;
+    private volatile double walkReluctance;
 
     // 정류장 좌표 캐시
     private final double[] stopLats;
@@ -71,6 +71,13 @@ public class AccessEgressFinder {
             this.stopLats[i] = transitData.getStopLat(i);
             this.stopLons[i] = transitData.getStopLon(i);
         }
+    }
+
+    /**
+     * walkReluctance 동적 변경 (multi-batch 모드용)
+     */
+    public void setWalkReluctance(double walkReluctance) {
+        this.walkReluctance = walkReluctance;
     }
 
     /**

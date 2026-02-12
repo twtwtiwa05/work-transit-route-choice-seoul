@@ -36,6 +36,7 @@ OTP_DIR = ROOT.parent / "korean-otp"
 TRIP_ATTRS_FILE = OUTPUT_DIR / "trip_attributes_filtered.parquet"
 SUBSAMPLE_CSV = OTP_DIR / "data" / "od_subsample.csv"
 SUBSAMPLE_IDS_FILE = OUTPUT_DIR / "subsample_chain_ids.parquet"
+SUBSAMPLE_ATTRS_FILE = OUTPUT_DIR / "trip_attributes_subsample.parquet"  # 서브샘플용 trip_attributes
 
 # 기본 서브샘플 크기
 DEFAULT_N = 10000
@@ -77,20 +78,29 @@ def extract_subsample(n=DEFAULT_N, seed=42):
         # ── 층화 추출: 시간대별 비율 유지 ──
         # 출발 시간 컬럼 찾기
         time_col = None
-        for col in ["departure_time", "dep_time", "start_time", "TIME_BOARDING"]:
+        time_is_seconds = False
+        for col in ["departure_time", "dep_time", "start_time", "TIME_BOARDING", "board_time"]:
             if col in df.columns:
                 time_col = col
+                # board_time은 초 단위 (seconds from midnight)
+                if col == "board_time":
+                    time_is_seconds = True
                 break
 
         if time_col:
             # 시간대 추출
-            try:
-                df["_hour"] = pd.to_datetime(df[time_col], format="%H:%M").dt.hour
-            except (ValueError, TypeError):
+            if time_is_seconds:
+                # 초 단위 -> 시간 추출
+                df["_hour"] = (df[time_col] // 3600).astype(int) % 24
+                print(f"  시간 컬럼: {time_col} (초 단위, 시간대로 변환)")
+            else:
                 try:
-                    df["_hour"] = pd.to_datetime(df[time_col]).dt.hour
-                except Exception:
-                    df["_hour"] = 0  # 파싱 실패 시 균등 추출
+                    df["_hour"] = pd.to_datetime(df[time_col], format="%H:%M").dt.hour
+                except (ValueError, TypeError):
+                    try:
+                        df["_hour"] = pd.to_datetime(df[time_col]).dt.hour
+                    except Exception:
+                        df["_hour"] = 0  # 파싱 실패 시 균등 추출
 
             # 시간대별 층화 추출
             print(f"  층화 기준: {time_col} (시간대)")
@@ -144,13 +154,25 @@ def extract_subsample(n=DEFAULT_N, seed=42):
 
     # 출발 시간
     time_col_final = None
-    for col in ["departure_time", "dep_time", "start_time", "TIME_BOARDING"]:
+    time_is_seconds_final = False
+    for col in ["departure_time", "dep_time", "start_time", "TIME_BOARDING", "board_time"]:
         if col in sample.columns:
             time_col_final = col
+            if col == "board_time":
+                time_is_seconds_final = True
             break
 
     if time_col_final:
-        csv_data["departure_time"] = sample[time_col_final].values
+        if time_is_seconds_final:
+            # 초 단위 -> HH:MM 변환
+            def seconds_to_hhmm(sec):
+                h = int(sec // 3600) % 24
+                m = int((sec % 3600) // 60)
+                return f"{h:02d}:{m:02d}"
+            csv_data["departure_time"] = sample[time_col_final].apply(seconds_to_hhmm).values
+            print(f"  출발 시간: {time_col_final} (초->HH:MM 변환)")
+        else:
+            csv_data["departure_time"] = sample[time_col_final].values
     else:
         # 기본값: 08:00
         print(f"  경고: 출발 시간 컬럼 없음, 08:00 기본값 사용")
@@ -169,16 +191,29 @@ def extract_subsample(n=DEFAULT_N, seed=42):
         chain_ids.to_parquet(SUBSAMPLE_IDS_FILE)
         print(f"  chain_id 저장: {SUBSAMPLE_IDS_FILE.name}")
 
+    # 서브샘플용 trip_attributes 생성 (od_id 재매핑)
+    # 중요: od_id를 0부터 다시 부여해야 OTP 결과와 매칭됨!
+    sample_attrs = sample.copy().reset_index(drop=True)
+    sample_attrs["od_id"] = sample_attrs.index  # od_id = 0, 1, 2, ...
+    sample_attrs.to_parquet(SUBSAMPLE_ATTRS_FILE, index=False)
+    print(f"  서브샘플 trip_attributes 저장: {SUBSAMPLE_ATTRS_FILE.name}")
+    print(f"    od_id 범위: 0 ~ {len(sample_attrs)-1}")
+
     # ── 시간대 분포 비교 ──
     print(f"\n  시간대 분포 비교:")
     print(f"  {'시간':>4} {'전체':>10} {'서브샘플':>10} {'비율':>8}")
     if time_col_final:
-        try:
-            full_hours = pd.to_datetime(df[time_col_final], format="%H:%M").dt.hour
-            sub_hours = pd.to_datetime(csv_df["departure_time"], format="%H:%M").dt.hour
-        except Exception:
-            full_hours = pd.to_datetime(df[time_col_final]).dt.hour
-            sub_hours = pd.to_datetime(csv_df["departure_time"]).dt.hour
+        # 전체 데이터 시간대
+        if time_is_seconds_final:
+            full_hours = (df[time_col_final] // 3600).astype(int) % 24
+        else:
+            try:
+                full_hours = pd.to_datetime(df[time_col_final], format="%H:%M").dt.hour
+            except Exception:
+                full_hours = pd.to_datetime(df[time_col_final]).dt.hour
+
+        # 서브샘플 시간대 (항상 HH:MM 형식)
+        sub_hours = pd.to_datetime(csv_df["departure_time"], format="%H:%M").dt.hour
 
         full_dist = full_hours.value_counts(normalize=True).sort_index()
         sub_dist = sub_hours.value_counts(normalize=True).sort_index()
@@ -189,10 +224,10 @@ def extract_subsample(n=DEFAULT_N, seed=42):
             sp = sub_dist.get(h, 0) * 100
             if fp > 0 or sp > 0:
                 print(f"  {h:>4}시 {fp:>9.1f}% {sp:>9.1f}% "
-                      f"{'✓' if abs(fp - sp) < 2 else '△'}")
+                      f"{'[OK]' if abs(fp - sp) < 2 else '[!]'}")
 
     # OTP 실행 안내
-    print(f"\n  다음 단계 — OTP 서브샘플 배치 실행:")
+    print(f"\n  다음 단계 - OTP 서브샘플 배치 실행:")
     print(f"    cd {OTP_DIR}")
     print(f"    java -jar build/libs/korean-otp.jar batch \\")
     print(f"      data/od_subsample.csv \\")
@@ -230,8 +265,9 @@ def run_subsample_pipeline(ndjson_path, iteration):
     """서브샘플 NDJSON으로 축소 파이프라인을 실행한다.
 
     calibration_orchestrator의 step_pipeline과 동일하지만,
-    서브샘플 전용 출력 디렉토리를 사용한다.
+    서브샘플 전용 trip_attributes를 사용한다.
     """
+    import os
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -241,15 +277,30 @@ def run_subsample_pipeline(ndjson_path, iteration):
 
     ndjson = Path(ndjson_path)
     if not ndjson.exists():
-        print(f"  오류: NDJSON 파일 없음 — {ndjson}")
+        print(f"  오류: NDJSON 파일 없음 - {ndjson}")
+        return False
+
+    # 서브샘플용 trip_attributes 확인
+    if not SUBSAMPLE_ATTRS_FILE.exists():
+        print(f"  오류: 서브샘플 trip_attributes 없음")
+        print(f"  먼저 --extract로 서브샘플 추출 필요")
         return False
 
     print(f"  NDJSON: {ndjson}")
     print(f"  크기: {ndjson.stat().st_size / (1024**2):.1f} MB")
+    print(f"  서브샘플 trip_attributes: {SUBSAMPLE_ATTRS_FILE.name}")
+
+    # 서브샘플 모드 환경변수 설정
+    os.environ["SUBSAMPLE_MODE"] = "1"
 
     # 오케스트레이터의 파이프라인 호출
     from calibration_orchestrator import step_pipeline
-    return step_pipeline(iteration, str(ndjson))
+    result = step_pipeline(iteration, str(ndjson))
+
+    # 환경변수 해제
+    del os.environ["SUBSAMPLE_MODE"]
+
+    return result
 
 
 def main():

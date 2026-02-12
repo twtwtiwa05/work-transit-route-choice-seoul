@@ -1,0 +1,8 @@
+{
+  "walkReluctance": 16.88,
+  "transferCostSeconds": 124,
+  "subwayReluctance": 2.69,
+  "firstBoardCostSeconds": 60,
+  "waitReluctance": 1.0,
+  "searchWindowSeconds": 1800
+}

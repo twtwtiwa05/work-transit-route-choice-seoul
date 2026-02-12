@@ -1,15 +1,14 @@
 """
 Phase 3 Step 1: Choice Set 생성
 
-입력:
-- similarity_results.parquet (4.94M pairs)
+입력 (output/iter{N}/):
+- similarity_results.parquet
 
-출력:
+출력 (output/iter{N}/):
 - choice_set.parquet
-  - chain_id, od_id, alt_id
-  - choice: 1 if best-match, 0 otherwise
-  - sim_total, exact_match
-  - best_sim: 해당 체인의 최고 sim_total
+
+환경변수:
+- ITERATION: 반복 회차 (기본 0)
 
 로직:
 1. similarity_results 로드
@@ -18,29 +17,36 @@ Phase 3 Step 1: Choice Set 생성
 4. choice 변수 생성
 """
 
+import sys
 import pandas as pd
 import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 
-# 경로 설정
+# 경로 설정 - iteration_paths 사용
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-OUTPUT_DIR = PROJECT_ROOT / "output"
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from utils.iteration_paths import get_paths, print_iteration_info
+
+# Iteration별 경로 가져오기
+paths = get_paths()
 
 # 설정
-THRESHOLD = 0.70  # 민감도 분석용으로 변경 가능
+import os
+THRESHOLD = float(os.environ.get("CHOICE_THRESHOLD", "0.50"))  # 환경변수로 조정 가능, 기본 0.50
 
 
 def main():
     print("=" * 70)
     print("Phase 3 Step 1: Choice Set 생성")
     print("=" * 70)
+    print_iteration_info()
     print(f"Threshold: {THRESHOLD}")
     print()
 
     # 1. 데이터 로드
     print("1. 데이터 로드 중...")
-    sim_df = pd.read_parquet(OUTPUT_DIR / "similarity_results.parquet")
+    sim_df = pd.read_parquet(paths.similarity_results)
     print(f"   총 쌍: {len(sim_df):,}")
     print(f"   체인 수: {sim_df['chain_id'].nunique():,}")
     print(f"   OD 수: {sim_df['od_id'].nunique():,}")
@@ -102,9 +108,15 @@ def main():
     ]
     choice_df = choice_df[output_columns]
 
+    n_filtered_chains = choice_df['chain_id'].nunique()
     print(f"   필터링된 쌍: {len(choice_df):,}")
-    print(f"   필터링된 체인: {choice_df['chain_id'].nunique():,}")
-    print(f"   체인당 평균 대안: {len(choice_df) / choice_df['chain_id'].nunique():.2f}")
+    print(f"   필터링된 체인: {n_filtered_chains:,}")
+    if n_filtered_chains > 0:
+        print(f"   체인당 평균 대안: {len(choice_df) / n_filtered_chains:.2f}")
+    else:
+        print("   경고: 필터링된 체인이 없습니다. Threshold를 낮추세요.")
+        print("   (환경변수 CHOICE_THRESHOLD=0.30 등으로 설정)")
+        sys.exit(1)
     print()
 
     # 5. 검증
@@ -121,9 +133,9 @@ def main():
     print(f"   choice=1이 2+개인 체인: {chains_with_multi_choice:,}")
 
     if chains_with_zero_choice > 0 or chains_with_multi_choice > 0:
-        print("   ⚠️ 경고: choice 변수 이상")
+        print("   [!] 경고: choice 변수 이상")
     else:
-        print("   ✅ choice 변수 정상")
+        print("   [OK] choice 변수 정상")
     print()
 
     # 6. 대안 수 분포
@@ -161,7 +173,7 @@ def main():
 
     # 9. 저장
     print("9. 저장 중...")
-    output_path = OUTPUT_DIR / "choice_set.parquet"
+    output_path = paths.choice_set
     choice_df.to_parquet(output_path, index=False)
 
     file_size = output_path.stat().st_size / (1024**2)

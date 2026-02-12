@@ -1,0 +1,18 @@
+{
+  "status": "subsample_ready",
+  "iterations": [],
+  "best": null,
+  "subsample": {
+    "total": 45000,
+    "by_type": {
+      "GENERAL": 20000,
+      "ELDERLY": 10000,
+      "YOUTH": 5000,
+      "DISABLED": 5000,
+      "CHILDREN": 5000
+    },
+    "od_file": "C:\\Users\\USER\\OneDrive\\Desktop\\연구실\\강릉ITS\\korean-otp\\data\\od_usertype_subsample.csv",
+    "timestamp": "2026-02-09T03:55:25.193061"
+  },
+  "last_update": "2026-02-09T03:55:25.193061"
+}

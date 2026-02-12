@@ -1,16 +1,14 @@
 """
 Phase 3 Step 2: 대안 속성 추출
 
-입력:
-- otp_alternatives.parquet (4.47M 경로)
+입력 (output/iter{N}/):
+- otp_alternatives.parquet
 
-출력:
+출력 (output/iter{N}/):
 - alternative_attributes.parquet
-  - od_id, alt_id
-  - T_ride, T_walk, T_wait, T_total (분 단위)
-  - N_transfer
-  - D_subway, D_bus_only
-  - modes
+
+환경변수:
+- ITERATION: 반복 회차 (기본 0)
 
 로직:
 1. otp_alternatives 로드
@@ -18,25 +16,30 @@ Phase 3 Step 2: 대안 속성 추출
 3. 더미 변수 계산
 """
 
+import sys
 import pandas as pd
 import numpy as np
 import json
 from pathlib import Path
 
-# 경로 설정
+# 경로 설정 - iteration_paths 사용
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-OUTPUT_DIR = PROJECT_ROOT / "output"
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from utils.iteration_paths import get_paths, print_iteration_info
+
+# Iteration별 경로 가져오기
+paths = get_paths()
 
 
 def main():
     print("=" * 70)
     print("Phase 3 Step 2: 대안 속성 추출")
     print("=" * 70)
-    print()
+    print_iteration_info()
 
     # 1. 데이터 로드
     print("1. 데이터 로드 중...")
-    otp_df = pd.read_parquet(OUTPUT_DIR / "otp_alternatives.parquet")
+    otp_df = pd.read_parquet(paths.otp_alternatives)
     print(f"   총 경로: {len(otp_df):,}")
     print(f"   OD 수: {otp_df['od_id'].nunique():,}")
     print(f"   컬럼: {list(otp_df.columns)}")
@@ -125,7 +128,7 @@ def main():
 
     # 5. 저장
     print("5. 저장 중...")
-    output_path = OUTPUT_DIR / "alternative_attributes.parquet"
+    output_path = paths.alternative_attributes
     attr_df.to_parquet(output_path, index=False)
 
     file_size = output_path.stat().st_size / (1024**2)

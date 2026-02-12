@@ -585,512 +585,205 @@ seaborn>=0.13.0        # 시각화
 
 ## 5. 수정사항 4: 반복 보정 프레임워크
 
-### 5.1 핵심 아이디어
+### 5.1 핵심 목표
+
+Phase 3에서 추정된 행태 파라미터(β)를 OTP 라우팅 엔진의 비용함수에 반영하여 **자기일관적(self-consistent) 파라미터**를 도출한다.
 
 ```
-┌───────────────────────────────────────────────────────────┐
-│                    반복 보정 루프                            │
-│                                                           │
-│   OTP 파라미터 θ ──→ 경로 대안 생성 ──→ 교통카드 매칭        │
-│        ↑                                    │             │
-│        │                                    ↓             │
-│   β→θ 매핑          ←── Mixed Logit 추정 ←── 유사도 계산    │
-│   (MSA 감쇠)              (β 파라미터)                      │
-│                                                           │
-│   수렴 시: 최적 θ* + 최적 β* = 자기일관적 시스템              │
-└───────────────────────────────────────────────────────────┘
+문제 상황:
+  OTP: walkReluctance=1.0, transferCostSeconds=120초 (기본값)
+  MNL: 보행 가중치 22.7×, 환승 페널티 ~100분
+  → OTP 가정과 실제 행태 사이에 큰 괴리
 ```
 
-### 5.2 이론적 분류: 이중 수준 최적화 (Bilevel Optimization)
+### 5.2 접근법 진화 과정
 
-**상위 수준** (OTP 파라미터 보정):
-```
-min_θ  D(P_observed, P_predicted(θ))
-```
+연구 과정에서 여러 접근법을 시도하며 점진적으로 핵심 발견에 도달:
 
-**하위 수준** (경로선택 모델 추정):
-```
-max_β  LL(β | C(θ))
-```
+| 접근법 | 설명 | 결과 | 핵심 발견 |
+|--------|------|------|-----------|
+| 전통적 반복 | β→θ→OTP 재실행→β 재추정 | ❌ Exact Match 28.66%→14% | 대중교통 이산적 특성으로 붕괴 |
+| A. Pooled MSA | β 비율 기반 단일 θ, MSA 수렴 | +1.02%p (Best Match) | Choice Set 고정이 안정적 |
+| B. 유형별 θ | 5유형별 β 비율 기반 θ | +4.3%p (Best Match) | 유형별 차별화 유효 |
+| E. 확률적 RSM | LHS+RSM 3D 전역 탐색, MNL 확률 가중 F₁, IPW 보정 | +0.95%p (OTP 1순위) | **θ 최적화의 구조적 상한 ~+1%p** |
+| **MNL 재순위** | **MNL β로 OTP 대안 재순위** | **+1.89%p (OTP 1순위)** | **핵심 기여: β가 θ보다 우수** |
 
-여기서 `C(θ)`는 OTP 파라미터 θ하에서 생성된 선택지 집합.
+### 5.3 전통적 반복 보정의 실패
 
-핵심 결합: **선택지 집합 C(θ)가 OTP 파라미터에 의존**하고, **추정된 β가 다음 OTP 파라미터를 결정**.
-
-**유사 방법론**:
-- 확률적 이용자 균형 (Stochastic User Equilibrium, Sheffi 1985)
-- Method of Successive Averages (MSA)
-- 교통 배정 반복법 (Frank-Wolfe algorithm)
-
-### 5.3 이용자 유형별 Generalized Cost 전략
-
-**사용자 제안 반영**: OTP는 1회만 실행하되, 유형별로 다른 Generalized Cost를 적용
+초기에 전통적 방식(β→θ→OTP 재실행→β 재추정)을 시도:
 
 ```
-[Step 1] OTP 실행 (가중평균 파라미터)
-         → 각 OD쌍에 대해 5~11개 Pareto-optimal 대안 생성
-         → 각 대안의 속성 추출: (T_ride, T_walk, N_transfer, D_subway)
+Iter0 → Iter1 파라미터 변경:
+  walkReluctance: 1.0 → 5.0 (+400%)
+  transferCostSeconds: 120 → 300 (+150%)
 
-[Step 2] 유형별 효용 계산 (같은 대안, 다른 β)
-
-  일반 이용자:
-    V_j = -0.084×T_ride - 0.685×T_walk - 4.04×N_transfer + 2.49×D_subway
-
-  고령자:
-    V_j = -0.070×T_ride - 0.770×T_walk - 5.94×N_transfer + 4.72×D_subway
-
-  장애인:
-    V_j = -0.072×T_ride - 0.807×T_walk - 4.62×N_transfer + 2.93×D_subway
-
-[Step 3] 유형별 선택확률
-    P(j | 일반) = exp(V_j^일반) / Σ exp(V_k^일반)
-    P(j | 고령) = exp(V_j^고령) / Σ exp(V_k^고령)
-
-    → 같은 대안이라도 유형별로 다른 확률!
+결과: Exact Match 28.66% → 14.0% (-14.6%p) ← 붕괴!
 ```
 
-**이 구조의 장점**:
-- OTP 1회 실행 = 계산 비용 1/5
-- 유형별 차이는 β 파라미터 수준에서 반영 (더 유연)
-- Pareto-optimal 대안은 다양한 유형의 선호를 포괄할 수 있음
+**원인**: OTP 파라미터 변경 → 완전히 다른 경로 세트 생성 → TCD 관측 경로와 매칭률 급락. 도로 네트워크(연속적)와 달리 대중교통(이산적)은 파라미터 변화에 극도로 민감.
 
-### 5.4 파라미터 매핑 함수: β → OTP θ
+→ **Choice Set 고정 접근법** 채택: Phase 3 β를 Ground Truth로 고정, θ만 조정
 
-#### WALK_RELUCTANCE 매핑
+### 5.4 접근법 A: Choice Set 고정 보정 (Pooled MSA)
 
-OTP에서 보행 비용은:
-```java
-// KoreanAccessEgress.java
-public int c1() {
-    return durationSeconds * 100;  // 현재: 1초 = 100 비용단위
-}
+**β → θ 매핑 공식**:
+```
+walkReluctance = |β_walk / β_ride| = |-0.644 / -0.075| = 8.59
+transferCostSeconds = |β_transfer / β_ride| × 60 = |-3.051 / -0.075| × 60 = 2,441초
 ```
 
-수정 후:
-```java
-public int c1() {
-    return (int)(durationSeconds * 100 * WALK_RELUCTANCE);
-    // WALK_RELUCTANCE=8.5 → 1초 보행 = 850 비용단위 = 8.5초 차내시간
-}
+파라미터 상한 적용(walkReluctance ≤ 6.0, transferCostSeconds ≤ 300) 후 MSA 감쇠:
+```
+α_k = min(0.3, 1/(k+1))
+θ_k = θ_{k-1} + α_k × (θ_target − θ_{k-1})
 ```
 
-**매핑 공식**:
+**수렴 결과**: walkReluctance=5.47, transferCostSeconds=276
+**검증**: Exact Match 28.66% → 29.68% (+1.02%p, Best Match 기준)
+
+### 5.5 접근법 B: 유형별 θ
+
+Pooled θ × (유형별 가중치 / Pooled 가중치)로 5유형별 θ 산출:
+
+| 유형 | walkReluctance | transferCostSec |
+|------|----------------|-----------------|
+| GENERAL | 4.07 | 202 |
+| CHILDREN | 2.97 | 145 |
+| YOUTH | 2.71 | 139 |
+| ELDERLY | 1.75 | 109 |
+| DISABLED | 7.28 | 358 |
+
+**결과**: Exact Match 33.0% (+4.3%p, Best Match 기준)
+
+### 5.6 평가 지표의 진화
+
+| 단계 | 평가 방식 | 문제점 |
+|------|-----------|--------|
+| 1단계 | Best Match (sim max) | 파라미터 변화에 둔감, 보정 효과 희석 |
+| 2단계 | OTP 1순위 (generalized_cost min) | 계단형(0/1), 최적화 불가 |
+| 3단계 | MNL 확률 가중 F₁ | 연속적이나 경계 수렴 |
+| **4단계** | **MNL 재순위 (V max)** | **핵심 기여** |
+
+전체 데이터(1,320,030 체인) 베이스라인:
+- OTP 1순위 Exact Match: **20.34%** (Best Match 28.62%와 8.28%p 차이 = 개선 여지)
+
+### 5.7 접근법 E: 확률 기반 LHS + RSM 최적화
+
+**목적함수** (IPW-가중 기대 유사도):
 ```
-WALK_RELUCTANCE = |β_walk_pooled / β_ride_pooled|
-
-현재 β 추정치 (Table 8):
-  β_walk = -0.699, β_ride = -0.082
-  → WALK_RELUCTANCE = 0.699/0.082 = 8.5
-
-유형별 가중평균 (반복 보정용):
-  WALK_RELUCTANCE = Σ(w_g × |β_walk_g / β_ride_g|)
-  = 0.828×8.2 + 0.086×11.0 + 0.045×10.3 + 0.031×11.2 + 0.010×19.6
-  ≈ 8.74
-```
-
-#### TRANSFER_COST 매핑
-
-OTP에서 환승 비용은:
-```java
-// KoreanCostCalculator.java
-private static final int TRANSFER_COST = 120 * 100;  // 120초 = 2분
-```
-
-**매핑 공식**:
-```
-TRANSFER_COST(초) = |β_transfer / β_ride| × 60
-
-현재 β 추정치:
-  β_transfer = -4.194, β_ride = -0.082
-  → TRANSFER_COST = 4.194/0.082 × 60 = 3,068초 ≈ 51분
-
-⚠️ 주의: 3,068초는 너무 큼 → Pareto 탐색에서 다환승 경로가 사라질 수 있음
-→ 상한 설정: TRANSFER_COST ≤ 600초 (10분)
-→ 나머지는 MNL β 수준에서 반영 (행태 모델이 환승 기피를 포착)
-```
-
-**핵심 인사이트**: OTP 파라미터는 **대안 생성** 역할이므로 극단적 값은 피해야 합니다. 행태적 선호의 극단성은 **MNL β 파라미터**에서 포착하는 것이 적절합니다. OTP의 TRANSFER_COST는 "다환승 경로도 대안에 포함되게 하되, 어느 정도 페널티는 주는" 수준으로 설정.
-
-### 5.5 반복 알고리즘 (의사코드)
-
-```
-알고리즘: IterativeCalibration
-
-입력:
-  S = {(n, y_n, user_type_n)} : 교통카드 관측 데이터
-  θ_0 = (WALK_RELUCTANCE=1.0, TRANSFER_COST=120초) : 초기 OTP 파라미터
-  ε = 0.01 : 수렴 허용 오차
-  K_max = 15 : 최대 반복 횟수
-
-출력:
-  θ* : 수렴된 OTP 파라미터
-  β* : 수렴된 Mixed Logit 파라미터 (유형별)
-  C*(θ*) : 최종 선택지 집합
-
-절차:
-  k ← 0
-  θ ← θ_0
-
-  REPEAT:
-    k ← k + 1
-    print(f"=== Iteration {k} ===")
-
-    // STEP 1: OTP 배치 실행 (Java)
-    write_config(θ, "calibration_config.json")
-    run_java_batch("BatchRouter", od_pairs, "batch_result_k.json")
-    C_k ← load_batch_results("batch_result_k.json")
-    // 각 OD에 대해 5~11개 Pareto-optimal 대안 + 속성
-
-    // STEP 2: 경로 매칭 (Python)
-    for each 관측 n:
-      for each 대안 j in C_k(n):
-        S_trip(y_n, j) ← compute_similarity(y_n, j)  // 5개 유사도 지표
-      best_match ← argmax_j S_trip(y_n, j)
-      if S_trip(y_n, best_match) ≥ 0.85:  // Exact Match
-        include n in estimation_sample
-
-    match_rate_k ← |estimation_sample| / N
-    print(f"Match rate: {match_rate_k:.1%}")
-
-    // STEP 3: 속성 추출 (Python)
-    for each n in estimation_sample:
-      for each j in C_k(n):
-        extract (T_ride_nj, T_walk_nj, N_transfer_nj, D_subway_nj)
-
-    // STEP 4: Mixed Logit 추정 (Python - xlogit)
-    β_k ← estimate_mixed_logit(estimation_sample)
-    // 유형별 5개 모델도 별도 추정
-
-    // STEP 5: 목표 OTP 파라미터 계산
-    θ_target.WALK_RELUCTANCE ← |β_k.walk / β_k.ride|
-    θ_target.TRANSFER_COST ← min(600, |β_k.transfer / β_k.ride| × 60)
-
-    // STEP 6: MSA 감쇠 업데이트
-    α_k ← min(0.5, 1/k)  // 감쇠 계수
-    θ_k ← θ_{k-1} + α_k × (θ_target - θ_{k-1})
-
-    // STEP 7: 수렴 검사
-    Δ_β ← max(|β_k - β_{k-1}|) / max(|β_{k-1}|)
-    Δ_θ ← max(|θ_k - θ_{k-1}|) / max(|θ_{k-1}|)
-    route_stability ← mean(Jaccard(C_k(n), C_{k-1}(n)) for all n)
-    Δ_LL ← |LL_k - LL_{k-1}| / |LL_{k-1}|
-
-    print(f"Δβ={Δ_β:.4f}, Δθ={Δ_θ:.4f}, RouteStab={route_stability:.4f}, ΔLL={Δ_LL:.6f}")
-
-    converged ← (Δ_β < ε) AND (route_stability > 0.95) AND (Δ_LL < 0.001)
-
-  UNTIL converged OR k ≥ K_max
-
-  print(f"Converged at iteration {k}")
-  print(f"Final θ: WALK_RELUCTANCE={θ_k.wr:.2f}, TRANSFER_COST={θ_k.tc:.0f}s")
-  print(f"Final match rate: {match_rate_k:.1%}")
-
-  RETURN θ_k, β_k, C_k
+F₁(θ) = Σᵢ wᵢ^IPW × Σⱼ P(j|i,θ) × sim(i,j) / Σᵢ wᵢ^IPW
+P(j|i,θ) = exp(V_ij) / Σ exp(V_ik),  V_ij = β'x_ij
 ```
 
-### 5.6 수렴 기준 (4가지 동시 충족)
+3D 파라미터 공간: walkReluctance∈[2,40], transferCostSeconds∈[15,500], subwayReluctance∈[0.2,3.0]
 
-| 기준 | 수식 | 임계값 | 의미 |
-|------|------|--------|------|
-| 파라미터 안정성 | `max|βₖ - βₖ₋₁| / |βₖ₋₁|` | < 0.01 (1%) | β가 거의 변하지 않음 |
-| 경로집합 안정성 | `mean(Jaccard(Cₖ, Cₖ₋₁))` | > 0.95 | 대안 경로가 거의 동일 |
-| 로그우도 안정성 | `|LLₖ - LLₖ₋₁| / |LLₖ₋₁|` | < 0.001 | 모델 적합도 안정 |
-| 최대 반복 | k | ≤ 15 | 안전 장치 |
+**GENERAL 결과** (22개 LHS + 6개 검증, RSM R²=0.98):
+- 최적 θ: walkReluctance=**40.0**(상한), transferCostSeconds=**17**(하한 근처), subwayReluctance=**3.0**(상한)
+- **3개 파라미터 모두 경계에 수렴** → 구조적 문제
 
-### 5.7 예상 수렴 과정
+**구조적 한계 발견**:
+- det_exact(OTP 자체 순위): 19.84% → 20.79% (+0.95%p — 미미)
+- mnl_exact(MNL 재순위): 21.84% → 30.66% (+8.82%p — 대폭)
+- F₁ 개선의 대부분이 θ 자체 개선이 아닌 **MNL 재순위 효과**에 기인
+- 극단적 θ → 다양한 Choice Set → MNL 재순위 "재료" 풍부화
+
+→ **θ 최적화의 상한은 ~+1%p** (OTP 1순위 기준)
+
+### 5.8 MNL 재순위 (핵심 기여)
+
+접근법 E의 구조적 한계 분석에서 도출된 핵심 발견: OTP 재실행 없이 기존 대안에 MNL β를 적용하여 재순위하면 θ 최적화보다 더 큰 개선을 달성.
 
 ```
-Iteration 0 (기준선):
-  θ: WALK_RELUCTANCE=1.0, TRANSFER_COST=120s
-  → OTP가 보행 많은 경로도 추천 (보행 거의 페널티 없음)
-  → 매칭률: ~38% (기존 논문과 동일)
-  → β: walk_weight=8.5×, transfer=-4.2
-
-Iteration 1:
-  θ: WALK_RELUCTANCE=3.75 (1.0+0.5×(8.5-1.0)), TRANSFER_COST=240s
-  → 보행 적은 경로 위주 추천
-  → 매칭률: ~43% (+5%)
-  → β 약간 변화
-
-Iteration 2:
-  θ: WALK_RELUCTANCE=5.6, TRANSFER_COST=300s
-  → 매칭률: ~48% (+5%)
-  → 경로집합 안정화 시작
-
-Iteration 3-4:
-  θ: WALK_RELUCTANCE=6.8-7.5, TRANSFER_COST=350-400s
-  → 매칭률: ~52-55%
-  → Δβ < 0.05 (미세 조정 단계)
-
-Iteration 5-6:
-  θ: WALK_RELUCTANCE=7.5-8.0, TRANSFER_COST=400-450s
-  → 매칭률: ~55-58%
-  → Δβ < 0.01 → 수렴!
-
-최종 결과:
-  θ*: WALK_RELUCTANCE ≈ 8.0, TRANSFER_COST ≈ 420s
-  매칭률: 38% → 55%+ (17%p 개선)
-  β*: 보다 정확한 행태 파라미터 (일관된 선택지 집합 기반)
+V_j = β_ride × T_ride_j + β_walk × T_walk_j + β_transfer × N_transfer_j + β_subway × D_subway_j
+MNL 1순위 = argmax_j V_j  (generalized_cost 대신 V 사용)
 ```
 
-### 5.8 비수렴 대응 방안
+**전체 결과** (1,320,030 체인, 4,884,216 경로 쌍):
 
-| 위험 | 확률 | 대응 |
+| 순위 방식 | Exact Match | sim_total |
+|-----------|-------------|-----------|
+| OTP 1순위 | 20.34% | 0.5372 |
+| **MNL 1순위** | **22.23%** | **0.5713** |
+| Best Match (상한) | 28.62% | 0.6260 |
+
+**상세 분석 결과**:
+
+- **유형별**: YOUTH +2.49%p(최대), CHILDREN +2.23%p, GENERAL +1.99%p, DISABLED +1.51%p, ELDERLY +1.16%p(최소)
+- **환승별**: 직통 +2.05%p, 환승1회 +1.25%p, 2회+ 거의 효과 없음
+- **시간대**: 피크 +1.84%p, 비피크 +1.91%p (안정적, 시간대 무관)
+- **대안 수별**: 1개=0%p, 2개=+1.52%p, 3-4개=+2.23%p, **5개+=+3.17%p** (단조 증가)
+- **일치/불일치**: 75.4% 동일 선택, 24.6% 불일치 → 불일치 시 MNL:OTP = **10.4:1** (Exact Match)
+- **MNL 선택 경로 특성**: 보행 -0.5분(16%↓), 환승 -0.10회(20%↓), 지하철 +2.0%p, 차내시간 +1.1분
+
+### 5.9 OTP Java 수정사항
+
+Phase 4에서 실제 수행한 Java 수정:
+
+| 파일 | 수정 내용 |
+|------|----------|
+| `KoreanCostCalculator.java` | `TRANSFER_COST`, `WAIT_RELUCTANCE` 상수 → `CalibrationConfig`에서 읽도록 파라미터화 |
+| `KoreanAccessEgress.java` (AccessEgressFinder) | `walkReluctance` 외부 주입, `c1()` = `durationSeconds × 100 × walkReluctance` |
+| `BatchRouter.java` | `calibration_config.json` 파일 로드, 경로 속성(ride_time, walk_time, transfers, modes, stops) 출력 추가 |
+| `KoreanTransitDataProvider.java` | 보정 파라미터를 CostCalculator에 전달하는 경로 추가 |
+| `CalibrationConfig.java` | JSON 기반 파라미터 설정 클래스 신규 생성 |
+
+### 5.10 구현 파일 (Phase 4)
+
+| 파일 | 역할 | 상태 |
 |------|------|------|
-| **진동** (두 상태 왔다갔다) | 중간 | MSA 감쇠 계수 αₖ = 1/(k+1) 적용 → 보장됨 |
-| **선택지 붕괴** (다환승 경로 소멸) | 낮음 | TRANSFER_COST 상한 600초, Pareto 탐색이 다양성 유지 |
-| **파라미터 발산** | 낮음 | β 비율(β_walk/β_ride)은 본질적으로 안정적 |
-| **계산시간 초과** | 중간 | 10K 서브샘플로 반복, 최종만 전체 실행 |
-
-### 5.9 OTP Java 측 수정사항 (상세)
-
-#### 수정 1: KoreanCostCalculator.java
-
-**위치**: `korean-otp/src/main/java/kr/otp/raptor/spi/KoreanCostCalculator.java`
-
-**현재 코드**:
-```java
-private static final int FIRST_BOARD_COST = 60 * 100;
-private static final int TRANSFER_COST = 120 * 100;
-```
-
-**수정 후**:
-```java
-private final int firstBoardCost;
-private final int transferCost;
-private final double waitReluctance;
-
-public KoreanCostCalculator(int firstBoardCostSec, int transferCostSec, double waitReluctance) {
-    this.firstBoardCost = firstBoardCostSec * 100;
-    this.transferCost = transferCostSec * 100;
-    this.waitReluctance = waitReluctance;
-}
-```
-
-#### 수정 2: KoreanAccessEgress.java
-
-**위치**: `korean-otp/src/main/java/kr/otp/raptor/spi/KoreanAccessEgress.java`
-
-**현재 코드**:
-```java
-public int c1() {
-    return durationSeconds * 100;
-}
-```
-
-**수정 후**:
-```java
-private final double walkReluctance;
-
-public KoreanAccessEgress(int stopIndex, int durationSeconds, double walkReluctance) {
-    this.stopIndex = stopIndex;
-    this.durationSeconds = durationSeconds;
-    this.walkReluctance = walkReluctance;
-}
-
-public int c1() {
-    return (int)(durationSeconds * 100 * walkReluctance);
-}
-```
-
-#### 수정 3: BatchRouter.java
-
-**위치**: `korean-otp/src/main/java/kr/otp/batch/BatchRouter.java`
-
-**추가 기능**:
-1. `calibration_config.json` 파일 읽기
-2. 파라미터를 KoreanRaptor → KoreanTransitDataProvider → KoreanCostCalculator로 전달
-3. 출력 JSON에 경로 속성 추가:
-
-```json
-{
-  "paths": [
-    {
-      "departure": "09:00",
-      "arrival": "09:40",
-      "duration": 40,
-      "transfers": 1,
-      "legs": [...],
-      "route_attributes": {
-        "ride_time_min": 29.5,
-        "walk_time_min": 1.8,
-        "n_transfers": 1,
-        "has_subway": true,
-        "modes": ["SUBWAY", "BUS"],
-        "stops": ["100001", "100002", "100003", ...]
-      }
-    }
-  ]
-}
-```
-
-#### 수정 4: KoreanTransitDataProvider.java
-
-**위치**: `korean-otp/src/main/java/kr/otp/raptor/spi/KoreanTransitDataProvider.java`
-
-**변경**: 생성자에서 보정 파라미터를 받아 CostCalculator에 전달
-
-### 5.10 구현 파일
-
-| 파일 | 역할 | 입출력 |
-|------|------|-------|
-| `scripts/calibration/calibration_orchestrator.py` | 메인 반복 루프 | config → Java 호출 → Python 분석 → 수렴 검사 |
-| `scripts/calibration/param_mapper.py` | β → OTP θ 매핑 + MSA 감쇠 | β_estimates.json → calibration_config.json |
-| `scripts/calibration/convergence_checker.py` | 수렴 진단 + 시각화 | 반복별 β, θ, LL → 수렴 그래프 |
-| `scripts/calibration/route_matcher.py` | 교통카드 ↔ OTP 경로 매칭 | tcd + batch_result → matched_data.parquet |
-
-### 5.11 계산 예산
-
-| 단계 | 반복당 소요시간 | 비고 |
-|------|-------------|------|
-| OTP 배치 실행 | ~72분 | 187K OD @ 43.4 req/s |
-| 경로 매칭 | ~10분 | Pandas 조인 + 유사도 계산 |
-| Mixed Logit 추정 | ~5분 | xlogit GPU |
-| 파라미터 매핑 | <1분 | 단순 연산 |
-| **반복당 합계** | **~88분** | |
-| **5회 반복 (예상)** | **~7.3시간** | |
-| **개발 시 10K 서브샘플** | **~5분/반복** | 빠른 디버깅 |
+| `scripts/calibration/fixed_choice_calibration.py` | β→θ 매핑 + MSA 수렴 (접근법 A) | ✅ |
+| `scripts/calibration/usertype_calibration.py` | 유형별 θ 적용 (접근법 B) | ✅ |
+| `scripts/calibration/probabilistic_rsm_calibration.py` | LHS + RSM + IPW (접근법 E) | ✅ |
+| `scripts/calibration/mnl_reranking_analysis.py` | **MNL 재순위 상세 분석 (핵심)** | ✅ |
+| `scripts/calibration/full_baseline_analysis.py` | 전체 데이터 베이스라인 | ✅ |
 
 ---
 
 ## 6. 전체 실행 파이프라인
 
-### Phase 1: 데이터 전처리 (Day 1-2)
+### Phase 1: 데이터 전처리 ✅ 완료
 
 ```
-[1.1] TCD 파케 데이터 로드
-      입력: DATA/tcd_2025_parquet/20250220/TCD_20250220.parquet
-      출력: cleaned_tcd.parquet (~10M 유효 레코드)
-      스크립트: scripts/data/tcd_preprocessor.py
-
-[1.2] 통행 체인 재구성
-      입력: cleaned_tcd.parquet
-      출력: trip_chains.parquet (승차→환승→하차 완전 체인)
-      스크립트: scripts/data/trip_chain_builder.py
-
-[1.3] OD 쌍 추출 + 좌표 변환
-      입력: trip_chains.parquet + STTN_20250220.parquet
-      출력: od_pairs.csv, trip_attributes.parquet
-      스크립트: scripts/data/od_extractor.py
-
-[1.4] GTFS 정류장 시퀀스 추출
-      입력: GTFS stop_times.txt + routes.txt + trips.txt
-      출력: route_stop_sequences.parquet (노선별 정류장 순서)
-      스크립트: scripts/similarity/stop_sequence_extractor.py
-
-[1.5] 노선 동등성 인덱스 구축
-      입력: route_stop_sequences.parquet
-      출력: route_equivalence_index.parquet (노선쌍 유사도)
-      스크립트: scripts/similarity/route_equivalence_index.py
+[1.1] TCD 데이터 로드 + 정제 → cleaned_tcd.parquet (18,106,743 레그)
+[1.2] 통행 체인 재구성 → trip_chains.parquet (13,906,278 체인) + trip_legs.parquet
+[1.3] OD 쌍 추출 + 좌표 변환 → od_pairs.csv (1,781,135 OD)
+[1.4] 정류장 시퀀스 추출 (GTFS + TCD)
+[1.5] GTFS↔TCD ID 매핑 → 버스 85.3%, 지하철역 97.1%, 지하철노선 100%
+[1.6] 미매칭 OD 필터링 → 1,263K OD (OTP 입력)
 ```
 
-### Phase 2: 초기 OTP 배치 + 매칭 (Day 3-4)
+### Phase 2: OTP 배치 + 매칭 + 유사도 ✅ 완료
 
 ```
-[2.1] OTP Java 파라미터화 수정
-      수정 파일: KoreanCostCalculator.java, KoreanAccessEgress.java,
-                BatchRouter.java, KoreanTransitDataProvider.java
-      테스트: 소수 OD로 기능 검증
-
-[2.2] 초기 OTP 배치 실행
-      입력: od_pairs.csv + calibration_config.json (기본 파라미터)
-      출력: batch_result_iter0.json
-      실행: Java BatchRouter (187K OD, ~72분)
-
-[2.3] 경로 유사도 계산
-      입력: trip_chains.parquet + batch_result_iter0.json + route_stop_sequences.parquet
-      출력: similarity_results.parquet (5개 지표 + S_trip)
-      스크립트: scripts/similarity/route_similarity.py
-
-[2.4] 매칭 결과 분석
-      - 기존 Route Jaccard(노선ID) vs 새 S_trip(정류장) 분포 비교
-      - Exact Match 비율: 38% → ?%
-      - 유형별 매칭률 비교표
+[2.1] OTP Java 파라미터화 수정 (CalibrationConfig 도입)
+[2.2] OTP 배치 실행 (1,263K OD, ~8시간)
+[2.3] OTP 결과 파싱 → otp_alternatives.parquet (4.47M 경로)
+[2.4] TCD 경유정류장 추출 → 버스 66.1% 성공
+[2.5] 유사도 계산 → 1,320,030 체인, Exact Match 28.66%
 ```
 
-### Phase 3: 모델 추정 (Day 5-7)
+### Phase 3: 모형 추정 ✅ 완료
 
 ```
-[3.1] 모델 입력 데이터 포맷팅
-      입력: similarity_results.parquet + batch_result_iter0.json
-      출력: model_input.parquet (wide format: trip × alternatives)
-      스크립트: scripts/models/data_formatter.py
-
-[3.2] MNL 추정 (기준선)
-      - 풀링 MNL: 전체 이용자
-      - 유형별 MNL: 5개 모델
-      → 기존 논문 결과 재현 확인
-
-[3.3] Mixed Logit 추정 (주력)
-      - 풀링 ML: 랜덤 파라미터 (μ, σ)
-      - 유형별 ML: 5개 × (μ, σ)
-      → ρ² 개선 확인
-      스크립트: scripts/models/mixed_logit_estimator.py
-
-[3.4] Latent Class 추정 (비교)
-      - K=2,3,4,5,6 클래스 비교
-      - 최적 K 선택 (AIC/BIC)
-      - 잠재 클래스 vs 교통카드 유형 교차분석
-      스크립트: scripts/models/latent_class_estimator.py
-
-[3.5] LightGBM 벤치마크
-      - 80/20 split
-      - Hit Rate, SHAP 분석
-      스크립트: scripts/models/lightgbm_benchmark.py
-
-[3.6] 모델 비교
-      - MNL vs ML vs LC vs LightGBM
-      - ρ², Hit Rate, AIC/BIC 비교표
-      스크립트: scripts/models/model_comparison.py
+[3.1] Choice Set 생성 → choice_set.parquet
+[3.2] 대안 속성 추출 → alternative_attributes.parquet
+[3.3] 모델 입력 준비 → model_input_train/test.parquet (329K/82K 체인)
+[3.4] MNL 추정 (Pooled + 5유형) → ρ²=0.469, Hit Rate=66.0%
+[3.5] Mixed Logit (Pooled) → ρ²=0.464, 모든 σ 유의 (이질성 확인)
+[3.6] Latent Class (K=3) → Hit Rate=67.4% (최고, 경제학 모형 1위)
+[3.7] LightGBM Benchmark → Hit Rate=66.2% (LC 하회)
+[3.8] 통합 모형 비교 → LC > LightGBM > MNL > ML (테스트셋)
 ```
 
-### Phase 4: 반복 보정 (Day 8-10)
+### Phase 4: 반복 보정 + MNL 재순위 ✅ 완료
 
 ```
-[4.1] β → OTP 파라미터 매핑 (Iteration 1)
-      β_0 → θ_1 (MSA 감쇠 적용)
-      스크립트: scripts/calibration/param_mapper.py
-
-[4.2] OTP 재실행 (Iteration 1)
-      batch_result_iter1.json 생성
-
-[4.3] 재매칭 + 재추정 (Iteration 1)
-      새 유사도 → 새 β_1
-
-[4.4] 반복 (Iteration 2~6)
-      수렴까지 [4.1]~[4.3] 반복
-      스크립트: scripts/calibration/calibration_orchestrator.py
-
-[4.5] 수렴 진단
-      - 반복별 파라미터 궤적 그래프
-      - 매칭률 변화 그래프
-      - 로그우도 수렴 그래프
-      스크립트: scripts/calibration/convergence_checker.py
-```
-
-### Phase 5: 검증 + 결과 정리 (Day 11-12)
-
-```
-[5.1] Hold-out 검증
-      - 80/20 split
-      - Train vs Test: Hit Rate, ρ², Mean Choice Probability
-      - 과적합 여부 확인
-
-[5.2] 테스트 케이스
-      - 명동→역삼 (지하철 vs 버스)
-      - 구로디지털단지→종로 (0환승 vs 1환승)
-      - 합정→선릉 (직통 vs 환승)
-      - 각 케이스: 유형별 선택확률 비교
-
-[5.3] 반복 전/후 비교
-      - 매칭률: 38% → ?%
-      - ρ²: 0.059 → ?
-      - OTP 파라미터: WALK_RELUCTANCE 1.0 → ?
-      - 경로 추천 차이 시각화
-
-[5.4] 결과 테이블 생성
-      - 논문용 테이블 (Table 7~14 대체)
-      - 새로운 테이블: 유사도 분포, ML 파라미터, 잠재 클래스, 수렴 과정
+[4.1] 전통적 반복 보정 시도 → 실패 (Exact Match 28.66% → 14%)
+[4.2] 접근법 A: Choice Set 고정 보정 → +1.02%p (Best Match)
+[4.3] 접근법 B: 유형별 θ 적용 → +4.3%p (Best Match)
+[4.4] 평가 지표 수정: Best Match → OTP 1순위 → 확률적 F₁
+[4.5] 접근법 E: 확률적 RSM+IPW → θ 경계 수렴 (구조적 한계 발견)
+[4.6] MNL 재순위 상세 분석 → +1.89%p (OTP 재실행 불필요, 핵심 기여)
 ```
 
 ---
@@ -1099,146 +792,165 @@ public int c1() {
 
 ```
 강릉ITS/
-├── Kim_TransitRouteChoice_ITSWC2026.pdf    # 기존 논문
-├── RESEARCH_PLAN.md                        # 이 계획서
+├── RESEARCH_PLAN.md                         # 이 계획서 (docs/ 내에도 복사)
 │
-├── scripts/                                 # 🆕 신규 Python 코드
-│   ├── requirements.txt                     # 패키지 의존성
-│   │
-│   ├── data/                               # Phase 1: 데이터 전처리
-│   │   ├── tcd_preprocessor.py             # TCD 파케 로드+정제
-│   │   ├── trip_chain_builder.py           # 통행 체인 재구성
-│   │   └── od_extractor.py                 # OD 추출+좌표변환
-│   │
-│   ├── similarity/                         # 수정사항 1: 유사도
-│   │   ├── stop_sequence_extractor.py      # GTFS 정류장 시퀀스
-│   │   ├── route_similarity.py             # 5개 유사도 지표
-│   │   └── route_equivalence_index.py      # 노선쌍 사전계산
-│   │
-│   ├── models/                             # 수정사항 3: 모델
-│   │   ├── data_formatter.py               # 모델 입력 포맷
-│   │   ├── mixed_logit_estimator.py        # Mixed Logit (xlogit)
-│   │   ├── latent_class_estimator.py       # Latent Class (Biogeme)
-│   │   ├── lightgbm_benchmark.py           # LightGBM + SHAP
-│   │   └── model_comparison.py             # 3모델 비교
-│   │
-│   └── calibration/                        # 수정사항 4: 반복보정
-│       ├── calibration_orchestrator.py     # 메인 반복 루프
-│       ├── param_mapper.py                 # β→OTP 매핑+MSA
-│       ├── convergence_checker.py          # 수렴 진단+시각화
-│       └── route_matcher.py               # 경로 매칭
+├── main/                                    # Python 코드 + 결과
+│   ├── CLAUDE.md                            # 작업 가이드
+│   ├── scripts/
+│   │   ├── data/                            # Phase 1: 전처리
+│   │   │   ├── step1_clean_tcd.py
+│   │   │   ├── step2_build_trip_chains.py
+│   │   │   ├── step3_extract_od.py
+│   │   │   ├── step4_extract_stop_sequences.py
+│   │   │   ├── step5_map_gtfs_tcd_ids.py
+│   │   │   └── step6_filter_unmatched.py
+│   │   ├── matching/                        # Phase 2: OTP 매칭 + 유사도
+│   │   │   ├── step4_parse_otp_results.py
+│   │   │   └── step5_calculate_similarity.py
+│   │   ├── models/                          # Phase 3: 모형 추정
+│   │   │   ├── step1_create_choice_set.py
+│   │   │   ├── step2_extract_attributes.py
+│   │   │   ├── step3_prepare_model_input.py
+│   │   │   ├── step4_estimate_mnl.py
+│   │   │   ├── step5_estimate_mixed_logit.py
+│   │   │   ├── step6_estimate_latent_class.py
+│   │   │   ├── step7_lightgbm_benchmark.py
+│   │   │   └── step8_model_comparison.py
+│   │   └── calibration/                     # Phase 4: 반복 보정
+│   │       ├── fixed_choice_calibration.py
+│   │       ├── usertype_calibration.py
+│   │       ├── probabilistic_rsm_calibration.py
+│   │       └── mnl_reranking_analysis.py    # ★ 핵심 기여
+│   ├── output/                              # 중간 산출물
+│   │   ├── model_input_train.parquet
+│   │   └── model_input_test.parquet
+│   ├── results/                             # 최종 결과
+│   │   ├── PHASE3_RESULTS1_MNL.md ~ 5_COMPARISON.md
+│   │   ├── PHASE4_RESULTS.md
+│   │   ├── mnl_reranking_analysis.json
+│   │   └── figures/
+│   └── docs/                                # 계획서 + 참조 문서
+│       ├── PHASE1_PREPROCESSING_PLAN.md
+│       ├── PHASE3_MODEL_ESTIMATION_PLAN.md
+│       ├── PHASE4_ITERATIVE_CALIBRATION_PLAN.md
+│       ├── SIMILARITY_METRICS_FRAMEWORK.md
+│       └── DATA_AND_SYSTEM_REFERENCE.md
 │
-├── korean-otp/                             # 기존 OTP 엔진 (Java 수정)
+├── korean-otp/                              # OTP 엔진 (Java)
 │   ├── src/main/java/kr/otp/
+│   │   ├── CalibrationConfig.java           # 보정 파라미터 설정
 │   │   ├── raptor/spi/
-│   │   │   ├── KoreanCostCalculator.java   # ✏️ 파라미터화
-│   │   │   ├── KoreanAccessEgress.java     # ✏️ WALK_RELUCTANCE
-│   │   │   └── KoreanTransitDataProvider.java # ✏️ 파라미터 전달
-│   │   └── batch/
-│   │       └── BatchRouter.java            # ✏️ 설정읽기+속성출력
-│   └── data/gtfs/                          # GTFS 데이터
+│   │   │   ├── KoreanCostCalculator.java    # ✏️ 파라미터화 완료
+│   │   │   └── KoreanTransitDataProvider.java
+│   │   ├── core/AccessEgressFinder.java     # ✏️ walkReluctance 반영
+│   │   └── batch/BatchRouter.java           # ✏️ calibration_config 로드
+│   ├── calibration_config.json              # 현재 파라미터
+│   └── data/gtfs/                           # GTFS 데이터
 │
-├── DATA/                                   # 데이터
-│   ├── tcd_2025_parquet/
-│   │   └── 20250220/                       # 📌 분석 대상 (목요일)
-│   │       ├── TCD_20250220.parquet
-│   │       ├── ROUTE_20250220.parquet
-│   │       ├── STTN_20250220.parquet
-│   │       └── ROUTESTTN_20250220.parquet
-│   ├── tcn_route_mapping_complete.csv
-│   └── tcn_to_gtfs_route_mapping.csv
-│
-└── results/                                # 🆕 결과 출력
-    ├── iteration_logs/                     # 반복보정 로그
-    ├── model_results/                      # 모델 추정 결과
-    ├── figures/                            # 그래프
-    └── tables/                             # 논문용 테이블
+└── DATA/                                    # 원시 데이터
+    └── tcd_2025_parquet/20250220/           # 분석 대상 (목요일)
 ```
 
 ---
 
-## 8. 검증 계획
+## 8. 검증 결과
 
-### 8.1 유사도 프레임워크 검증
+### 8.1 유사도 프레임워크 검증 ✅
 
-| 검증 | 방법 | 기대 결과 |
+| 검증 | 기대 | 실제 결과 |
 |------|------|----------|
-| 302↔303 문제 해결 | 기존 Route Jaccard vs 새 S_jaccard 비교 | S_jaccard가 0.85+ (기존 0.0) |
-| Exact Match 개선 | S_trip 기준 매칭률 | 38% → 55%+ |
-| 유형별 패턴 | 어린이 > 고령자 > 일반 순 매칭률 | 기존 패턴 유지 확인 |
+| Exact Match | 38% → 55%+ | **28.66%** (기준 재정의: 경로+수단 완전 일치) |
+| sim_total ≥ 70% | - | **42.5%** 체인 |
+| sim_total ≥ 90% | - | **23.1%** 체인 |
+| 유형별 패턴 | 어린이 > 청소년 > 일반 | ✅ CHILDREN(46.5%) > YOUTH(41.7%) > GENERAL(28.5%) |
 
-### 8.2 모델 검증
+> **참고**: 초기 기대(38%→55%)와 실제 결과(28.66%)의 차이는 Exact Match 기준 강화(5개 유사도 지표 기반 완전 일치) 때문. 정류장 시퀀스 기반 비교 자체는 성공적으로 구현됨.
 
-| 검증 | 방법 | 기대 결과 |
+### 8.2 모형 검증 ✅
+
+| 검증 | 기대 | 실제 결과 |
 |------|------|----------|
-| Hold-out | 80/20 split, Train vs Test | ML: Hit Rate 차이 < 1% (과적합 없음) |
-| 모델 비교 | ρ², AIC, BIC | ML > MNL > LC (적합도 순) |
-| LightGBM 대비 | Hit Rate 비교 | ML Hit Rate는 LightGBM의 90-95% |
-| 파라미터 부호 | β 추정치 부호 | 이론 일치 (보행-, 환승-, 지하철+) |
-| 우도비 검정 | 유형별 vs 풀링 | p < 0.001 (유형별 차이 유의) |
+| 파라미터 부호 | 보행-, 환승-, 지하철+ | ✅ β_walk=-0.644, β_transfer=-3.051, β_subway=+2.538 |
+| ML 이질성 | σ 유의 | ✅ 모든 σ 유의 (보행 가중치 14×~36×) |
+| LC > MNL | LC 적합도 우위 | ✅ LC(67.4%) > MNL(66.0%) |
+| LightGBM 대비 | ML ≥ 90% | ✅ LC(67.4%) > LightGBM(66.2%), **경제학 모형 1위** |
+| SHAP vs β | 순위 일치 | ✅ SHAP 특성 중요도 = MNL β 절대값 순위 (완벽 일치) |
 
-### 8.3 반복 보정 검증
+### 8.3 반복 보정 검증 ✅
 
-| 검증 | 방법 | 기대 결과 |
-|------|------|----------|
-| 수렴 | 파라미터 궤적 그래프 | 5~8회 반복 후 안정 |
-| 매칭률 개선 | 반복별 매칭률 | 38% → 55%+ 단조 증가 |
-| OTP 파라미터 | 보정 전 vs 후 | WALK_RELUCTANCE: 1.0 → ~8.0 |
-| 경로 추천 변화 | 동일 OD의 추천 경로 비교 | 보행 적은 경로로 전환 |
+| 검증 | 초기 기대 | 실제 결과 |
+|------|----------|----------|
+| 전통적 반복 수렴 | 5~8회 반복 후 안정 | ❌ 1회 만에 매칭률 붕괴 (28.66%→14%) |
+| θ 최적화 개선 | 큰 개선 | **~+1%p 상한** (구조적 한계 발견) |
+| MNL 재순위 | (계획에 없음) | **+1.89%p** (θ 최적화의 2배, 핵심 기여) |
+| 불일치 시 MNL 우위 | - | **10.4:1** (Exact Match 기준) |
 
-### 8.4 테스트 케이스 (논문 재현)
+### 8.4 핵심 수치 종합
 
-| OD | 비교 | 기대 패턴 |
-|-----|------|----------|
-| 명동→역삼 | 지하철(환승) vs 버스(직통) | 고령자: 지하철 67%+, 어린이: 버스 52%+ |
-| 구로→종로 | 0환승 vs 1환승 | 고령자: 0환승 86%+, 일반: 1환승 38%+ |
-| 합정→선릉 | 직통 vs 환승 | 고령자: 직통 97%+, 일반: 직통 85%+ |
+```
+Phase 2 (유사도):
+  분석 규모: 1,320,030 체인, 4,936,864 쌍
+  Exact Match: 28.66%
+  Best Match sim_total: 평균 0.626
+
+Phase 3 (모형):
+  Hit Rate: LC(67.4%) > LGB(66.2%) > MNL(66.0%) > ML(65.9%)
+  MNL ρ²: 0.469
+  보행 가중치: 22.7× (ML 분포: 14×~36×)
+  환승 페널티: ~100분
+
+Phase 4 (보정):
+  θ 최적화 상한: ~+1%p (OTP 1순위 기준)
+  MNL 재순위: +1.89%p (OTP 재실행 불필요)
+  불일치 시: MNL:OTP = 10.4:1
+  대안 5개+: MNL +3.17%p (최대 개선)
+```
 
 ---
 
 ## 9. 학술적 기여
 
-### 기존 논문 대비 추가 기여
+### 기존 논문 대비 실현된 기여
 
-| # | 기여 | 학술적 가치 |
-|---|------|-----------|
-| 1 | **정류장 시퀀스 기반 유사도** | 노선 ID 한계 극복, 기능적 경로 동등성의 학술적 정의 제시 |
-| 2 | **TCD 완전 환승 데이터** | 지하철 환승까지 포착한 보다 정확한 통행 체인 분석 |
-| 3 | **Mixed Logit** | MNL → ML 확장으로 이용자 유형 내 이질성까지 포착 (μ+σ 보고) |
-| 4 | **Latent Class** | 교통카드 유형 ≠ 행태 군집 여부 실증 검증 |
-| 5 | **LightGBM 벤치마크** | 이산선택모델의 예측력을 ML 대비 정량 평가 |
-| 6 | **반복 보정** | 라우팅 엔진-행태 모델의 자기일관적(self-consistent) 보정 프레임워크 |
-| 7 | **매칭률 개선** | 38% → 55%+로 분석 가능 표본 대폭 확대 |
+| # | 기여 | 학술적 가치 | 상태 |
+|---|------|-----------|------|
+| 1 | **정류장 시퀀스 기반 다층 유사도** | 5단계(환승/수단/Jaccard/LCS/시간) 유사도 프레임워크, 302↔303 문제 해결 | ✅ |
+| 2 | **TCD 완전 환승 데이터** | 지하철↔지하철 환승 포함, 1,320만 체인 분석 | ✅ |
+| 3 | **Mixed Logit (이질성)** | 보행 가중치 분포 14×~36× (개인차 2.6배), 모든 σ 유의 | ✅ |
+| 4 | **Latent Class (잠재 군집)** | 3클래스 발견, 고령자 61%가 접근성 클래스, Hit Rate 1위(67.4%) | ✅ |
+| 5 | **LightGBM 벤치마크** | 경제학 모형(LC) > ML(LightGBM), SHAP=β 순위 일치 | ✅ |
+| 6 | **θ 최적화 구조적 한계 실증** | 전통적 반복 실패 + RSM 경계 수렴 → ~+1%p 상한 | ✅ |
+| 7 | **MNL 재순위의 이론적·실증적 정당화** | +1.89%p, MNL:OTP=10.4:1, 대안 수 단조 관계 | ✅ **핵심** |
 
-### 참고 문헌 (추가 필요)
+### 참고 문헌
 
-- Han, Y., et al. (2022). "A neural-embedded discrete choice model..." Transportation Research Part B
-- Wong, M. & Farooq, B. (2021). "ResLogit: A residual neural network logit model..." Transportation Research Part C
-- Arriagada, J., et al. (2025). "An experiential learning-based transit route choice model..." Transportation
-- xlogit documentation: https://xlogit.readthedocs.io/
-- Frejinger, E. & Bierlaire, M. (2007). "Capturing correlation with subnetworks..." Transportation Research Part B
-- Sheffi, Y. (1985). Urban Transportation Networks. Prentice-Hall.
+- McFadden, D. (1974). Conditional logit analysis of qualitative choice behavior.
+- Ben-Akiva, M. & Lerman, S. R. (1985). *Discrete Choice Analysis*.
+- Sheffi, Y. (1985). *Urban Transportation Networks*.
+- Prato, C. G. (2009). Route choice modeling: past, present and future research directions.
+- Frejinger, E., Bierlaire, M. & Ben-Akiva, M. (2009). Sampling of alternatives for route choice modeling.
+- Cascetta, E. (2009). *Transportation Systems Analysis* (Ch. 10: Assignment-Consistent Models).
+- Train, K. (2009). *Discrete Choice Methods with Simulation*.
+- Han, Y., et al. (2022). A neural-embedded discrete choice model. *Transportation Research Part B*.
 
 ---
 
 ## 10. 일정 및 산출물
 
-### 일정 (12일)
+### 실제 일정
 
-| 일차 | 단계 | 산출물 |
-|------|------|--------|
-| Day 1-2 | 데이터 전처리 | cleaned_tcd.parquet, trip_chains.parquet, od_pairs.csv |
-| Day 3-4 | OTP 수정 + 배치 + 매칭 | batch_result_iter0.json, similarity_results.parquet |
-| Day 5-6 | Mixed Logit + MNL 추정 | ml_results.json, mnl_results.json |
-| Day 7 | Latent Class + LightGBM | lc_results.json, lgb_results.json |
-| Day 8-9 | 반복 보정 (5~8회) | iteration_logs/, converged_params.json |
-| Day 10 | 최종 모델 추정 | final_ml_results.json (수렴 파라미터 기반) |
-| Day 11 | Hold-out 검증 + 테스트 케이스 | validation_results.json |
-| Day 12 | 결과 정리 + 테이블/그래프 | tables/, figures/ |
+| 일차 | 단계 | 상태 |
+|------|------|------|
+| Day 1-3 | Phase 1: 데이터 전처리 (TCD 정제 + 체인 구성 + OD 추출 + ID 매핑) | ✅ |
+| Day 4-5 | Phase 2: OTP 배치 실행 (~8시간) + 결과 파싱 + 유사도 계산 | ✅ |
+| Day 6-7 | Phase 3: MNL + Mixed Logit (~6.4시간) | ✅ |
+| Day 8 | Phase 3: Latent Class + LightGBM + 모형 비교 | ✅ |
+| Day 9-11 | Phase 4: 접근법 A→B→E + 평가 지표 진화 + MNL 재순위 분석 | ✅ |
+| Day 12+ | 논문 작성 | ⏳ |
 
 ### 핵심 산출물
 
-1. **Python 스크립트 16개** (data 3 + similarity 3 + models 5 + calibration 4 + requirements 1)
-2. **Java 수정 4개** (KoreanCostCalculator, KoreanAccessEgress, BatchRouter, KoreanTransitDataProvider)
-3. **결과 테이블** (유사도 분포, Mixed Logit 파라미터, Latent Class 교차표, 수렴 과정, 모델 비교)
-4. **그래프** (유사도 히스토그램, 파라미터 비교 바차트, 수렴 궤적, SHAP 요약)
+1. **Python 스크립트 ~25개** (data 6 + matching 2 + models 8 + calibration 5 + utils)
+2. **Java 수정 5개** (CalibrationConfig, CostCalculator, AccessEgressFinder, TransitDataProvider, BatchRouter)
+3. **결과 문서 7개** (Phase 3 5개 + Phase 4 2개)
+4. **데이터** (model_input_train/test.parquet, mnl_reranking_analysis.json 등)

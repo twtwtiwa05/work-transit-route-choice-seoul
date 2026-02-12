@@ -1,28 +1,29 @@
 """
 Step 5: TCD 관측 경로 vs OTP 대안 경로 유사도 계산
 
-입력:
-- trip_attributes_matched.parquet (1,320,030 체인)
-- otp_alternatives.parquet (4,477,498 경로)
-- tcd_leg_traversed_stops.parquet (경유 정류장)
-- gtfs_tcd_stop_mapping.parquet (정류장 ID 매핑)
-- gtfs_tcd_route_mapping.parquet (노선 ID 매핑)
+입력 (output/iter{N}/):
+- trip_attributes_matched.parquet
+- otp_alternatives.parquet
 
-출력:
-- similarity_results.parquet (체인별 × 대안별 유사도)
-- similarity_summary.parquet (OD별 최선 매칭 요약)
+입력 (공통):
+- tcd_leg_traversed_stops.parquet
+- gtfs_tcd_stop_mapping.parquet
+- gtfs_tcd_route_mapping.parquet
 
-유사도 지표 (4개 레벨):
-- Level 1: Exact Match (완전 일치)
-- Level 2: Route/Mode Sequence Similarity
-- Level 3: Stop-based Similarity (Jaccard, LCS, BAMR)
-- Level 4: Temporal Similarity
+출력 (output/iter{N}/):
+- similarity_results.parquet
+- similarity_summary.parquet
+
+환경변수:
+- ITERATION: 반복 회차 (기본 0)
 
 실행:
     python scripts/matching/step5_calculate_similarity.py
+    ITERATION=1 python scripts/matching/step5_calculate_similarity.py
 """
 
 import json
+import sys
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -30,20 +31,26 @@ from tqdm import tqdm
 from collections import defaultdict
 import time
 
-# 경로 설정
+# 경로 설정 - iteration_paths 사용
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-OUTPUT_DIR = PROJECT_ROOT / "output"
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from utils.iteration_paths import get_paths, print_iteration_info
 
-# 입력 파일
-TRIP_ATTRS_FILE = OUTPUT_DIR / "trip_attributes_matched.parquet"
-OTP_ALTS_FILE = OUTPUT_DIR / "otp_alternatives.parquet"
-TCD_STOPS_FILE = OUTPUT_DIR / "tcd_leg_traversed_stops.parquet"
-STOP_MAPPING_FILE = OUTPUT_DIR / "gtfs_tcd_stop_mapping.parquet"
-ROUTE_MAPPING_FILE = OUTPUT_DIR / "gtfs_tcd_route_mapping.parquet"
+# Iteration별 경로 가져오기
+paths = get_paths()
 
-# 출력 파일
-SIMILARITY_RESULTS_FILE = OUTPUT_DIR / "similarity_results.parquet"
-SIMILARITY_SUMMARY_FILE = OUTPUT_DIR / "similarity_summary.parquet"
+# 입력 파일 (iteration별)
+TRIP_ATTRS_FILE = paths.trip_attrs_matched
+OTP_ALTS_FILE = paths.otp_alternatives
+
+# 입력 파일 (공통 - iter0)
+TCD_STOPS_FILE = paths.tcd_leg_stops
+STOP_MAPPING_FILE = paths.stop_mapping
+ROUTE_MAPPING_FILE = paths.route_mapping
+
+# 출력 파일 (iteration별)
+SIMILARITY_RESULTS_FILE = paths.similarity_results
+SIMILARITY_SUMMARY_FILE = paths.similarity_summary
 
 
 def load_id_mappings():
@@ -78,7 +85,7 @@ def load_id_mappings():
     print(f"  버스 노선 매핑: {bus_count:,}개")
 
     # 지하철 노선 매핑 추가
-    subway_mapping_file = OUTPUT_DIR / "subway_line_mapping.json"
+    subway_mapping_file = PROJECT_ROOT / "output" / "subway_line_mapping.json"
     if subway_mapping_file.exists():
         # GTFS에서 지하철 route_id 로드
         gtfs_routes_file = PROJECT_ROOT.parent / "korean-otp" / "data" / "gtfs" / "routes.txt"
@@ -601,7 +608,7 @@ def main():
     dist = summary['sim_bin'].value_counts().sort_index()
     for label, count in dist.items():
         pct = count / len(summary) * 100
-        bar = '█' * int(pct / 2)
+        bar = '#' * int(pct / 2)
         print(f"  {label}: {count:,} ({pct:.1f}%) {bar}")
 
     print()

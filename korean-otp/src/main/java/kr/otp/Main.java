@@ -48,6 +48,14 @@ public class Main {
             return;
         }
 
+        // "multi-batch" 서브 커맨드 → BatchRouter.runMultiBatch로 위임
+        if (args.length > 0 && args[0].equalsIgnoreCase("multi-batch")) {
+            String[] mbArgs = new String[args.length - 1];
+            System.arraycopy(args, 1, mbArgs, 0, mbArgs.length);
+            BatchRouter.runMultiBatch(mbArgs);
+            return;
+        }
+
         // UTF-8 출력 설정
         try {
             System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));

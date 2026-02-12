@@ -53,10 +53,9 @@ korean-otp/data/gtfs/
 korean-otp/data/osm/
 korean-otp/data/*.csv
 
-# Batch results (very large - up to 32GB)
-korean-otp/batch_result*.ndjson
-korean-otp/batch_result*.ndjson.progress
-korean-otp/test_result*.ndjson
+# Batch results (very large - up to 48GB)
+korean-otp/*.ndjson
+korean-otp/*.ndjson.progress
 korean-otp/batch_result.json
 
 # Build artifacts

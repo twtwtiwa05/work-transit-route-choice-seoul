@@ -17,20 +17,22 @@ public class CalibrationConfig {
     private final int firstBoardCostSeconds;
     private final double waitReluctance;
     private final double walkReluctance;
+    private final double subwayReluctance;
     private final int searchWindowSeconds;
 
     private CalibrationConfig(int transferCostSeconds, int firstBoardCostSeconds,
                               double waitReluctance, double walkReluctance,
-                              int searchWindowSeconds) {
+                              double subwayReluctance, int searchWindowSeconds) {
         this.transferCostSeconds = transferCostSeconds;
         this.firstBoardCostSeconds = firstBoardCostSeconds;
         this.waitReluctance = waitReluctance;
         this.walkReluctance = walkReluctance;
+        this.subwayReluctance = subwayReluctance;
         this.searchWindowSeconds = searchWindowSeconds;
     }
 
     public static CalibrationConfig defaults() {
-        return new CalibrationConfig(120, 60, 1.0, 1.0, 1800);
+        return new CalibrationConfig(120, 60, 1.0, 1.0, 1.0, 1800);
     }
 
     /**
@@ -41,6 +43,7 @@ public class CalibrationConfig {
         int firstBoardCost = 60;
         double waitRel = 1.0;
         double walkRel = 1.0;
+        double subwayRel = 1.0;
         int searchWindow = 1800;
 
         try (BufferedReader reader = Files.newBufferedReader(path)) {
@@ -55,10 +58,11 @@ public class CalibrationConfig {
             firstBoardCost = parseIntValue(json, "firstBoardCostSeconds", firstBoardCost);
             waitRel = parseDoubleValue(json, "waitReluctance", waitRel);
             walkRel = parseDoubleValue(json, "walkReluctance", walkRel);
+            subwayRel = parseDoubleValue(json, "subwayReluctance", subwayRel);
             searchWindow = parseIntValue(json, "searchWindowSeconds", searchWindow);
         }
 
-        return new CalibrationConfig(transferCost, firstBoardCost, waitRel, walkRel, searchWindow);
+        return new CalibrationConfig(transferCost, firstBoardCost, waitRel, walkRel, subwayRel, searchWindow);
     }
 
     private static int parseIntValue(String json, String key, int defaultValue) {
@@ -67,7 +71,12 @@ public class CalibrationConfig {
         try {
             return Integer.parseInt(val);
         } catch (NumberFormatException e) {
-            return defaultValue;
+            // float 문자열(예: "202.0") 지원 - Python json.dump(float())와의 호환
+            try {
+                return (int) Double.parseDouble(val);
+            } catch (NumberFormatException e2) {
+                return defaultValue;
+            }
         }
     }
 
@@ -108,11 +117,12 @@ public class CalibrationConfig {
     public int getFirstBoardCostSeconds() { return firstBoardCostSeconds; }
     public double getWaitReluctance() { return waitReluctance; }
     public double getWalkReluctance() { return walkReluctance; }
+    public double getSubwayReluctance() { return subwayReluctance; }
     public int getSearchWindowSeconds() { return searchWindowSeconds; }
 
     @Override
     public String toString() {
-        return String.format("CalibrationConfig{transfer=%ds, firstBoard=%ds, wait=%.2f, walk=%.2f, window=%ds}",
-            transferCostSeconds, firstBoardCostSeconds, waitReluctance, walkReluctance, searchWindowSeconds);
+        return String.format("CalibrationConfig{transfer=%ds, firstBoard=%ds, wait=%.2f, walk=%.2f, subway=%.2f, window=%ds}",
+            transferCostSeconds, firstBoardCostSeconds, waitReluctance, walkReluctance, subwayReluctance, searchWindowSeconds);
     }
 }

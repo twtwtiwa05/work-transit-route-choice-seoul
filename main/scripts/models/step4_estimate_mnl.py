@@ -1,12 +1,14 @@
 """
 Phase 3 Step 4: MNL (Multinomial Logit) 모델 추정
 
-입력:
+입력 (output/iter{N}/):
 - model_input_train.parquet
 
-출력:
+출력 (results/iter{N}/):
 - mnl_results.json (추정 결과)
-- mnl_results_detailed.txt (상세 결과)
+
+환경변수:
+- ITERATION: 반복 회차 (기본 0)
 
 모델:
 1. Pooled MNL: 전체 이용자
@@ -19,6 +21,7 @@ V_j = β_ride * T_ride + β_walk * T_walk + β_transfer * N_transfer
 구현: 순수 numpy/scipy (최적화된 벡터 연산)
 """
 
+import sys
 import pandas as pd
 import numpy as np
 import json
@@ -29,11 +32,13 @@ from scipy.stats import norm
 import warnings
 warnings.filterwarnings('ignore')
 
-# 경로 설정
+# 경로 설정 - iteration_paths 사용
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-OUTPUT_DIR = PROJECT_ROOT / "output"
-RESULTS_DIR = PROJECT_ROOT / "results"
-RESULTS_DIR.mkdir(exist_ok=True)
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from utils.iteration_paths import get_paths, print_iteration_info
+
+# Iteration별 경로 가져오기
+paths = get_paths()
 
 # 모델 변수 (T_wait 제거, Peak 상호작용 추가)
 VARNAMES = ['T_ride', 'T_walk', 'N_transfer', 'D_subway', 'Peak_T_ride', 'Peak_N_transfer']
@@ -276,7 +281,7 @@ def estimate_mnl(df, model_name="Pooled"):
         print(f"  환승 페널티: {weights['transfer_minutes']:.1f}분 (환승 1회 = 차내 {weights['transfer_minutes']:.1f}분)")
     else:
         weights = {}
-        print("\n⚠️ β_ride ≈ 0, 가중치 계산 불가")
+        print("\n[!] β_ride ≈ 0, 가중치 계산 불가")
 
     return {
         'model_name': model_name,
@@ -293,12 +298,13 @@ def main():
     print("=" * 70)
     print("Phase 3 Step 4: MNL 모델 추정")
     print("=" * 70)
+    print_iteration_info()
     print(f"시작 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
 
     # 1. 데이터 로드
     print("1. 데이터 로드 중...")
-    train_df = pd.read_parquet(OUTPUT_DIR / "model_input_train.parquet")
+    train_df = pd.read_parquet(paths.model_input_train)
     print(f"   Train 데이터: {len(train_df):,} rows, {train_df['chain_id'].nunique():,} chains")
 
     # 상호작용 변수 생성 (Peak × 시간/환승)
@@ -333,7 +339,7 @@ def main():
 
         n_chains = type_df['chain_id'].nunique()
         if n_chains < 500:
-            print(f"\n⚠️ {type_label}: 샘플 부족 ({n_chains} chains) - 건너뜀")
+            print(f"\n[!] {type_label}: 샘플 부족 ({n_chains} chains) - 건너뜀")
             continue
 
         results['by_type'][str(user_type)] = estimate_mnl(type_df, f"Type {user_type}: {type_label}")
@@ -377,13 +383,13 @@ def main():
     print("=" * 70)
 
     # JSON 저장
-    json_path = RESULTS_DIR / "mnl_results.json"
+    json_path = paths.mnl_results
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
     print(f"   JSON: {json_path}")
 
     # 상세 텍스트 저장
-    txt_path = RESULTS_DIR / "mnl_results_detailed.txt"
+    txt_path = paths.results_dir / "mnl_results_detailed.txt"
     with open(txt_path, 'w', encoding='utf-8') as f:
         f.write("=" * 70 + "\n")
         f.write("MNL 추정 결과 상세\n")

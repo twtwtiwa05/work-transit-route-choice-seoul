@@ -1,0 +1,151 @@
+{
+  "method": "Approach E Full Validation (population-representative)",
+  "timestamp": "2026-02-10T21:05:27.119817",
+  "sample_per_type": 10000,
+  "stratified": false,
+  "baseline": {
+    "overall_det": 20.34,
+    "overall_mnl": 22.23,
+    "per_type_det": {
+      "GENERAL": 19.84,
+      "YOUTH": 27.83,
+      "CHILDREN": 31.3,
+      "ELDERLY": 19.84,
+      "DISABLED": 23.6
+    }
+  },
+  "optimal_thetas": {
+    "GENERAL": {
+      "walkReluctance": 28.58,
+      "transferCostSeconds": 216,
+      "subwayReluctance": 1.81
+    },
+    "CHILDREN": {
+      "walkReluctance": 30.0,
+      "transferCostSeconds": 91,
+      "subwayReluctance": 2.0
+    },
+    "YOUTH": {
+      "walkReluctance": 27.17,
+      "transferCostSeconds": 32,
+      "subwayReluctance": 1.61
+    },
+    "ELDERLY": {
+      "walkReluctance": 30.0,
+      "transferCostSeconds": 71,
+      "subwayReluctance": 2.0
+    },
+    "DISABLED": {
+      "walkReluctance": 27.17,
+      "transferCostSeconds": 32,
+      "subwayReluctance": 1.61
+    }
+  },
+  "type_weights": {
+    "GENERAL": 0.796193608606039,
+    "ELDERLY": 0.13206599072333572,
+    "YOUTH": 0.035980993951691256,
+    "DISABLED": 0.02817907793802512,
+    "CHILDREN": 0.007580328780908862
+  },
+  "results": {
+    "GENERAL": {
+      "F1": 0.5928378027101506,
+      "F2": 0.24860300175849545,
+      "det_exact": 0.21512503766194638,
+      "det_sim": 0.5551426410675049,
+      "mnl_exact": 0.266194636938837,
+      "mnl_sim": 0.6134008765220642,
+      "n_chains": 6638,
+      "n_sample_input": 10000,
+      "det_exact_0t": 0.25792023853894896,
+      "det_sim_0t": 0.5766956210136414,
+      "count_0t": 5366,
+      "det_exact_1t": 0.03802938634399308,
+      "det_sim_1t": 0.4710235595703125,
+      "count_1t": 1157,
+      "det_exact_2t": 0.0,
+      "count_2t": 115
+    },
+    "CHILDREN": {
+      "F1": 0.6692935047430975,
+      "F2": 0.3408908244972299,
+      "det_exact": 0.29875131287198037,
+      "det_sim": 0.6335794925689697,
+      "mnl_exact": 0.36433656202590736,
+      "mnl_sim": 0.6938154697418213,
+      "n_chains": 8569,
+      "n_sample_input": 10000,
+      "det_exact_0t": 0.32858622475401345,
+      "det_sim_0t": 0.6478633880615234,
+      "count_0t": 7724,
+      "det_exact_1t": 0.027707808564231738,
+      "det_sim_1t": 0.5078774690628052,
+      "count_1t": 794,
+      "det_exact_2t": 0.0,
+      "count_2t": 51
+    },
+    "YOUTH": {
+      "F1": 0.6594717135846568,
+      "F2": 0.3219663338670399,
+      "det_exact": 0.2623256972111554,
+      "det_sim": 0.6129052042961121,
+      "mnl_exact": 0.33354083665338646,
+      "mnl_sim": 0.6750742197036743,
+      "n_chains": 8032,
+      "n_sample_input": 10000,
+      "det_exact_0t": 0.2947203643090935,
+      "det_sim_0t": 0.6309096813201904,
+      "count_0t": 7027,
+      "det_exact_1t": 0.03917301414581066,
+      "det_sim_1t": 0.4949977695941925,
+      "count_1t": 919,
+      "det_exact_2t": 0.0,
+      "count_2t": 86
+    },
+    "ELDERLY": {
+      "F1": 0.5479705435335874,
+      "F2": 0.2292251531870926,
+      "det_exact": 0.17182830752512904,
+      "det_sim": 0.47123342752456665,
+      "mnl_exact": 0.2378429774517794,
+      "mnl_sim": 0.5594410300254822,
+      "n_chains": 7362,
+      "n_sample_input": 10000,
+      "det_exact_0t": 0.1758639910813824,
+      "det_sim_0t": 0.4693591892719269,
+      "count_0t": 7176,
+      "det_exact_1t": 0.01818181818181818,
+      "det_sim_1t": 0.5519164204597473,
+      "count_1t": 165,
+      "det_exact_2t": 0.0,
+      "count_2t": 21
+    },
+    "DISABLED": {
+      "F1": 0.5850556702537504,
+      "F2": 0.26925428515084315,
+      "det_exact": 0.21185242319064146,
+      "det_sim": 0.530856192111969,
+      "mnl_exact": 0.28769764751253374,
+      "mnl_sim": 0.6068081259727478,
+      "n_chains": 7779,
+      "n_sample_input": 10000,
+      "det_exact_0t": 0.22311901504787962,
+      "det_sim_0t": 0.5287561416625977,
+      "count_0t": 7310,
+      "det_exact_1t": 0.04116222760290557,
+      "det_sim_1t": 0.5813612937927246,
+      "count_1t": 413,
+      "det_exact_2t": 0.0,
+      "count_2t": 56
+    }
+  },
+  "summary": {
+    "weighted_det_exact": 0.21164703414966946,
+    "weighted_mnl_exact": 0.2662234132148364,
+    "weighted_F1": 0.5896701840616823,
+    "det_delta_pp": 0.8247034149669439,
+    "mnl_delta_pp": 4.392341321483638
+  },
+  "total_elapsed_min": 42.90675133864085
+}

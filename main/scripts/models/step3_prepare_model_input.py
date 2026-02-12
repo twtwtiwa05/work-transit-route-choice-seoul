@@ -1,15 +1,20 @@
 """
 Phase 3 Step 3: 모델 입력 데이터 준비
 
-입력:
+입력 (output/iter{N}/):
 - choice_set.parquet (Step 1)
 - alternative_attributes.parquet (Step 2)
+
+입력 (공통):
 - trip_attributes_filtered.parquet (Phase 1)
 
-출력:
+출력 (output/iter{N}/):
 - model_input.parquet (전체)
 - model_input_train.parquet (80%)
 - model_input_test.parquet (20%)
+
+환경변수:
+- ITERATION: 반복 회차 (기본 0)
 
 처리:
 1. 세 파일 병합
@@ -18,14 +23,19 @@ Phase 3 Step 3: 모델 입력 데이터 준비
 4. Train/Test 분할 (체인 수준, 층화)
 """
 
+import sys
 import pandas as pd
 import numpy as np
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 
-# 경로 설정
+# 경로 설정 - iteration_paths 사용
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-OUTPUT_DIR = PROJECT_ROOT / "output"
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from utils.iteration_paths import get_paths, print_iteration_info
+
+# Iteration별 경로 가져오기
+paths = get_paths()
 
 # 이상치 기준
 MIN_DURATION_MIN = 1.0       # 최소 1분
@@ -51,18 +61,18 @@ def main():
     print("=" * 70)
     print("Phase 3 Step 3: 모델 입력 데이터 준비")
     print("=" * 70)
-    print()
+    print_iteration_info()
 
     # 1. 데이터 로드
     print("1. 데이터 로드 중...")
 
-    choice_df = pd.read_parquet(OUTPUT_DIR / "choice_set.parquet")
+    choice_df = pd.read_parquet(paths.choice_set)
     print(f"   choice_set: {len(choice_df):,} rows, {choice_df['chain_id'].nunique():,} chains")
 
-    attr_df = pd.read_parquet(OUTPUT_DIR / "alternative_attributes.parquet")
+    attr_df = pd.read_parquet(paths.alternative_attributes)
     print(f"   alternative_attributes: {len(attr_df):,} rows")
 
-    trip_df = pd.read_parquet(OUTPUT_DIR / "trip_attributes_filtered.parquet")
+    trip_df = pd.read_parquet(paths.trip_attrs_filtered)
     print(f"   trip_attributes: {len(trip_df):,} rows")
     print()
 
@@ -162,7 +172,7 @@ def main():
     print("5. Choice 변수 검증...")
     choice_per_chain = clean_df.groupby('chain_id')['choice'].sum()
     valid_choice = (choice_per_chain == 1).all()
-    print(f"   모든 체인에 choice=1이 정확히 1개: {'✅' if valid_choice else '❌'}")
+    print(f"   모든 체인에 choice=1이 정확히 1개: {'[OK]' if valid_choice else '[X]'}")
 
     if not valid_choice:
         bad_chains = choice_per_chain[choice_per_chain != 1]
@@ -180,7 +190,7 @@ def main():
     # 대안 1개인 체인 제거 (선택 모델에 의미 없음)
     single_alt_chains = alts_per_chain[alts_per_chain == 1].index
     if len(single_alt_chains) > 0:
-        print(f"   ⚠️ 대안 1개인 체인: {len(single_alt_chains):,} (제거)")
+        print(f"   [!] 대안 1개인 체인: {len(single_alt_chains):,} (제거)")
         clean_df = clean_df[~clean_df['chain_id'].isin(single_alt_chains)]
         alts_per_chain = clean_df.groupby('chain_id').size()
         print(f"   제거 후: {clean_df['chain_id'].nunique():,} chains")
@@ -230,12 +240,24 @@ def main():
     # 층화 추출을 위한 user_type
     chain_user_type = final_df.groupby('chain_id')['user_type'].first()
 
-    train_chains, test_chains = train_test_split(
-        unique_chains,
-        test_size=TEST_SIZE,
-        random_state=RANDOM_STATE,
-        stratify=chain_user_type[unique_chains].values
-    )
+    # 각 클래스의 최소 샘플 수 확인 (층화 분할에는 최소 2개 필요)
+    min_class_count = chain_user_type.value_counts().min()
+    use_stratify = min_class_count >= 2
+
+    if use_stratify:
+        train_chains, test_chains = train_test_split(
+            unique_chains,
+            test_size=TEST_SIZE,
+            random_state=RANDOM_STATE,
+            stratify=chain_user_type[unique_chains].values
+        )
+    else:
+        print(f"   [!] 일부 user_type이 1개뿐이므로 층화 분할 건너뜀")
+        train_chains, test_chains = train_test_split(
+            unique_chains,
+            test_size=TEST_SIZE,
+            random_state=RANDOM_STATE
+        )
 
     train_df = final_df[final_df['chain_id'].isin(train_chains)]
     test_df = final_df[final_df['chain_id'].isin(test_chains)]
@@ -260,17 +282,17 @@ def main():
     print("10. 저장 중...")
 
     # 전체
-    full_path = OUTPUT_DIR / "model_input.parquet"
+    full_path = paths.model_input
     final_df.to_parquet(full_path, index=False)
     print(f"   전체: {full_path} ({full_path.stat().st_size/(1024**2):.1f} MB)")
 
     # Train
-    train_path = OUTPUT_DIR / "model_input_train.parquet"
+    train_path = paths.model_input_train
     train_df.to_parquet(train_path, index=False)
     print(f"   Train: {train_path} ({train_path.stat().st_size/(1024**2):.1f} MB)")
 
     # Test
-    test_path = OUTPUT_DIR / "model_input_test.parquet"
+    test_path = paths.model_input_test
     test_df.to_parquet(test_path, index=False)
     print(f"   Test: {test_path} ({test_path.stat().st_size/(1024**2):.1f} MB)")
     print()

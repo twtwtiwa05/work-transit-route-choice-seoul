@@ -1,0 +1,106 @@
+{
+  "method": "LHS + Response Surface Method",
+  "status": "completed",
+  "start_time": "2026-02-10T00:23:58.736794",
+  "settings": {
+    "n_lhs_samples": 20,
+    "sample_size": 2000,
+    "param_bounds": {
+      "walkReluctance": [
+        1.0,
+        30.0
+      ],
+      "transferCostSeconds": [
+        30,
+        400
+      ],
+      "subwayReluctance": [
+        0.2,
+        2.0
+      ]
+    }
+  },
+  "results": {
+    "GENERAL": {
+      "optimal_theta": {
+        "walkReluctance": 4.03,
+        "transferCostSeconds": 388,
+        "subwayReluctance": 0.39
+      },
+      "best_sim_total": 0.5735777020454407,
+      "best_exact_match": 0.21195652173913043,
+      "rsm_r_squared": 0.7885100203129805,
+      "rsm_rmse": 0.01466966975153881,
+      "rsm_coefficients": {
+        "intercept": 0.5127869005419983,
+        "walkRel": 0.0008169337400678764,
+        "transCost": 0.00033345677783162093,
+        "subwayRel": 0.015228805388215853,
+        "walkRel^2": -9.477857455369223e-05,
+        "transCost^2": -5.047918714868161e-07,
+        "subwayRel^2": -0.013685268402896402,
+        "walkRel*transCost": 3.2757497908003316e-06,
+        "walkRel*subwayRel": 0.0018185951507234083,
+        "transCost*subwayRel": -9.364231304917853e-05
+      },
+      "rsm_predicted_optimum": {
+        "walkReluctance": 12.31,
+        "transferCostSeconds": 352,
+        "subwayReluctance": 0.2
+      },
+      "rsm_predicted_sim": 0.5778896153742389,
+      "total_evaluations": 27,
+      "elapsed_min": 44.7,
+      "phase1_top5": [
+        {
+          "theta": {
+            "walkReluctance": 4.03,
+            "transferCostSeconds": 388,
+            "subwayReluctance": 0.39
+          },
+          "sim": 0.5735777020454407,
+          "exact": 0.21195652173913043
+        },
+        {
+          "theta": {
+            "walkReluctance": 12.31,
+            "transferCostSeconds": 400,
+            "subwayReluctance": 0.2
+          },
+          "sim": 0.5730258226394653,
+          "exact": 0.21380697050938338
+        },
+        {
+          "theta": {
+            "walkReluctance": 21.95,
+            "transferCostSeconds": 347,
+            "subwayReluctance": 0.78
+          },
+          "sim": 0.571669340133667,
+          "exact": 0.2087912087912088
+        },
+        {
+          "theta": {
+            "walkReluctance": 12.61,
+            "transferCostSeconds": 269,
+            "subwayReluctance": 0.57
+          },
+          "sim": 0.5715512633323669,
+          "exact": 0.20596205962059622
+        },
+        {
+          "theta": {
+            "walkReluctance": 8.17,
+            "transferCostSeconds": 370,
+            "subwayReluctance": 0.3
+          },
+          "sim": 0.5712195038795471,
+          "exact": 0.20888055034396497
+        }
+      ],
+      "timestamp": "2026-02-10T01:08:41.759823"
+    }
+  },
+  "end_time": "2026-02-10T01:08:41.760824",
+  "total_elapsed_min": 44.7
+}

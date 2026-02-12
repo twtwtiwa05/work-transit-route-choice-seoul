@@ -1,0 +1,146 @@
+{
+  "method": "Probabilistic LHS + RSM (Approach E-IPW)",
+  "objective": "F1 = Σ w_ipw × P(j|MNL β) × sim(j) / Σ w_ipw (IPW-weighted)",
+  "status": "running",
+  "start_time": "2026-02-11T00:34:55.975675",
+  "settings": {
+    "n_lhs_samples": 22,
+    "sample_size": 5000,
+    "param_bounds": {
+      "walkReluctance": [
+        2.0,
+        40.0
+      ],
+      "transferCostSeconds": [
+        15,
+        500
+      ],
+      "subwayReluctance": [
+        0.2,
+        3.0
+      ]
+    },
+    "mnl_betas": {
+      "pooled": {
+        "T_ride": -0.07498770610598887,
+        "T_walk": -0.6441589132495491,
+        "N_transfer": -3.051072746767041,
+        "D_subway": 2.5379894848151454
+      },
+      "GENERAL": {
+        "T_ride": -0.07847618693371328,
+        "T_walk": -0.6283492422815684,
+        "N_transfer": -2.9662034150581422,
+        "D_subway": 2.3622194545159676
+      },
+      "YOUTH": {
+        "T_ride": -0.11452109982658194,
+        "T_walk": -0.7469108516609095,
+        "N_transfer": -3.295156986515721,
+        "D_subway": 2.238237605781155
+      },
+      "ELDERLY": {
+        "T_ride": -0.03202585311224609,
+        "T_walk": -0.7233903787410852,
+        "N_transfer": -3.996075762065534,
+        "D_subway": 4.551235043260515
+      }
+    }
+  },
+  "results": {
+    "GENERAL": {
+      "optimal_theta": {
+        "walkReluctance": 40.0,
+        "transferCostSeconds": 17,
+        "subwayReluctance": 3.0
+      },
+      "best_F1": 0.6183313048016807,
+      "best_F2": 0.2858193883867232,
+      "best_det_exact": 0.20791999085565516,
+      "best_det_sim": 0.538099928895454,
+      "best_mnl_exact": 0.30660980101463275,
+      "best_mnl_sim": 0.6398125176061833,
+      "rsm_r_squared": 0.9802172022358672,
+      "rsm_rmse": 0.0022383715015131724,
+      "rsm_coefficients": {
+        "intercept": 0.5535089976982964,
+        "walkRel": 0.0016863611295878408,
+        "transCost": 2.8770861063472037e-05,
+        "subwayRel": 0.0008397813617523123,
+        "walkRel^2": -2.4493471423610673e-05,
+        "transCost^2": -1.6914923176538913e-08,
+        "subwayRel^2": 0.0012321098852808346,
+        "walkRel*transCost": -1.3608069953438576e-07,
+        "walkRel*subwayRel": 0.00017922558677997162,
+        "transCost*subwayRel": -1.3867257409263372e-05
+      },
+      "rsm_predicted_optimum": {
+        "walkReluctance": 40.0,
+        "transferCostSeconds": 15,
+        "subwayReluctance": 3.0
+      },
+      "rsm_predicted_f1": 0.6166113741255138,
+      "total_evaluations": 28,
+      "elapsed_min": 125.7,
+      "beta_source": "GENERAL",
+      "phase1_top5": [
+        {
+          "theta": {
+            "walkReluctance": 40.0,
+            "transferCostSeconds": 17,
+            "subwayReluctance": 3.0
+          },
+          "F1": 0.6183313048016807,
+          "F2": 0.2858193883867232,
+          "det_exact": 0.20791999085565516,
+          "mnl_exact": 0.30660980101463275
+        },
+        {
+          "theta": {
+            "walkReluctance": 40.0,
+            "transferCostSeconds": 15,
+            "subwayReluctance": 3.0
+          },
+          "F1": 0.6183231627776052,
+          "F2": 0.2824848381522696,
+          "det_exact": 0.20583672774430897,
+          "mnl_exact": 0.3044944377880393
+        },
+        {
+          "theta": {
+            "walkReluctance": 39.88,
+            "transferCostSeconds": 138,
+            "subwayReluctance": 2.74
+          },
+          "F1": 0.6169877540879952,
+          "F2": 0.27872789364475364,
+          "det_exact": 0.2206145299196241,
+          "mnl_exact": 0.2990233413957073
+        },
+        {
+          "theta": {
+            "walkReluctance": 34.0,
+            "transferCostSeconds": 15,
+            "subwayReluctance": 3.0
+          },
+          "F1": 0.6133072047336428,
+          "F2": 0.2764734215550441,
+          "det_exact": 0.20632333973587388,
+          "mnl_exact": 0.29950557713124243
+        },
+        {
+          "theta": {
+            "walkReluctance": 40.0,
+            "transferCostSeconds": 15,
+            "subwayReluctance": 2.55
+          },
+          "F1": 0.6123850473333151,
+          "F2": 0.27659968284104575,
+          "det_exact": 0.20562489311860246,
+          "mnl_exact": 0.2980617957010184
+        }
+      ],
+      "timestamp": "2026-02-11T02:40:38.357773"
+    }
+  }
+}

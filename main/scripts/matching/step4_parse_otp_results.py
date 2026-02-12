@@ -2,27 +2,26 @@
 Step 4: OTP 배치 결과 파싱 + 속성 추출
 
 입력:
-- batch_result_iter0.ndjson (30.4GB, 1,263,225 OD)
+- batch_result_iter{N}.ndjson (OTP 배치 결과)
 - trip_attributes_filtered.parquet (1,467,135 체인)
 
-출력:
+출력 (output/iter{N}/):
 - otp_alternatives.parquet (~10M행, OD별 최대 10개 경로)
 - failed_od_ids.parquet (경로 없음 OD 목록)
 - trip_attributes_matched.parquet (경로 있는 체인만)
 
-추출 속성:
-- 기본: od_id, alt_id, total_duration, generalized_cost
-- 시간: ride_time_sec, walk_time_sec, wait_time_sec
-- 환승: n_transfers, has_subway
-- 수단: modes (JSON)
-- 노선: route_ids, route_names (JSON) ← 추가!
-- 정류장: stop_sequence, boarding_stops, alighting_stops (JSON) ← 추가!
+환경변수:
+- ITERATION: 반복 회차 (기본 0)
+- OTP_NDJSON_PATH: NDJSON 경로 (선택)
 
 실행:
     python scripts/matching/step4_parse_otp_results.py
+    ITERATION=1 python scripts/matching/step4_parse_otp_results.py
 """
 
 import json
+import os
+import sys
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
@@ -30,16 +29,30 @@ from pathlib import Path
 from tqdm import tqdm
 import time
 
-# 경로 설정
+# 경로 설정 - iteration_paths 사용
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-OTP_RESULT = Path(r"C:\Users\USER\OneDrive\Desktop\연구실\강릉ITS\korean-otp\batch_result_iter0.ndjson")
-OUTPUT_DIR = PROJECT_ROOT / "output"
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from utils.iteration_paths import get_paths, get_otp_ndjson_path, print_iteration_info
 
-# 출력 파일
-OTP_ALTERNATIVES_FILE = OUTPUT_DIR / "otp_alternatives.parquet"
-FAILED_OD_FILE = OUTPUT_DIR / "failed_od_ids.parquet"
-TRIP_ATTRS_MATCHED_FILE = OUTPUT_DIR / "trip_attributes_matched.parquet"
-TRIP_ATTRS_FILTERED_FILE = OUTPUT_DIR / "trip_attributes_filtered.parquet"
+# Iteration별 경로 가져오기
+paths = get_paths()
+OTP_RESULT = get_otp_ndjson_path()
+
+# 출력 파일 (iteration별)
+OTP_ALTERNATIVES_FILE = paths.otp_alternatives
+FAILED_OD_FILE = paths.failed_od_ids
+TRIP_ATTRS_MATCHED_FILE = paths.trip_attrs_matched
+
+# 서브샘플 모드 확인: SUBSAMPLE_MODE=1이면 trip_attributes_subsample.parquet 사용
+SUBSAMPLE_MODE = os.environ.get("SUBSAMPLE_MODE", "0") == "1"
+if SUBSAMPLE_MODE:
+    # output/ 디렉토리에 있는 서브샘플 전용 파일 사용
+    # (run_subsample.py에서 생성, od_id가 0부터 재매핑됨)
+    PROJECT_ROOT = Path(__file__).parent.parent.parent
+    TRIP_ATTRS_FILTERED_FILE = PROJECT_ROOT / "output" / "trip_attributes_subsample.parquet"
+    print(f"[서브샘플 모드] trip_attributes_subsample.parquet 사용")
+else:
+    TRIP_ATTRS_FILTERED_FILE = paths.trip_attrs_filtered
 
 
 def extract_route_info_from_legs(legs):
@@ -233,6 +246,22 @@ def parse_otp_results():
     print(f"  컬럼: {list(df.columns)}")
     print()
 
+    # 중복 제거: 동일 OD 내에서 동일 노선 조합(route_ids)은 첫 번째만 유지
+    print("중복 제거 중 (동일 OD + 동일 노선 조합)...")
+    before_dedup = len(df)
+    df = df.drop_duplicates(subset=['od_id', 'route_ids'], keep='first')
+    after_dedup = len(df)
+    removed = before_dedup - after_dedup
+    print(f"  제거 전: {before_dedup:,}")
+    print(f"  제거 후: {after_dedup:,}")
+    print(f"  중복 제거: {removed:,} ({removed/before_dedup*100:.1f}%)")
+    print(f"  OD당 평균 대안: {after_dedup / df['od_id'].nunique():.2f}")
+    print()
+
+    # alt_id 재정렬 (중복 제거 후 연속적으로)
+    df = df.sort_values(['od_id', 'total_duration'])
+    df['alt_id'] = df.groupby('od_id').cumcount().astype('int8')
+
     # 저장
     print(f"저장 중: {OTP_ALTERNATIVES_FILE}")
     df.to_parquet(OTP_ALTERNATIVES_FILE, index=False)
@@ -256,15 +285,18 @@ def parse_otp_results():
     print(f"성공 (경로 있음): {len(success_od_ids):,} ({len(success_od_ids)/total_lines*100:.1f}%)")
     print(f"실패 (경로 없음): {len(failed_od_ids):,} ({len(failed_od_ids)/total_lines*100:.1f}%)")
     print()
-    print(f"총 경로 수: {total_itineraries:,}")
-    print(f"OD당 평균 경로: {total_itineraries/len(success_od_ids):.1f}개")
-    print(f"OD당 최대 경로: {max(itinerary_counts)}개")
+    print(f"총 경로 수 (중복 제거 전): {total_itineraries:,}")
+    print(f"총 경로 수 (중복 제거 후): {len(df):,}")
+    print(f"OD당 평균 경로: {len(df)/len(success_od_ids):.2f}개")
+    alts_per_od = df.groupby('od_id').size()
+    print(f"OD당 최대 경로: {alts_per_od.max()}개")
     print()
 
-    # 경로 수 분포
+    # 경로 수 분포 (중복 제거 후)
     from collections import Counter
-    count_dist = Counter(itinerary_counts)
-    print("경로 수 분포:")
+    dedup_counts = df.groupby('od_id').size().tolist()
+    count_dist = Counter(dedup_counts)
+    print("경로 수 분포 (중복 제거 후):")
     for n in sorted(count_dist.keys()):
         print(f"  {n}개: {count_dist[n]:,} ({count_dist[n]/len(success_od_ids)*100:.1f}%)")
     print()
@@ -338,7 +370,7 @@ def analyze_failed_ods(failed_od_ids):
     hour_dist = failed_ods['hour'].value_counts().sort_index()
     for hour, count in hour_dist.items():
         pct = count / len(failed_ods) * 100
-        bar = '█' * int(pct / 2)
+        bar = '#' * int(pct / 2)
         print(f"  {hour:02d}시: {count:,} ({pct:.1f}%) {bar}")
     print()
 
@@ -354,6 +386,9 @@ def main():
     print("=" * 70)
     print("  Phase 2 Step 4: OTP 결과 파싱 + 속성 추출")
     print("=" * 70)
+    print_iteration_info()
+    print(f"  NDJSON: {OTP_RESULT}")
+    print(f"  출력 디렉토리: {paths.output_dir}")
     print()
 
     # 1. OTP 결과 파싱
