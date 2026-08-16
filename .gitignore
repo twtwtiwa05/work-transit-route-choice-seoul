@@ -102,3 +102,6 @@ logs/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Claude session state
+.omc/

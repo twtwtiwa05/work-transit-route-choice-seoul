@@ -1,0 +1,164 @@
+\section{Data and Methodology}
+
+\subsection{Data Overview}
+
+The empirical foundation is Seoul's Transportation Card Data (TCD), which
+records tap-in and tap-out transactions for every transit trip. TCD captures
+subway-to-subway transfers that older smart card formats miss, yielding a more
+complete picture of multimodal trip chains. We analyze a single representative
+weekday, February 20, 2025 (Thursday). After removing trips with no valid OTP
+alternative, the dataset comprises 1,320,030 trip chains paired with 4,936,864
+chain--alternative observations (3.74 alternatives per chain on average).
+
+\begin{table}[htbp]
+\centering
+\tablefont
+\begin{tabular}{|l|r|r|r|}
+\hline
+\headrow
+\textbf{Chain Type} & \textbf{Chains} & \textbf{Share} & \textbf{Avg.\ Alternatives} \\
+\hline
+Bus Only            & 445,554   & 33.8\% & 3.51 \\
+\hline
+Subway Only         & 720,692   & 54.6\% & 3.82 \\
+\hline
+Mixed (Bus+Subway)  & 153,784   & 11.7\% & 4.01 \\
+\hline
+Total               & 1,320,030 & 100\%  & 3.74 \\
+\hline
+\end{tabular}
+\caption{Trip Chain Composition}
+\end{table}
+
+For model estimation, chains with at least two alternatives (411,754) are
+split 80/20 into training (329,403) and test (82,351) sets, stratified by user
+type.
+
+\begin{table}[htbp]
+\centering
+\tablefont
+\begin{tabular}{|l|r|r|r|r|c|}
+\hline
+\headrow
+\textbf{User Type} & \textbf{All Chains} & \textbf{Share} & \textbf{Train} &
+\textbf{Test} & \textbf{Test HR Range} \\
+\hline
+General  & 1,044,091 & 79.1\% & 271,843 & 67,961 & 64.8--66.4\% \\
+\hline
+Elderly  & 177,303   & 13.4\% & 24,132  & 6,033  & 71.6--77.8\% \\
+\hline
+Youth    & 49,772    & 3.8\%  & 19,725  & 4,931  & 64.9--67.0\% \\
+\hline
+Disabled & 38,281    & 2.9\%  & 9,113   & 2,278  & 70.3--71.5\% \\
+\hline
+Children & 10,583    & 0.8\%  & 4,590   & 1,148  & 64.9--69.4\% \\
+\hline
+\end{tabular}
+\caption{User Type Distribution and Test Hit Rate Range Across Models}
+\end{table}
+
+\subsection{Multi-Level Similarity Framework}
+
+Rather than relying on a single similarity metric---a limitation noted by
+Tomhave and Khani \cite{tomhave2021} in their multi-criteria transit route
+choice study---we construct a hierarchical framework with four levels and ten
+metrics (Table~4). Level 1 (Exact Match) is the strictest criterion, requiring
+complete identity of route sequences, mode sequences, and boarding/alighting
+stops. Level 2 (Structural Similarity) relaxes this to sequence-level measures
+using Longest Common Subsequence (LCS) similarity. Level 3 (Stop-based
+Similarity) operates at the individual stop level via Jaccard indices. Level 4
+(Temporal Similarity) captures travel-time correspondence. The composite index
+is:
+\begin{align*}
+\mathit{sim}_{\mathrm{total}} ={}& 0.30\cdot\mathit{sim}_{\mathrm{route\_seq}}
+ + 0.20\cdot\mathit{sim}_{\mathrm{mode\_seq}}
+ + 0.20\cdot\mathit{sim}_{\mathrm{jaccard\_full}} \\
+ &+ 0.15\cdot\mathit{sim}_{\mathrm{lcs}}
+ + 0.15\cdot\mathit{sim}_{\mathrm{time}}
+\end{align*}
+
+\begin{table}[htbp]
+\centering
+\tablefont
+\begin{tabular}{|l|l|l|c|}
+\hline
+\headrow
+\textbf{Level} & \textbf{Metric} & \textbf{Description} & \textbf{Weight} \\
+\hline
+1. Exact & exact\_match & Route + mode + stop identity & --- \\
+\hline
+\multirow{3}{*}{2. Structural}
+ & sim\_route\_seq  & Route sequence LCS similarity & 0.30 \\
+ & sim\_mode\_seq   & Mode sequence LCS similarity  & 0.20 \\
+ & transfer\_match  & Transfer count match (binary) & --- \\
+\hline
+\multirow{4}{*}{3. Stop-based}
+ & sim\_jaccard\_board  & Boarding stop Jaccard index  & --- \\
+ & sim\_jaccard\_alight & Alighting stop Jaccard index & --- \\
+ & sim\_jaccard\_full   & All-stop Jaccard index       & 0.20 \\
+ & sim\_lcs             & Stop sequence LCS similarity & 0.15 \\
+\hline
+4. Temporal & sim\_time  & Travel time ratio similarity & 0.15 \\
+\hline
+Composite   & sim\_total & Weighted sum of above        & 1.00 \\
+\hline
+\end{tabular}
+\caption{Multi-Level Similarity Framework (10 Metrics)}
+\end{table}
+
+Level 1 (Exact Match) requires complete identity of route, mode, and stop
+sequences. Level 2 (Structural Similarity) uses normalized LCS similarity:
+$2\cdot\mathrm{LCS}(A,B)\,/\,(|A|+|B|)$. Level 3 (Stop-based Similarity)
+applies the Jaccard index
+$|S_{\mathrm{obs}} \cap S_{\mathrm{alt}}|\,/\,|S_{\mathrm{obs}} \cup S_{\mathrm{alt}}|$
+to boarding, alighting, and all traversed stops, complemented by stop-sequence
+LCS to preserve order. Level 4 (Temporal Similarity) is defined as
+$\mathit{sim}_{\mathrm{time}} = 1 - \min(1,\,
+|T_{\mathrm{obs}} - T_{\mathrm{alt}}|\,/\,\max(T_{\mathrm{obs}}, T_{\mathrm{alt}}))$.
+Because TCD records intermediate stops only for bus legs, subway segments use
+boarding and alighting stops alone---a limitation the Jaccard formulation
+handles gracefully.
+
+\subsection{Model Specifications}
+
+\subsubsection{Multinomial Logit (MNL)}
+
+The utility for alternative $j$ in individual $n$'s choice set is:
+\begin{align*}
+V_j ={}& \beta_{\mathrm{ride}} T_{\mathrm{ride}}
+ + \beta_{\mathrm{walk}} T_{\mathrm{walk}}
+ + \beta_{\mathrm{transfer}} N_{\mathrm{transfer}}
+ + \beta_{\mathrm{subway}} D_{\mathrm{subway}} \\
+ &+ \beta_{\mathrm{peak \cdot ride}} (D_{\mathrm{peak}} \times T_{\mathrm{ride}})
+ + \beta_{\mathrm{peak \cdot xfer}} (D_{\mathrm{peak}} \times N_{\mathrm{transfer}})
+\end{align*}
+where $T_{\mathrm{ride}}$ is in-vehicle time (min), $T_{\mathrm{walk}}$ is
+total walking time (min), $N_{\mathrm{transfer}}$ is transfer count,
+$D_{\mathrm{subway}}$ indicates subway inclusion, and $D_{\mathrm{peak}}$
+flags peak-hour departures (07--09h, 18--20h). Waiting time was excluded after
+preliminary estimation revealed multicollinearity and a counter-theoretic
+positive coefficient.
+
+\subsubsection{Mixed Logit}
+
+To accommodate unobserved taste heterogeneity, $T_{\mathrm{walk}}$,
+$N_{\mathrm{transfer}}$, and $D_{\mathrm{subway}}$ are specified as random
+coefficients, $\beta_k \sim N(\mu_k, \sigma_k)$, while $T_{\mathrm{ride}}$ and
+peak interactions remain fixed. Significant $\sigma_k$ values formally reject
+MNL's homogeneity assumption.
+
+\subsubsection{Latent Class Model}
+
+Following Greene and Hensher \cite{greene2003}, a K-class model assigns each
+class its own utility parameters. Peak interactions are dropped after Mixed
+Logit reveals them non-significant once heterogeneity is controlled. Class
+membership is modeled as a function of concomitant variables
+$Z_n = [D_{\mathrm{children}}, D_{\mathrm{youth}}, D_{\mathrm{elderly}},
+D_{\mathrm{disabled}}, D_{\mathrm{peak}}]$.
+
+\subsubsection{LightGBM Benchmark}
+
+As a non-parametric benchmark, LightGBM \cite{ke2017} classifiers predict
+which alternative was chosen. Two configurations are tested: a Core model
+(same four variables as MNL) and a Full model adding $D_{\mathrm{peak}}$,
+user\_type, and chain composition.

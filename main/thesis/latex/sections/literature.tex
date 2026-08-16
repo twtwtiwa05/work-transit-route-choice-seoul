@@ -1,0 +1,68 @@
+\section{Literature Review}
+
+\subsection{Transit Route Choice Models}
+
+The theoretical foundation for route choice modeling rests on random utility
+maximization \cite{benakiva1985}, under which a traveler selects the
+alternative with the highest perceived utility. Prato \cite{prato2009}
+identifies three persistent challenges: generating plausible alternatives,
+defining attributes behaviorally, and selecting a model structure. The MNL
+model \cite{mcfadden1974} remains the workhorse owing to its tractability,
+though its IIA limitation has motivated richer structures. Train
+\cite{train2009} demonstrated that Mixed Logit captures unobserved taste
+heterogeneity through continuous coefficient distributions, while Greene and
+Hensher \cite{greene2003} showed that Latent Class models segment the
+population into discrete behavioral groups linked to observable
+characteristics via concomitant variables. Large-scale empirical applications
+remain scarce: Kim et al.\ \cite{kim2020} calibrated a transit route choice
+model using Seoul smart card data but considered a single user type, Arriagada
+et al.\ \cite{arriagada2025} estimated a learning-based model on
+$\sim$100,000 trips in Santiago, and Arriagada et al.\ \cite{arriagada2022}
+later revealed route choice strategy heterogeneity using smart card data in
+the same network.
+
+\subsection{Transfer Penalty and User Heterogeneity}
+
+Jara-D\'iaz et al.\ \cite{jaradiaz2022}, synthesizing data from five
+countries, reported pure transfer penalties of 13--18 minutes. For Seoul, Yoo
+\cite{yoo2015} estimated an average penalty of 11.24 minutes but did not
+disaggregate by demographics. A growing body of work documents systematic
+differences across traveler groups: Chen et al.\ \cite{chen2021} found
+significant preference heterogeneity among elderly riders in China, and Peng
+et al.\ \cite{peng2024} reported that older rail passengers are 10.2
+percentage points less likely to choose express services. These studies
+examine single segments in isolation; no prior work has simultaneously
+compared behavior across five user types using four model families---an
+omission this paper rectifies.
+
+\subsection{Differentiation from Prior Research}
+
+Table~1 positions the present study relative to the most relevant prior work.
+The key distinctions are the data scale (1.32 million chains), model breadth
+(four families), multi-level similarity framework, and closed-loop calibration
+analysis.
+
+\begin{table}[htbp]
+\centering
+\tablefont
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\headrow
+\textbf{Criterion} & \textbf{\cite{kim2020}} & \textbf{\cite{yoo2015}} &
+\textbf{\cite{arriagada2025}} & \textbf{This Study (2025)} \\
+\hline
+Data Scale    & $\sim$10K & $\sim$1K & $\sim$100K & 1,320K \\
+\hline
+Similarity    & Single & Single & Single & 4-Level/10 \\
+\hline
+Models        & MNL & MNL & MNL & 4 Families \\
+\hline
+User Types    & 1 & 1 & 1 & 5 + LC \\
+\hline
+ML Benchmark  & $\times$ & $\times$ & $\times$ & LightGBM \\
+\hline
+Calibration   & $\times$ & $\times$ & $\times$ & $\theta$ + Re-rank \\
+\hline
+\end{tabular}
+\caption{Comparison with Prior Research}
+\end{table}

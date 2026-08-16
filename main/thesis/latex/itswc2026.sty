@@ -1,0 +1,112 @@
+%==============================================================================
+% itswc2026.sty — 2026 Gangneung ITS World Congress paper format
+%
+% Implements the official template rules:
+%   - ISO A4, 25 mm (1 inch) margins on all sides
+%   - Times New Roman 12 pt (newtx), one column, single spacing
+%   - One line between paragraphs, justified text, no paragraph indent
+%   - Page numbers bottom center
+%   - Unnumbered headings:
+%       Level 1: ALL CAPS, bold, centered, 16 pt
+%       Level 2: ALL CAPS, bold, flush left, 14 pt
+%       Level 3: Initial caps, bold, flush left, 12 pt
+%       Level 4: Initial caps, bold italic, flush left, 12 pt, run-in
+%   - Tables: bold caption BELOW the table (e.g., "Table 1. Source of Data."),
+%     table text no smaller than 11 pt
+%   - References numbered "(1)", cited in text as "(1)"
+%==============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{itswc2026}[2026/08/16 ITS World Congress 2026 Gangneung format]
+
+% ---------- Page geometry ----------
+\RequirePackage[a4paper,margin=25mm]{geometry}
+
+% ---------- Font: Times New Roman 12 pt ----------
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{newtxtext,newtxmath}
+
+% ---------- Spacing: single spacing, one line between paragraphs ----------
+\RequirePackage{setspace}
+\singlespacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 1pt minus 1pt}
+
+% ---------- Page numbers: bottom center ----------
+\pagestyle{plain}
+
+% ---------- Headings (unnumbered) ----------
+\RequirePackage{titlesec}
+\setcounter{secnumdepth}{0}
+
+% Level 1: all caps, bold, centered, 16 pt
+\titleformat{\section}
+  {\centering\bfseries\fontsize{16}{19}\selectfont}{}{0pt}{\MakeUppercase}
+\titlespacing*{\section}{0pt}{10pt plus 2pt minus 2pt}{4pt}
+
+% Level 2: all caps, bold, flush left, 14 pt
+\titleformat{\subsection}
+  {\bfseries\fontsize{14}{17}\selectfont}{}{0pt}{\MakeUppercase}
+\titlespacing*{\subsection}{0pt}{8pt plus 2pt minus 2pt}{2pt}
+
+% Level 3: initial caps, bold, flush left, 12 pt
+\titleformat{\subsubsection}
+  {\bfseries\normalsize}{}{0pt}{}
+\titlespacing*{\subsubsection}{0pt}{6pt plus 2pt minus 1pt}{1pt}
+
+% Level 4: initial caps, bold italic, flush left, 12 pt, run-in
+\titleformat{\paragraph}[runin]
+  {\bfseries\itshape\normalsize}{}{0pt}{}
+\titlespacing*{\paragraph}{0pt}{4pt plus 1pt}{1em}
+
+% ---------- Figures and tables ----------
+\RequirePackage{graphicx}
+\RequirePackage[table]{xcolor}
+\RequirePackage{multirow}
+\RequirePackage{caption}
+\captionsetup{font={bf},labelsep=period,skip=4pt}
+\captionsetup[figure]{justification=centering,singlelinecheck=true}
+\captionsetup[table]{justification=raggedright,singlelinecheck=false}
+
+% Tighter float placement (pack figures/tables into text pages, less whitespace)
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{10pt plus 2pt minus 4pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+
+% Table body text: 11 pt minimum per template
+\newcommand{\tablefont}{\fontsize{11}{13.2}\selectfont}
+% Header row shading similar to the Word template
+\newcommand{\headrow}{\rowcolor{gray!20}}
+
+% ---------- Citations "(1)" and bibliography labels "(1)" ----------
+\RequirePackage{cite}
+\renewcommand{\citeleft}{(}
+\renewcommand{\citeright}{)}
+\makeatletter
+\renewcommand\@biblabel[1]{(#1)}
+\makeatother
+
+% Slightly tighter bibliography entries
+\newcommand{\bibspacing}{\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}}
+
+% ---------- Misc ----------
+\RequirePackage{amsmath}
+\RequirePackage{microtype}
+\RequirePackage[hidelinks]{hyperref}
+
+% Title block helpers (18 pt centered caps title; 12 pt author block)
+\newcommand{\papertitle}[1]{%
+  \begin{center}
+    {\fontsize{18}{22}\selectfont\bfseries #1\par}
+  \end{center}\vspace{2pt}}
+\newcommand{\authorblock}[2]{%
+  \begin{center}
+    {\bfseries #1}\\[1pt]
+    #2
+  \end{center}\vspace{-2pt}}
+
+\endinput

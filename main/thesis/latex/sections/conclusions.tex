@@ -1,0 +1,48 @@
+\section{Conclusions}
+
+This study pursued four objectives and offers corresponding contributions.
+First, the multi-level similarity framework with four hierarchical levels and
+ten metrics provides a systematic evaluation of route-matching quality,
+revealing that 28.66\% of 1.32 million trip chains achieve exact match with at
+least one OTP alternative and that matching degrades sharply with transfer
+count (45.6\% for direct trips vs.\ $<$0.3\% for two-or-more transfers). This
+framework moves beyond single-metric assessments prevalent in prior work and
+quantifies the room for improvement that motivates the subsequent modeling.
+Second, the comparison of four model families on an identical hold-out set
+demonstrates that theory-grounded models can match or exceed machine learning:
+a 24-parameter Latent Class model (67.4\%) outperforms LightGBM (66.2\%), and
+a six-parameter MNL achieves 99.7\% of the ML benchmark's accuracy.
+
+Third, the LC analysis reveals that administrative card-type categories are
+informative but imperfect behavioral proxies (Cram\'er's V = 0.685): 61\% of
+elderly users belong to the Accessibility-Priority class, but 39\% exhibit
+Mainstream or Extreme preferences. The elderly subgroup's positive ride-time
+valuation and near-lexicographic transfer aversion, confirmed across all four
+model families, challenge the assumption that travel time minimization is
+universal. Fourth, MNL-based re-ranking of OTP alternatives delivers +1.89\%p
+improvement---roughly double the structural ceiling of $\theta$-based
+calibration---without re-running the router, with a 10.4:1 win ratio when the
+two disagree. The gain reaches +3.17\%p in complex scenarios with five or more
+alternatives.
+
+For transit agencies and app developers, MNL re-ranking represents a
+lightweight, high-impact upgrade deployable as a post-processing step with no
+changes to routing infrastructure. For the Accessibility-Priority segment
+(8.7\%), systems should prioritize transfer-free subway options; for disabled
+users (walking weight 30.2$\times$, transfer penalty 129.6 min), minimizing
+walking distance should take precedence over minimizing travel time. More
+broadly, card-type information should serve as a Bayesian prior for
+personalization, updated with revealed-preference data rather than treated as
+a static label.
+
+Several limitations should be noted. The analysis draws on a single weekday,
+though weekday transit demand in Seoul exhibits high day-to-day regularity and
+1.32 million chains far exceed typical survey-based studies. Fare
+differentials, real-time crowding, and weather are absent but primarily affect
+mode choice rather than route choice. The positive $\beta_{\mathrm{ride}}$ for
+elderly users invites complementary stated-preference research to disentangle
+seat availability from ride-time preference. Future work should extend
+re-ranking to full probabilistic route assignment for equity-aware service
+analysis, pursue real-time API deployment, multi-city replication,
+user-type-specific re-ranking leveraging LC class probabilities, and adaptive
+learning algorithms that update taste parameters as trip histories accumulate.

@@ -1,0 +1,50 @@
+\section{Introduction}
+
+Every day, millions of transit travelers consult routing
+applications---Google Maps, Naver Maps, or open-source engines such as
+OpenTripPlanner (OTP)---to decide how to get from origin to destination. These
+platforms uniformly adopt a deterministic paradigm: they minimize a predefined
+generalized cost and present the result as the single ``best'' route,
+implicitly assuming that all users weigh walking, riding, and transferring in
+the same way. Empirical evidence, however, paints a different picture. Elderly
+passengers may tolerate longer rides to avoid stairway transfers; wheelchair
+users may detour to reach an elevator; commuters may prioritize speed above all
+else. If these preferences are systematic rather than random, a
+one-size-fits-all recommendation will systematically mis-serve certain
+groups---a concern with direct equity implications as urban populations age.
+
+Seoul provides an ideal setting for investigating these questions. Its
+Transportation Card system records over seven million tap-in/tap-out
+transactions daily across all bus and subway services, enabling
+population-scale revealed-preference observation of route choice. Five
+administratively defined card types---general, elderly, disabled, youth, and
+children---permit demographic segmentation without survey recruitment, and
+OpenTripPlanner's RAPTOR algorithm \cite{delling2015} can systematically
+generate competing alternatives for each observed trip. Prior work using Seoul
+smart card data \cite{kim2020} calibrated a transit route choice model but
+considered only a single user type; the present study extends this to four
+model families, five user types, and 1.32 million trip chains.
+
+Despite a growing literature on transit route choice, three substantive gaps
+remain. First, most studies estimate a single discrete choice specification and
+report its fit, without testing whether the structure imposed by random utility
+theory helps or hinders prediction relative to flexible machine learning
+alternatives such as gradient boosting. Second, neither Mixed Logit's
+continuous coefficient distributions nor observed demographic segmentation can
+discover data-driven behavioral clusters that cut across administrative
+card-type categories---a 70-year-old commuter who walks briskly differs
+fundamentally from a frail peer who avoids stairs, yet both carry the same
+``elderly'' smart card. Third, route choice research overwhelmingly concludes
+at the point of parameter estimation; whether those parameters can improve an
+operational routing system---and if so, by how much---is seldom examined.
+
+The present study pursues four objectives. First, we develop a multi-level
+route similarity framework with 10 metrics organized into four hierarchical
+levels. Second, we estimate and compare four model families---MNL, Mixed
+Logit, Latent Class (with concomitant variables), and LightGBM---on an
+identical hold-out test set drawn from 1.32 million trip chains. Third, we
+characterize the latent behavioral segments and examine how they align with
+administrative card-type categories. Fourth, we close the loop between
+estimation and practice by demonstrating that MNL-based re-ranking of
+router-generated alternatives outperforms traditional parameter calibration at
+negligible computational cost.
