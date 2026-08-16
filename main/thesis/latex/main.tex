@@ -41,8 +41,9 @@ outperforming LightGBM (66.2\%) with an order of magnitude fewer parameters.
 Three behaviorally distinct classes emerge---including an Accessibility-Priority
 segment (8.7\%, predominantly elderly) that values longer seated rides over
 transfers---yet administrative card types only partially predict class
-membership (Cram\'er's V = 0.685). All four models converge on the same variable
-importance ranking (SHAP--MNL Spearman $\rho$ = 1.0). On the practical side,
+membership (Cram\'er's V = 0.685). Variance-standardized MNL coefficients and SHAP importance agree on the
+dominant factors, walking time and transfers (Spearman $\rho$ = 0.8). On the
+practical side,
 traditional calibration of OTP parameters encounters a ceiling of approximately
 one percentage point, whereas MNL-based re-ranking of existing alternatives
 delivers +1.89 percentage points at negligible computational cost, with a

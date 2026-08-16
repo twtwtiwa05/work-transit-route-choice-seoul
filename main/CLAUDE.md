@@ -117,7 +117,7 @@ V_j = β_ride × T_ride_j
 
 - **LC(67.4%) > LightGBM(66.2%)**: 경제학 모형이 ML 상한 +1.2%p 초과
 - MNL / LightGBM = 99.7%: 6개 파라미터 선형모형이 상한의 99.7% 달성
-- SHAP 순위 = MNL β 순위 (완벽 일치) → 효용함수 사양 타당성 확인
+- SHAP 순위 vs 표준화 MNL |β|·SD: 상위 2개(보행·환승) 일치, ρ = 0.8 (원시 |β| 비교는 단위 문제로 무의미, ρ = 0.0) → 효용함수 사양 타당성 확인
 - D_peak SHAP ≈ 0 → 네 모형 일관 비유의
 - **상세 결과**: `results/PHASE3_RESULTS4_LIGHTGBM.md`
 

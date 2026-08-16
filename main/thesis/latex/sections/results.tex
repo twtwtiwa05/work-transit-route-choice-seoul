@@ -86,7 +86,8 @@ $\rho^2$       & 0.469 & 0.459 & 0.486 & 0.582 & 0.515 \\
 Hit Rate       & 62.9\% & 62.1\% & 63.8\% & 78.5\% & 73.0\% \\
 \hline
 \end{tabular}
-\caption{MNL Parameter Estimates by User Type. p$<$0.001, p$<$0.01}
+\caption{MNL Parameter Estimates by User Type. All p $<$ 0.001 except
+Disabled $\beta_{\mathrm{ride}}$ (p $<$ 0.01)}
 \end{table}
 
 The most notable result in Table~6 is the positive $\beta_{\mathrm{ride}}$
@@ -207,12 +208,22 @@ band suggests a natural accuracy ceiling imposed by unobserved factors.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/figure3_shap_validation.png}
-\caption{SHAP Variable Importance vs.\ MNL $|\beta|$ Rankings (Spearman $\rho$ = 1.0)}
+\caption{SHAP Variable Importance vs.\ Standardized MNL Coefficients
+($|\beta|\cdot$SD; Spearman $\rho$ = 0.8)}
 \end{figure}
 
-SHAP importance scores from LightGBM yield perfect rank concordance with
-absolute MNL coefficients (Spearman $\rho$ = 1.0): walking time ranks first,
-followed by transfers, in-vehicle time, and subway indicator. This
-theory-driven/data-driven agreement strongly supports our utility
-specification; $D_{\mathrm{peak}}$'s near-zero SHAP value (0.002) further
-confirms that peak-hour effects do not materially shape route choice in Seoul.
+Because the utility coefficients carry different units (per minute, per
+transfer, or a 0/1 dummy shift), their raw magnitudes cannot be rank-compared
+directly; we therefore standardize each coefficient by its attribute's
+test-set standard deviation ($|\beta_k|\cdot\sigma_k$), the quantity to which
+mean absolute SHAP contributions are proportional in a linear model. On this
+common scale, MNL and LightGBM agree on the two dominant factors: walking
+time (40.6\% vs.\ 39.6\%) and transfers (35.6\% vs.\ 31.7\%), with Spearman
+$\rho$ = 0.8. The single rank disagreement concerns in-vehicle time and the
+subway dummy: $T_{\mathrm{ride}}$'s per-minute coefficient is small but its
+variation is large (SD $\approx$ 15 min), whereas $D_{\mathrm{subway}}$'s
+large coefficient acts on limited 0/1 variation. This agreement between the
+theory-driven and data-driven rankings on what dominates route choice
+supports our utility specification; $D_{\mathrm{peak}}$'s near-zero SHAP
+value (0.002) further confirms that peak-hour effects do not materially shape
+route choice in Seoul.

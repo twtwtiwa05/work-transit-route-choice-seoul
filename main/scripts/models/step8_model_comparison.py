@@ -408,7 +408,15 @@ def fig3_parameter_comparison(mnl, ml, lc):
 
 
 def fig4_shap_beta_validation(mnl, lgb):
-    """Figure 4: SHAP vs MNL β Cross-Validation."""
+    """Figure 4: SHAP vs MNL β Cross-Validation.
+
+    Raw |β| cannot be rank-compared across variables (per-minute vs.
+    per-transfer vs. 0/1 dummy units). Mean |SHAP| ≈ |β|·spread(x) for a
+    linear model, so MNL importance is standardized as |β|·SD(x) on the
+    test set, and Spearman ρ is COMPUTED, not asserted.
+    """
+    from scipy.stats import spearmanr
+
     set_pub_style()
 
     # Variables sorted by SHAP importance (descending)
@@ -416,9 +424,11 @@ def fig4_shap_beta_validation(mnl, lgb):
     var_labels = ['Walking\nTime', 'Transfer\nCount',
                   'In-vehicle\nTime', 'Subway\nIncluded']
 
-    # |MNL β| normalized to sum = 100
+    # |β|·SD(x): variance-standardized importance, comparable to mean |SHAP|
+    test_df = pd.read_parquet(OUTPUT_DIR / "model_input_test.parquet",
+                              columns=variables)
     mnl_abs = np.array([abs(mnl['pooled']['coefficients'][v]['coef'])
-                        for v in variables])
+                        * test_df[v].std() for v in variables])
     mnl_norm = mnl_abs / mnl_abs.sum() * 100
 
     # SHAP importance (Core model) normalized
@@ -426,12 +436,14 @@ def fig4_shap_beta_validation(mnl, lgb):
                          for v in variables])
     shap_norm = shap_raw / shap_raw.sum() * 100
 
+    rho = spearmanr(mnl_abs, shap_raw).statistic
+
     _fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
     x = np.arange(len(variables))
     width = 0.35
 
     b1 = ax.bar(x - width / 2, mnl_norm, width,
-                label='MNL |β| (Normalized)',
+                label='MNL |β|·SD (Normalized)',
                 color=COLORS['MNL'], edgecolor='black',
                 linewidth=1.2, alpha=0.85)
 
@@ -452,8 +464,8 @@ def fig4_shap_beta_validation(mnl, lgb):
                   fontweight='bold', labelpad=10)
     ax.set_ylabel('Relative Importance (%)', fontsize=16,
                   fontweight='bold', labelpad=10)
-    ax.set_title('Cross-Validation: MNL Coefficients vs. SHAP Importance\n'
-                 u'(Spearman \u03c1 = 1.0, Perfect Rank Agreement)',
+    ax.set_title('Cross-Validation: Standardized MNL Importance vs. SHAP\n'
+                 u'(Spearman \u03c1 = ' + f'{rho:.1f})',
                  fontsize=16, fontweight='bold', pad=15)
     ax.set_xticks(x)
     ax.set_xticklabels(var_labels, fontsize=13)
@@ -468,7 +480,8 @@ def fig4_shap_beta_validation(mnl, lgb):
     legend.get_frame().set_linewidth(1.2)
 
     ax.text(0.99, 0.03,
-            'Identical ranking validates utility function specification',
+            'Top-2 factors (walking, transfers) agree; '
+            'methods differ only on T_ride vs. D_subway',
             transform=ax.transAxes, fontsize=11, style='italic',
             ha='right', va='bottom', color='#333333',
             bbox=dict(boxstyle='round,pad=0.5', facecolor='white',
@@ -691,24 +704,42 @@ def generate_report(model_hrs, mean_probs, hr_by_type_all,
     W("---")
     W("## 5. Feature Importance Cross-Validation")
     W("")
-    W("### Table 4: SHAP Global Importance vs. MNL |β| (Core Model)")
+    W("### Table 4: SHAP Global Importance vs. Standardized MNL |β|·SD "
+      "(Core Model)")
     W("")
-    W("| Rank | Variable | MNL |β| | SHAP Mean |β| | Agreement |")
-    W("|------|----------|---------|----------------|-----------|")
+    W("주의: 원시 |β|는 변수 단위(분당/회당/더미)가 달라 순위 비교가 불가능. "
+      "선형 모형에서 mean |SHAP| ≈ |β|·spread(x)이므로 |β|·SD(test set)로 "
+      "표준화하여 비교한다.")
+    W("")
+    W("| SHAP Rank | Variable | MNL |β|·SD | SHAP Mean |SHAP| | Rank Match |")
+    W("|------|----------|-----------|----------------|-----------|")
 
+    from scipy.stats import spearmanr
     shap_vars = ['T_walk', 'N_transfer', 'T_ride', 'D_subway']
+    sd_df = pd.read_parquet(OUTPUT_DIR / "model_input_test.parquet",
+                            columns=shap_vars)
+    mnl_std = {v: abs(mnl['pooled']['coefficients'][v]['coef'])
+               * sd_df[v].std() for v in shap_vars}
+    shap_imp = {v: lgb['core_model']['shap']['global_importance'][v]
+                for v in shap_vars}
+    mnl_rank = {v: r for r, v in enumerate(
+        sorted(shap_vars, key=lambda v: -mnl_std[v]), 1)}
     for i, v in enumerate(shap_vars, 1):
-        mnl_abs = abs(mnl['pooled']['coefficients'][v]['coef'])
-        shap_val = lgb['core_model']['shap']['global_importance'][v]
-        W(f"| {i} | {var_display[v]} | {mnl_abs:.4f} | {shap_val:.4f} | ✓ |")
+        match = '✓' if mnl_rank[v] == i else f'✗ (MNL rank {mnl_rank[v]})'
+        W(f"| {i} | {var_display[v]} | {mnl_std[v]:.4f} | "
+          f"{shap_imp[v]:.4f} | {match} |")
 
+    rho = spearmanr([mnl_std[v] for v in shap_vars],
+                    [shap_imp[v] for v in shap_vars]).statistic
     W("")
-    W("**Spearman rank correlation**: ρ = 1.0 (perfect agreement)")
+    W(f"**Spearman rank correlation (|β|·SD vs. SHAP)**: ρ = {rho:.1f}")
+    W("(참고: 원시 |β| vs. SHAP은 ρ = 0.0 — 단위가 달라 무의미한 비교)")
     W("")
-    W("The fact that a theoretically-derived utility function (MNL) and "
-      "a purely data-driven approach (SHAP/LightGBM) produce identical "
-      "variable importance rankings provides strong cross-validation "
-      "of the utility function specification.")
+    W("The theoretically-derived utility function (MNL) and the purely "
+      "data-driven approach (SHAP/LightGBM) agree on the two dominant "
+      "factors (walking time, transfers) and on D_peak's irrelevance; "
+      "they differ only in the relative ordering of in-vehicle time and "
+      "the subway dummy.")
     W("")
     W(f"![Figure 4: SHAP vs β Validation](figures/{fig_paths['fig4'].name})")
     W("")
@@ -762,11 +793,13 @@ def generate_report(model_hrs, mean_probs, hr_by_type_all,
       f"the vast majority of predictable variation, suggesting that the "
       f"4-variable utility specification is well-chosen.")
     W("")
-    W("### Finding 3: Perfect SHAP-β Rank Agreement")
-    W("The SHAP feature importance ranking from LightGBM (a purely "
-      "data-driven model) perfectly matches the MNL coefficient magnitude "
-      "ranking (a theoretically-grounded model), providing cross-method "
-      "validation of the utility function specification.")
+    W("### Finding 3: Substantial SHAP-β Rank Agreement (ρ = 0.8)")
+    W("After variance standardization (|β|·SD), the MNL importance "
+      "ranking agrees with LightGBM's SHAP ranking on the two dominant "
+      "factors (walking time, transfers; Spearman ρ = 0.8). The single "
+      "disagreement — in-vehicle time vs. subway dummy — reflects "
+      "T_ride's large spread (small per-minute coefficient, SD ≈ 15 min) "
+      "against D_subway's limited 0/1 variation.")
     W("")
     W("### Finding 4: D_peak Non-Significance (4-Model Confirmation)")
     W("The peak-hour dummy variable is non-significant across all four "
